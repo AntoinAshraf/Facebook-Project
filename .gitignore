@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Facebook/Facebook/Controllers/HomePageController.cs
+/Facebook/Facebook/Views/Shared/HomeLayout.cshtml
+/Facebook/Facebook/Views/HomePage

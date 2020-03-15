@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "popper.js@1.16.1",
+      "destination": "wwwroot/lib/popper.js/",
+      "files": [
+        "popper.min.js",
+        "popper.js"
+      ]
+    },
+    {
+      "library": "slick-carousel@1.9.0",
+      "destination": "wwwroot/lib/slick-carousel/",
+      "files": [
+        "slick.min.js"
+      ]
+    },
+    {
+      "library": "font-awesome@5.12.1",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "slick-carousel@1.9.0",
+      "destination": "wwwroot/lib/slick-carousel/"
+    },
+    {
+      "library": "font-awesome@5.12.1",
+      "destination": "wwwroot/lib/font-awesome/"
+    }
+  ]
+}
