@@ -1,72 +1,66 @@
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token');
-const sendCodeBtn = document.getElementById("sendCodeBtn");
-let email;
+function confirmChangePassword(){
+    const code = document.getElementById("code");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
 
-fetch("https://localhost:44381/api/User/RecoverPassword/?token="+token,{
-    method:"get",
-}).then((response) => {
-    return response.json();
-}).then((data) => {
-    if(data.responseStatus === 200){
-        email = data.result;
-    }
-})
+    const confirmBtn = document.getElementById("confirmBtn");
 
-function sendCode(){
-    const code = document.getElementById("code").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if(code === ""){
-        return toastr.error('Code Field Can\'t be Empty.', 'Validation Error')
+    if (code.value === "") {
+        code.style.borderColor = "red";
+        return toastr.error('Code Field Can\'t be Empty.', 'Validation Error');
     }
 
-    if(password === ""){
-        return toastr.error('Password Field Can\'t be Empty.', 'Validation Error')
+    if (password.value === "") {
+        password.style.borderColor = "red";
+        return toastr.error('Password Field Can\'t be Empty.', 'Validation Error');
     }
 
-    if(password !== confirmPassword){
-        return toastr.error('Password and Confirm Password don\'t match.', 'Validation Error')
+    if (password.value.length < 5) {
+        confirmPassword.style.borderColor = "red";
+        return toastr.error('Password Can\'t be less than 5 character.', 'Validation Error');
     }
 
-    if(password.length < 5){
-        return toastr.error('Password Can\'t be less than 5 character.', 'Validation Error')
+    if (password.value !== confirmPassword.value) {
+        password.style.borderColor = "red";
+        confirmPassword.style.borderColor = "red";
+        return toastr.error('Password and Confirm Password don\'t match.', 'Validation Error');
     }
 
-    sendCodeBtn.disabled  = true;
-    sendCodeBtn.innerHTML = "Loading";
-    sendCodeBtn.style.backgroundColor = "#65a6f9";
+    code.style.borderColor = "#e5e5e5";
+    password.style.borderColor = "#e5e5e5";
+    confirmPassword.style.borderColor = "#e5e5e5";
 
-    fetch("https://localhost:44381/api/User/ConfirmRecoverPassword/?code="+code,{
-        method:"post",
+    confirmBtn.disabled  = true;
+    confirmBtn.innerHTML = "Loading";
+    confirmBtn.style.backgroundColor = "#65a6f9";
+
+    fetch("https://localhost:44340/Account/RecoverPassword/?code=" + code.value, {
+        method: "post",
         body: JSON.stringify({
-            Email: email,
-            Password: password,
+            Email: email.value,
+            Password: password.value
         }),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-          },
+        },
     }).then((response) => {
         return response.json();
     }).then((data) => {
-        if(data.responseStatus === 400){
-            data.validationErrors.forEach(element => {
-                toastr.error(element.message, 'Validation Error')
-            });
+        if (data.statusCode === 400) {
+            toastr.error(data.responseMessage, 'Validation Error');
         }
-        if(data.responseStatus === 200){
+        if (data.statusCode === 200) {
             toastr.success('Password Changed Successfully.', 'Done');
-            window.location.href = "/Account/Signin";
+            window.location.href = "/";
         }
-        sendCodeBtn.disabled  = false;
-        sendCodeBtn.innerHTML = "Sign in";
-        sendCodeBtn.style.backgroundColor = "#1877F2";
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = "Sign in";
+        confirmBtn.style.backgroundColor = "#1877F2";
     }).catch((err) => {
         toastr.error("Something went wrong!", 'Validation Error');
-        sendCodeBtn.disabled  = false;
-        sendCodeBtn.innerHTML = "Sign in";
-        sendCodeBtn.style.backgroundColor = "#1877F2";
-    })
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = "Sign in";
+        confirmBtn.style.backgroundColor = "#1877F2";
+    });
 }
