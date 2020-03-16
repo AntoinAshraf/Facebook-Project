@@ -5,7 +5,7 @@ function Register(){
     let firstName = document.getElementById("firstName");
     let lastName = document.getElementById("lastName");
     let phoneNumber = document.getElementById("phoneNumber");
-    let gender = Number.parseInt(document.getElementById("gender"));
+    let gender = document.getElementById("gender");
     let birthdate = document.getElementById("birthdate");
     
     let RegisterBtn = document.getElementById("registerBtn");
@@ -48,7 +48,7 @@ function Register(){
         phoneNumber.style.borderColor = "red";
         return toastr.error('This Phone Number is not valid.', 'Validation Error');
     }
-
+    debugger
     if (gender.value === "") {
         gender.style.borderColor = "red";
         return toastr.error('Gender Field Can\'t be Empty.', 'Validation Error');
@@ -87,7 +87,7 @@ function Register(){
             LastName: lastName.value,
             PhoneNumber: phoneNumber.value,
             Password: password.value,
-            GenderId: gender.value,
+            GenderId: Number.parseInt(gender.value),
             BirthDate: birthdate.value
         }),
         headers: {
