@@ -61,6 +61,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email not Exsist.
+        /// </summary>
+        public static string EmailNotExsist {
+            get {
+                return ResourceManager.GetString("EmailNotExsist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Email Is already exsist.
         /// </summary>
         public static string EmailNotUnique {
@@ -210,6 +219,15 @@ namespace Facebook.Recources {
         public static string ShortPassword {
             get {
                 return ResourceManager.GetString("ShortPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code you Entered is not Correct.
+        /// </summary>
+        public static string WrongCode {
+            get {
+                return ResourceManager.GetString("WrongCode", resourceCulture);
             }
         }
     }

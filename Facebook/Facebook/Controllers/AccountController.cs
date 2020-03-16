@@ -60,7 +60,7 @@ namespace Facebook.Controllers
         public IActionResult Login([FromBody]UserLoginDTO userLoginDto)
         {
             User user = db.Users.FirstOrDefault(x => x.Email == userLoginDto.Email);
-            if(user == null)
+            if (user == null)
             {
                 return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.IncorrectEmailOrPassword });
             }
@@ -73,7 +73,7 @@ namespace Facebook.Controllers
             userData.SetUser(HttpContext, user);
             List<Actions> actions = db.RoleActions.Where(s => s.RoleId == user.RoleId).Select(s => s.Action).ToList();
             userData.SetActions(HttpContext, actions);
-            return Json(new { statusCode = ResponseStatus.Success   });
+            return Json(new { statusCode = ResponseStatus.Success });
         }
 
         public IActionResult ActivateAccount([FromQuery]string token)
@@ -93,6 +93,61 @@ namespace Facebook.Controllers
             return RedirectToAction("Register", "Account");
         }
 
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        public ActionResult SendForgetPasswordCode([FromQuery]string Email)
+        {
+            var user = db.Users.Where(s => s.Email == Email).FirstOrDefault();
+            if (user == null)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.EmailNotExsist });
+            }
+            int code = new Random().Next(5000, 50000);
+            user.RecoveryCode = code;
+            db.SaveChanges();
+            string token = jwt.GenerateToken(user.Id);
+            email.SendRecoveryPasswordEmail(user.Email, code, "https://localhost:44340/Account/RecoverPassword/?token=" + token);
+            return Json(new { statusCode = ResponseStatus.Success });
+        }
+
+        public ActionResult RecoverPassword([FromQuery]string token)
+        {
+            bool TokenIsValid = jwt.ValidateCurrentToken(token);
+            ViewData["TokenIsValid"] = TokenIsValid;
+            if (TokenIsValid)
+            {
+                int userId = int.Parse(jwt.GetId(token));
+                User user = db.Users.Where(s => s.Id == userId).FirstOrDefault();
+                return View(user);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RecoverPassword([FromBody]UserLoginDTO userLoginDTO, [FromQuery]string code)
+        {
+            User user = db.Users.Where(s => s.Email == userLoginDTO.Email).FirstOrDefault();
+            if (user == null)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.EmailNotExsist });
+            }
+            if (user.RecoveryCode.ToString() != code)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.WrongCode });
+            }
+            if (userLoginDTO.Password.Length < 5)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.ShortPassword });
+            }
+            user.Password = Encription.Encrypt(userLoginDTO.Password, "SecretCode_hamed");
+            user.RecoveryCode = null;
+            db.Update(user);
+            db.SaveChanges();
+            return Json(new { statusCode = ResponseStatus.Success });
+        }
         /////////////////////////////////////////////////////////////////////////////////////
         //helper
 
