@@ -1,0 +1,50 @@
+﻿#popBtn {
+    background-color: #1877F2;
+    color: #fff;
+    font-size: 16px;
+    display: inline-block;
+    height: 40px;
+    padding: 0 15px;
+    line-height: 40px;
+    font-weight: 500;
+}
+
+#createTitle {
+   
+    float: left;
+    width: 100%;
+    background-color: #1877F2;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 20px 0;
+
+}
+
+#textPost {
+    width: 100%;
+    color: #b2b2b2;
+    font-size: 14px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    font-weight: 500;
+    padding: 15px;
+    height: 130px;
+
+}
+.post-body {
+    float: left;
+    width: 100%;
+    /* padding: 30px 20px; */
+    background-color: #fff;
+}
+
+.model-header-edit{
+    padding:0px
+}
+
+.modal-dialog-edit {
+  
+    top: 30%;
+}

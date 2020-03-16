@@ -76,6 +76,22 @@ namespace Facebook.Controllers
             return Json(new { statusCode = ResponseStatus.Success   });
         }
 
+        public IActionResult ActivateAccount([FromQuery]string token)
+        {
+            bool TokenIsValid = jwt.ValidateCurrentToken(token);
+            if (TokenIsValid)
+            {
+                int userId = int.Parse(jwt.GetId(token));
+                User user = db.Users.Where(s => s.Id == userId).FirstOrDefault();
+                if (!user.IsActive)
+                {
+                    user.IsActive = true;
+                    db.Users.Update(user);
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Register", "Account");
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         //helper
