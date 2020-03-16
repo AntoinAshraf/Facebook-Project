@@ -22,6 +22,8 @@
     <link href="~/css/line-awesome.min.css" rel="stylesheet" />
     <link href="~/css/animate.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+
 </head>
 
 
@@ -78,7 +80,7 @@
                             <ul class="us-links">
                                 <li class="text-center">
                                     <a href="profile-account-setting.html" title="">
-                                    <i class="fas fa-user-cog"></i> 
+                                        <i class="fas fa-user-cog"></i>
                                         Account Settings
                                     </a>
                                 </li>
@@ -117,6 +119,7 @@
 
 
 
+
     </div><!--theme-layout end-->
     @*scripts*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -126,5 +129,7 @@
     <script src="~/lib/slick-carousel/slick.min.js"></script>
     <script src="~/js/scrollbar.js"></script>
     <script src="~/js/script.js"></script>
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>
