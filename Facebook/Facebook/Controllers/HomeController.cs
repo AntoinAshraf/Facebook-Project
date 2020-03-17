@@ -46,7 +46,7 @@ namespace Facebook.Controllers
             postToDB.PostContent = userPost.PostContent;
 
             facebookDataContext.Posts.Add(postToDB);
-
+            facebookDataContext.SaveChanges();
 
             return View("Index");
         }
