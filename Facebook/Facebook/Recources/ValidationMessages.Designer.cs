@@ -169,6 +169,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old Password is Incorrect.
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Exceed 255 character.
         /// </summary>
         public static string LongString {

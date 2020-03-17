@@ -153,6 +153,9 @@
   <data name="IncorrectEmailOrPassword" xml:space="preserve">
     <value>Email or Password is not Correct</value>
   </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Old Password is Incorrect</value>
+  </data>
   <data name="LongString" xml:space="preserve">
     <value>Can't Exceed 255 character</value>
   </data>
