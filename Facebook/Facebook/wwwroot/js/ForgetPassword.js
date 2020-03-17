@@ -1,49 +1,50 @@
-function ForgetPasswordEmail(){
-    let email = document.getElementById("email").value;
-    let sendEmailBtn = document.getElementById("sendEmailBtn");
+function sendCode(){
+    let email = document.getElementById("email");
+    let sendCodeBtn = document.getElementById("sendCodeBtn");
 
-    if(email === ""){
-        return toastr.error('Email Field Can\'t be Empty.', 'Validation Error')
+    email.style.borderColor = "#e5e5e5";
+
+    if (email.value === "") {
+        email.style.borderColor = "red";
+        return toastr.error('Email Field Can\'t be Empty.', 'Validation Error');
     }
 
-    if(!ValidateEmail(email)){
-        return toastr.error('This Email is not valid.', 'Validation Error')
+    if (!ValidateEmail(email.value)) {
+        email.style.borderColor = "red";
+        return toastr.error('This Email is not valid.', 'Validation Error');
     }
 
-    sendEmailBtn.disabled  = true;
-    sendEmailBtn.innerHTML = "Loading";
-    sendEmailBtn.style.backgroundColor = "#65a6f9";
+    sendCodeBtn.disabled  = true;
+    sendCodeBtn.innerHTML = "Loading";
+    sendCodeBtn.style.backgroundColor = "#65a6f9";
 
-    fetch("https://localhost:44381/api/User/ForgetPassword/?email="+email,{
-        method:"get",
+    fetch("https://localhost:44340/Account/SendForgetPasswordCode/?Email=" + email.value, {
+        method: "get"
     }).then((response) => {
         return response.json();
     }).then((data) => {
-        debugger
-        if(data.responseStatus === 400){
-            data.validationErrors.forEach(element => {
-                toastr.error(element.message, 'Validation Error')
-            });
+        if (data.statusCode === 400) {
+            toastr.error(data.responseMessage, 'Validation Error');
         }
-        if(data.responseStatus === 200){
+        if (data.statusCode === 200) {
             toastr.success('Code has been sent to your Email Successfully', 'Done');
-            //window.location.href = "/Account/Signin";
+            //window.location.href = "/";
         }
-        sendEmailBtn.disabled  = false;
-        sendEmailBtn.innerHTML = "Send Email";
-        sendEmailBtn.style.backgroundColor = "#1877F2";
-        
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.innerHTML = "Send Email";
+        sendCodeBtn.style.backgroundColor = "#1877F2";
+
     }).catch((err) => {
-        sendEmailBtn.disabled  = false;
-        sendEmailBtn.innerHTML = "Send Email";
-        sendEmailBtn.style.backgroundColor = "#1877F2";
-        toastr.error("Something went wrong!", 'Validation Error')
-    })
+        sendCodeBtn.disabled = false;
+        sendCodeBtn.innerHTML = "Send Email";
+        sendCodeBtn.style.backgroundColor = "#1877F2";
+        toastr.error("Something went wrong!", 'Validation Error');
+    });
 }
 
 function ValidateEmail(email) 
 {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
         return true;
-    return false
+    return false;
 }

@@ -81,9 +81,7 @@
                     </div>
                     <div class="col-lg-12">
                         <ul>
-                            <li><button class="active"  id="postcreate" value="post">Post</button></li>
-                            <li><a href="#" title="">Cancel</a></li>
-                        </ul>
+                            <li><button class="active" id="postcreate" value="post">Post</button></li>
                     </div>
                 </div>
             </form>
@@ -92,34 +90,69 @@
     </div><!--post-project end-->
 </div>
 
-@*@section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }*@
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.min.js"></script>
+
     <script>
         $("#postcreate").click(function () {
-            console.log("fghjkl");
+            alert($("#content").val);
+
             var o = {
 
                 PostContent: $("#content").val()
             }
-            console.log($("#content").val)
-            //$.ajax({
-            //    url: 'Home/CreatePost',
-            //    method: 'POST',
-            //    data: JSON.stringify(o),
-            //    contentType: 'application/json',
+            alert(PostContent);
 
-            //    success: function (data) {
-            //        alert(JSON.stringify(data));
-            //    },
-            //    error: function (e) {
-            //        alert("error")
-            //    }
+            $.ajax({
+                /*url: 'Home/CreatePost'*/
+                url: '@Url.Action("CreatPost", "Home")',
+                method: 'POST',
+                data: JSON.stringify(o),
+                contentType: 'application/json',
 
-            //})
+                success: function (data) {
+                    alert(JSON.stringify(data));
+                },
+                error: function (e) {
+                    alert("error")
+                }
+
+            })
         })
-      
+
     </script>
 }
+
+@*@section Scripts {
+        <script>
+            $("#postcreate").click(function () {
+                alert($("#content").val);
+
+                var o = {
+
+                    PostContent: $("#content").val()
+                }
+                alert(PostContent);
+
+                $.ajax({
+                    /*url: 'Home/CreatePost'*/
+                    url: '@Url.Action("CreatPost", "Home")',
+                    method: 'POST',
+                    data: JSON.stringify(o),
+                    contentType: 'application/json',
+
+                    success: function (data) {
+                        alert(JSON.stringify(data));
+                    },
+                    error: function (e) {
+                        alert("error")
+                    }
+
+                })
+            })
+
+        </script>
+    }*@

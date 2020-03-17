@@ -29,7 +29,7 @@ namespace Facebook.Utilities
                 {
                     new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
             };
 

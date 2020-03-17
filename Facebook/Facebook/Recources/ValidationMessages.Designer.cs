@@ -61,6 +61,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email not Exsist.
+        /// </summary>
+        public static string EmailNotExsist {
+            get {
+                return ResourceManager.GetString("EmailNotExsist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Email Is already exsist.
         /// </summary>
         public static string EmailNotUnique {
@@ -160,6 +169,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old Password is Incorrect.
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Exceed 255 character.
         /// </summary>
         public static string LongString {
@@ -210,6 +228,15 @@ namespace Facebook.Recources {
         public static string ShortPassword {
             get {
                 return ResourceManager.GetString("ShortPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code you Entered is not Correct.
+        /// </summary>
+        public static string WrongCode {
+            get {
+                return ResourceManager.GetString("WrongCode", resourceCulture);
             }
         }
     }

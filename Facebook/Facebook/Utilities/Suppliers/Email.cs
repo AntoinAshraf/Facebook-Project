@@ -34,7 +34,6 @@ namespace Facebook.Utilities
 
             using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
             {
-
                 builder.HtmlBody = SourceReader.ReadToEnd();
             }
 
@@ -65,7 +64,6 @@ namespace Facebook.Utilities
 
             using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
             {
-
                 builder.HtmlBody = SourceReader.ReadToEnd();
             }
 

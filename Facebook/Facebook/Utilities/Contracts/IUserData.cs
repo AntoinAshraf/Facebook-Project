@@ -11,5 +11,6 @@ namespace Facebook.Contracts
         User GetUser(HttpContext httpContext);
         void SetUser(HttpContext httpContext, User user);
         void SetActions(HttpContext httpContext, List<Actions> actions);
+        void clearData(HttpContext httpContext);
     }
 }
