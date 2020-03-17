@@ -88,6 +88,7 @@ namespace Facebook.Controllers
                     user.IsActive = true;
                     db.Users.Update(user);
                     db.SaveChanges();
+                    userData.SetUser(HttpContext, user);
                 }
             }
             return RedirectToAction("Register", "Account");
@@ -108,6 +109,7 @@ namespace Facebook.Controllers
             int code = new Random().Next(5000, 50000);
             user.RecoveryCode = code;
             db.SaveChanges();
+            userData.SetUser(HttpContext, user);
             string token = jwt.GenerateToken(user.Id);
             email.SendRecoveryPasswordEmail(user.Email, code, "https://localhost:44340/Account/RecoverPassword/?token=" + token);
             return Json(new { statusCode = ResponseStatus.Success });
@@ -146,7 +148,41 @@ namespace Facebook.Controllers
             user.RecoveryCode = null;
             db.Update(user);
             db.SaveChanges();
+            userData.SetUser(HttpContext, user);
             return Json(new { statusCode = ResponseStatus.Success });
+        }
+
+        [AuthorizedAction]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AuthorizedAction]
+        public ActionResult ChangePassword([FromBody]ChangePasswordDto changePasswordDto)
+        {
+            User user = userData.GetUser(HttpContext);
+            user.Password = Encription.Decrypt(user.Password, "SecretCode_hamed");
+            if (user.Password != changePasswordDto.OldPassword)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.IncorrectPassword });
+            }
+            if (changePasswordDto.NewPassword.Length < 5)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.ShortPassword });
+            }
+            user.Password = Encription.Encrypt(changePasswordDto.NewPassword, "SecretCode_hamed");
+            db.Users.Update(user);
+            db.SaveChanges();
+            userData.SetUser(HttpContext, user);
+            return Json(new { statusCode = ResponseStatus.Success });
+        }
+
+        public ActionResult Logout()
+        {
+            userData.clearData(HttpContext);
+            return RedirectToAction("Register");
         }
         /////////////////////////////////////////////////////////////////////////////////////
         //helper

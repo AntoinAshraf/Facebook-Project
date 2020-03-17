@@ -25,7 +25,7 @@ namespace Facebook.Utilities
             if (filterContext.HttpContext.Session.GetComplexData<User>("User") == null || filterContext.HttpContext.Session.GetComplexData<User>("User").IsActive == false)
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary { { "controller", "Account" }, { "action", "Login" } });
+                    new RouteValueDictionary { { "controller", "Account" }, { "action", "Register" } });
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace Facebook.Utilities
             if (!actions.Where(s => s.Url == url).Any())
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary { { "controller", "Account" }, { "action", "Login" } });
+                    new RouteValueDictionary { { "controller", "Account" }, { "action", "Register" } });
                 return;
             }
         }

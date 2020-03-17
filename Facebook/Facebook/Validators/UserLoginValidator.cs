@@ -48,8 +48,8 @@ namespace Facebook.Validators
 
         private bool CorrectPassword(string password)
         {
-            user.Password = Encription.Decrypt(user.Password, "SecretCode_hamed");
-            if (user.Password != password)
+            string OriginalPassword = Encription.Decrypt(user.Password, "SecretCode_hamed");
+            if (OriginalPassword != password)
                 return false;
             return true;
         }
