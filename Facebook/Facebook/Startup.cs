@@ -63,15 +63,15 @@ namespace Facebook
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
-            
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseCors(options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-            
+
             app.UseAuthorization();
 
             app.UseSession();
@@ -80,7 +80,7 @@ namespace Facebook
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Account}/{action=Register}/{id?}");
+                    pattern: "{controller=Home}/{action=index}/{id?}");
             });
         }
     }
