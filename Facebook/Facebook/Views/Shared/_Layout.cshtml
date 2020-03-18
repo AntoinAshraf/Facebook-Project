@@ -22,6 +22,7 @@
     <link href="~/css/line-awesome.min.css" rel="stylesheet" />
     <link href="~/css/animate.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/css/toastr.min.css">
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
 
 </head>
@@ -39,7 +40,7 @@
                 <div class="header-data">
                     <div class="logo">
                         <div id="ll">
-                            <a href="index.html" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
+                            <a href="index" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
                         </div>
                     </div><!--logo end-->
                     <div class="search-bar">
@@ -51,7 +52,7 @@
                     <nav>
                         <ul>
                             <li>
-                                <a href="index.html" title="">
+                                <a href="index" title="">
                                     @*<span><img src="~/images/icon1.png" alt=""></span>*@
                                     <div><i class="fas fa-home fa-lg"></i></div>
                                     Home
@@ -72,20 +73,23 @@
                     <div class="user-account">
                         <div class="user-info">
                             <img src="http://via.placeholder.com/30x30" alt="">
-                            <a href="#" title="">John</a>
+                            <a href="#" title="">@*@ViewBag.User*@ @TempData["Users"]</a>
+                            @{
+                                TempData.Keep("Users"); 
+                            }
                             @*<i class="la la-sort-down"></i>*@
                             <i class="fas fa-chevron-circle-down"></i>
                         </div>
                         <div class="user-account-settingss">
                             <ul class="us-links">
                                 <li class="text-center">
-                                    <a href="profile-account-setting.html" title="">
+                                    <a href="/Account/ChangePassword" title="">
                                         <i class="fas fa-user-cog"></i>
                                         Account Settings
                                     </a>
                                 </li>
                             </ul>
-                            <h3 class="tc"><a href="sign-in.html" title=""><i class="fas fa-sign-out-alt"></i> Logout</a></h3>
+                            <h3 class="tc"><a href="/Account/Logout" title=""><i class="fas fa-sign-out-alt"></i> Logout</a></h3>
                         </div><!--user-account-settingss end-->
                     </div>
                 </div><!--header-data end-->
@@ -128,6 +132,7 @@
     <script src="~/js/jquery.mCustomScrollbar.js"></script>
     <script src="~/lib/slick-carousel/slick.min.js"></script>
     <script src="~/js/scrollbar.js"></script>
+    <script type="text/javascript" src="~/js/toastr.min.js"></script>
     <script src="~/js/script.js"></script>
     @RenderSection("Scripts", required: false)
 </body>

@@ -55,12 +55,12 @@ function confirmChangePassword(){
             window.location.href = "/";
         }
         confirmBtn.disabled = false;
-        confirmBtn.innerHTML = "Sign in";
+        confirmBtn.innerHTML = "Confirm";
         confirmBtn.style.backgroundColor = "#1877F2";
     }).catch((err) => {
         toastr.error("Something went wrong!", 'Validation Error');
         confirmBtn.disabled = false;
-        confirmBtn.innerHTML = "Sign in";
+        confirmBtn.innerHTML = "Confirm";
         confirmBtn.style.backgroundColor = "#1877F2";
     });
 }

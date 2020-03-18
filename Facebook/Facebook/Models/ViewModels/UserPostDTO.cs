@@ -9,5 +9,7 @@ namespace Facebook.Models.ViewModels
     {
         public int Id { get; set; }
         public string PostContent { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

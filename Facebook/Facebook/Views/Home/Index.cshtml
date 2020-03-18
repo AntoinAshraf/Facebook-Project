@@ -6,8 +6,27 @@
     {
         <a href="/Home/Privacy">Go To Privacy</a>
     }*@
-<partial name="~/Views/Home/CreatePost.cshtml" />
+@await Html.PartialAsync("CreatePost.cshtml")
+@*wait Html.PartialAsync("Posts.cshtml")*@
 
-@section Scripts {
-    <partial name="~/Views/Home/CreatePostScript.cshtml" />
-}
+@Html.ActionLink("All", "GetPosts", "Home")
+
+<script>
+    fetch("https://localhost:44340/Home/GetPosts", {
+        method: "get"
+    }).then((response) => {
+        debugger;
+        return response.json();
+    }).then((data) => {
+        debugger;
+        if (data.statusCode === 400) {
+            toastr.error(data.responseMessage, 'Validation Error');
+        }
+        if (data.statusCode === 200) {
+            toastr.success('Code has been sent to your Email Successfully', 'Done');
+            //window.location.href = "/";
+        }
+    }).catch((err) => {
+        debugger;
+    });
+</script>

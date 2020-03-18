@@ -1,0 +1,39 @@
+﻿@model Facebook.Models.ViewModels.PostsDTO
+
+<div id="EditModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-edit">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <form asp-controller="Home" asp-action="EditPost" method="post">
+                <div class="modal-header model-header-edit">
+                    <h3 id="createTitle">Edit Post</h3>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="post-body">
+                        @*<div class="post-project-fields">*@
+                        <div class="row">
+                            @Html.HiddenFor(m=>m.Id)
+                            <div class="col-lg-12">
+                                <textarea id="textPost" name="PostContent" placeholder="What's in your mind...">
+                                @Model.PostContent
+                                </textarea>
+
+                            </div>
+
+                        </div>
+                    </div><!--post-project-fields end-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- modal edit end -->
