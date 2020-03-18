@@ -39,7 +39,9 @@ namespace Facebook.Controllers
             return View();
         }
 
-        public IActionResult CreatePost(UserPostDTO userPost)
+
+        [HttpPost]
+        public IActionResult CreatePost(string s,[FromBody]UserPostDTO userPost)
         {
             Post postToDB = new Post();
 
@@ -47,8 +49,8 @@ namespace Facebook.Controllers
 
             facebookDataContext.Posts.Add(postToDB);
 
-
-            return View("Index");
+            facebookDataContext.SaveChanges();
+            return StatusCode(200);
         }
     }
 }

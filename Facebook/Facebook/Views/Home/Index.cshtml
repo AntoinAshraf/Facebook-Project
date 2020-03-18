@@ -2,8 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-        @*@if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Home/Privacy").Any())
-        {
-            <a href="/Home/Privacy">Go To Privacy</a>
-        }*@
-        @Html.Partial("CreatePost")
+@*@if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Home/Privacy").Any())
+    {
+        <a href="/Home/Privacy">Go To Privacy</a>
+    }*@
+<partial name="~/Views/Home/CreatePost.cshtml" />
+
+@section Scripts {
+    <partial name="~/Views/Home/CreatePostScript.cshtml" />
+}

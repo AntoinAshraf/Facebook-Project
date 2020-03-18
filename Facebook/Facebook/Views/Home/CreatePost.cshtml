@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-lg-12">
                         <ul>
-                            <li><button class="active"  id="postcreate" value="post">Post</button></li>
+                            <li><button class="active" id="postcreate" value="post">Post</button></li>
                             <li><a href="#" title="">Cancel</a></li>
                         </ul>
                     </div>
@@ -92,19 +92,19 @@
     </div><!--post-project end-->
 </div>
 
-@*@section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }*@
 
-@section Scripts {
+
+
+@*@section Scripts {
     <script>
+
         $("#postcreate").click(function () {
             console.log("fghjkl");
             var o = {
 
                 PostContent: $("#content").val()
             }
-            console.log($("#content").val)
+
             //$.ajax({
             //    url: 'Home/CreatePost',
             //    method: 'POST',
@@ -120,6 +120,6 @@
 
             //})
         })
-      
+
     </script>
-}
+}*@
