@@ -2,8 +2,31 @@
     ViewData["Title"] = "Home Page";
 }
 
-        @*@if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Home/Privacy").Any())
-        {
-            <a href="/Home/Privacy">Go To Privacy</a>
-        }*@
-        @Html.Partial("CreatePost")
+@*@if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Home/Privacy").Any())
+    {
+        <a href="/Home/Privacy">Go To Privacy</a>
+    }*@
+@await Html.PartialAsync("CreatePost.cshtml")
+@*wait Html.PartialAsync("Posts.cshtml")*@
+
+@Html.ActionLink("All", "GetPosts", "Home")
+
+<script>
+    fetch("https://localhost:44340/Home/GetPosts", {
+        method: "get"
+    }).then((response) => {
+        debugger;
+        return response.json();
+    }).then((data) => {
+        debugger;
+        if (data.statusCode === 400) {
+            toastr.error(data.responseMessage, 'Validation Error');
+        }
+        if (data.statusCode === 200) {
+            toastr.success('Code has been sent to your Email Successfully', 'Done');
+            //window.location.href = "/";
+        }
+    }).catch((err) => {
+        debugger;
+    });
+</script>

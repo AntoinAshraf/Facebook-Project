@@ -16,6 +16,7 @@ namespace FacebookDbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,5 +52,6 @@ namespace FacebookDbContext
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UsersPost> UsersPosts { get; set; }
         public DbSet<Facebook.Models.ViewModels.UserPostDTO> UserPostDTO { get; set; }
+        public DbSet<Facebook.Models.ViewModels.PostsDTO> PostsDTO { get; set; }
     }
 }

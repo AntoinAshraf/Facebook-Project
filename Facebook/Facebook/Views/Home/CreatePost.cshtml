@@ -30,8 +30,8 @@
 
     <div class="post-st">
         <ul>
-            <li><a class="post-jb active" href="#" title="">What's in your mind?</a></li>
-            <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">Open Modal</a></li>
+            @*<li><a class="post-jb active" href="#" title="">What's in your mind?</a></li>*@
+            <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
 
         </ul>
     </div><!--post-st end-->
@@ -43,83 +43,103 @@
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-edit">
+      
+        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header model-header-edit">
 
-                <h3 id="createTitle">Create Post</h3>
-            </div>
-            <div class="modal-body">
-                <div class="post-body">
-                    @*<div class="post-project-fields">*@
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <textarea id="textPost" name="description" placeholder="What's in your mind..."></textarea>
+            <form asp-controller="Home" asp-action="CreatePost" method="post">
+                <div class="modal-header model-header-edit">
+                    <h3 id="createTitle">Create Post</h3>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="post-body">
+                        @*<div class="post-project-fields">*@
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <textarea id="textPost" name="PostContent" placeholder="What's in your mind..."></textarea>
+
+                            </div>
+
                         </div>
-
-                    </div>
-                </div><!--post-project-fields end-->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Create</button>
-            </div>
+                    </div><!--post-project-fields end-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
         </div>
 
     </div>
 </div>
 
-<div class="post-popup job_post ">
-    <div class="post-project">
-        <h3>Create Post</h3>
-        <div class="post-project-fields">
-            <form>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <textarea name="description" id="content" placeholder="What's in your mind..."></textarea>
-                    </div>
-                    <div class="col-lg-12">
-                        <ul>
-                            <li><button class="active"  id="postcreate" value="post">Post</button></li>
-                            <li><a href="#" title="">Cancel</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </form>
-        </div><!--post-project-fields end-->
-        <a href="#" title=""><i class="la la-times-circle-o"></i></a>
-    </div><!--post-project end-->
-</div>
-
-@*@section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }*@
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/jquery.min.js"></script>
+
     <script>
         $("#postcreate").click(function () {
-            console.log("fghjkl");
+            alert($("#content").val);
+
             var o = {
 
                 PostContent: $("#content").val()
             }
-            console.log($("#content").val)
-            //$.ajax({
-            //    url: 'Home/CreatePost',
-            //    method: 'POST',
-            //    data: JSON.stringify(o),
-            //    contentType: 'application/json',
+            alert(PostContent);
 
-            //    success: function (data) {
-            //        alert(JSON.stringify(data));
-            //    },
-            //    error: function (e) {
-            //        alert("error")
-            //    }
+            $.ajax({
+                /*url: 'Home/CreatePost'*/
+                url: '@Url.Action("CreatPost", "Home")',
+                method: 'POST',
+                data: JSON.stringify(o),
+                contentType: 'application/json',
 
-            //})
+                success: function (data) {
+                    alert(JSON.stringify(data));
+                },
+                error: function (e) {
+                    alert("error")
+                }
+
+            })
         })
-      
+
     </script>
 }
+
+@*@section Scripts {
+        <script>
+            $("#postcreate").click(function () {
+                alert($("#content").val);
+
+                var o = {
+
+                    PostContent: $("#content").val()
+                }
+                alert(PostContent);
+
+                $.ajax({
+                    /*url: 'Home/CreatePost'*/
+                    url: '@Url.Action("CreatPost", "Home")',
+                    method: 'POST',
+                    data: JSON.stringify(o),
+                    contentType: 'application/json',
+
+                    success: function (data) {
+                        alert(JSON.stringify(data));
+                    },
+                    error: function (e) {
+                        alert("error")
+                    }
+
+                })
+            })
+
+        </script>
+    }*@
