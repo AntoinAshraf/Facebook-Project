@@ -9,24 +9,10 @@
 @await Html.PartialAsync("CreatePost.cshtml")
 @*wait Html.PartialAsync("Posts.cshtml")*@
 
-@Html.ActionLink("All", "GetPosts", "Home")
+@*@Html.ActionLink("All", "GetPosts", "Home")*@
+<div class='posts-section' id="posts"></div>
 
-<script>
-    fetch("https://localhost:44340/Home/GetPosts", {
-        method: "get"
-    }).then((response) => {
-        debugger;
-        return response.json();
-    }).then((data) => {
-        debugger;
-        if (data.statusCode === 400) {
-            toastr.error(data.responseMessage, 'Validation Error');
-        }
-        if (data.statusCode === 200) {
-            toastr.success('Code has been sent to your Email Successfully', 'Done');
-            //window.location.href = "/";
-        }
-    }).catch((err) => {
-        debugger;
-    });
-</script>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/getAllPosts.js"></script>
+}

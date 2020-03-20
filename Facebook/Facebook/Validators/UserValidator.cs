@@ -70,12 +70,12 @@ namespace Facebook.Validators
 
         private bool GenderExsist(int GenderId)
         {
-            return db.Users.Any(x => x.Id == GenderId);
+            return db.Gender.Any(x => x.Id == GenderId);
         }
 
         private bool RoleExsist(int RoleId)
         {
-            return db.Users.Any(x => x.Id == RoleId);
+            return db.Roles.Any(x => x.Id == RoleId);
         }
 
         private bool IsPhoneNumber(string PhoneNumber)

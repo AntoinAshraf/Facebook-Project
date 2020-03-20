@@ -30,7 +30,7 @@
 
     <div class="post-st">
         <ul>
-            @*<li><a class="post-jb active" href="#" title="">What's in your mind?</a></li>*@
+           
             <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
 
         </ul>
@@ -44,7 +44,7 @@
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-edit">
       
-        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
+        <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -64,12 +64,20 @@
 
                             </div>
 
+                            <div class="col-lg-12">
+                               <img  src="~/images/chat.png"/>
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Upload Image</label>
+                                <input type="file" class="btn btn-primary" onchange="upload()">
+                            </div>
+
                         </div>
                     </div><!--post-project-fields end-->
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                <div class="modal-footer-Edit modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Post</button>
                 </div>
             </form>
         </div>
@@ -79,37 +87,10 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script src="~/js/jquery.min.js"></script>
-
     <script>
-        $("#postcreate").click(function () {
-            alert($("#content").val);
-
-            var o = {
-
-                PostContent: $("#content").val()
-            }
-            alert(PostContent);
-
-            $.ajax({
-                /*url: 'Home/CreatePost'*/
-                url: '@Url.Action("CreatPost", "Home")',
-                method: 'POST',
-                data: JSON.stringify(o),
-                contentType: 'application/json',
-
-                success: function (data) {
-                    alert(JSON.stringify(data));
-                },
-                error: function (e) {
-                    alert("error")
-                }
-
-            })
-        })
-
+        function upload(e) {
+            console.log(e.target);
+        }
     </script>
 }
 
