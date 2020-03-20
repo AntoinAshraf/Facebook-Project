@@ -32,9 +32,8 @@ namespace Facebook.Controllers
         //[AuthorizedAction]
         public IActionResult Index()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
-            
-            TempData["Users"] = userData.GetUser(HttpContext).FirstName;
+            ViewData["Actions"] = userData.GetActions(HttpContext); 
+            //TempData["Users"] = userData.GetUser(HttpContext).FirstName;
             return View();
         }
 
@@ -77,32 +76,39 @@ namespace Facebook.Controllers
        [HttpGet]
         public IActionResult GetPosts()
         {
-            var postsResult = facebookDataContext.Posts.Include(p => p.UsersPosts)
-                .ToList();
-            
-            List<PostsDTO> posts = new List<PostsDTO>();
-            PostsDTO postToRetrieve;
-            for (int i = 0; i < postsResult.Count;i++)
-            {
-                if (postsResult[i].IsDeleted == false)
+            try {
+                var postsResult = facebookDataContext.Posts.Include(p => p.UsersPosts)
+              .ToList();
+                if(postsResult==null) return Json(new { statusCode = ResponseStatus.NoDataFound });
+                List<PostsDTO> posts = new List<PostsDTO>();
+                PostsDTO postToRetrieve;
+                for (int i = 0; i < postsResult.Count; i++)
                 {
-                    postToRetrieve = new PostsDTO();
-
-                    foreach (var users in postsResult[i].UsersPosts)
+                    if (postsResult[i].IsDeleted == false)
                     {
-                        postToRetrieve.Id = users.PostId;
-                        var userP = facebookDataContext.Users.Find(users.UserId);
+                        postToRetrieve = new PostsDTO();
 
-                        postToRetrieve.PostContent = postsResult[i].PostContent;
-                        postToRetrieve.FirstName = userP.FirstName;
-                        postToRetrieve.LastName = userP.LastName;
-                        postToRetrieve.CreatedAt = users.CreatedAt;
+                        foreach (var users in postsResult[i].UsersPosts)
+                        {
+                            postToRetrieve.Id = users.PostId;
+                            var userP = facebookDataContext.Users?.Find(users.UserId);
+
+                            postToRetrieve.PostContent = postsResult[i].PostContent;
+                            postToRetrieve.FirstName = userP.FirstName;
+                            postToRetrieve.LastName = userP.LastName;
+                            postToRetrieve.CreatedAt = users.CreatedAt;
+                        }
+                        posts.Add(postToRetrieve);
                     }
-                    posts.Add(postToRetrieve);
                 }
+                return Json(new { statusCode = ResponseStatus.Success, responseMessage = posts });
             }
-            //return Json(new { statusCode = ResponseStatus.Success, responseMessage = posts });
-            return PartialView("Posts", posts);
+            catch
+            {
+                return Json(new { statusCode = ResponseStatus.NoDataFound });
+            }
+            
+            //return PartialView("Posts", posts);
 
         }
 
@@ -121,7 +127,8 @@ namespace Facebook.Controllers
             postView.Id = postModel.Id;
             postView.PostContent = postModel.PostContent;
 
-            return PartialView("EditPost", postView);
+            // return Json(new { statusCode = ResponseStatus.Success, responseMessage = postView });
+            return PartialView("EditPost",postView);
         }
 
         [HttpPost]
