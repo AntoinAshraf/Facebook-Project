@@ -101,8 +101,8 @@ namespace Facebook.Controllers
                     posts.Add(postToRetrieve);
                 }
             }
-            return Json(new { statusCode = ResponseStatus.Success, responseMessage = posts });
-            //return PartialView("Posts", posts);
+            //return Json(new { statusCode = ResponseStatus.Success, responseMessage = posts });
+            return PartialView("Posts", posts);
 
         }
 
