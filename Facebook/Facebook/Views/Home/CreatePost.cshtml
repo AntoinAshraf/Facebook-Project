@@ -10,10 +10,6 @@
         </ul>
     </div><!--post-st end-->
 </div>
-
-
-
-
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-edit">
@@ -23,7 +19,7 @@
         <!-- Modal content-->
         <div class="modal-content">
 
-            <form asp-controller="Home" asp-action="CreatePost" method="post">
+            <form enctype="multipart/form-data" asp-controller="Home" asp-action="CreatePost" method="post">
                 <div class="modal-header model-header-edit">
                     <h3 id="createTitle">Create Post</h3>
                 </div>
@@ -34,16 +30,19 @@
                         @*<div class="post-project-fields">*@
                         <div class="row">
                             <div class="col-lg-12">
-                                <textarea id="textPost" name="PostContent" placeholder="What's in your mind..."></textarea>
+                                <textarea id="textPost" name="PostContent" onkeydown="checkform()" placeholder="What's in your mind..."></textarea>
 
                             </div>
 
-                            <div class="col-lg-12">
-                                <img id="post-image" />
+                            <div class="col-lg-12 row " id="image-category">
+                                @*<div class="col-3">
+                                        <img id="post-image" width="50px" height="50px" class="" />
+                                       <i class="la la-times-circle-o icon-img"></i>
+                                    </div>*@
                             </div>
                             <div class="col-lg-12">
                                 <label>Upload Image</label>
-                                <input type="file" class="btn btn-primary" onchange="upload(event)">
+                                <input asp-for="image" class="btn btn-primary" onchange="upload(event)">
                             </div>
 
                         </div>
@@ -51,7 +50,7 @@
                 </div>
                 <div class="modal-footer-Edit modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Post</button>
+                    <button type="submit" class="btn btn-primary" id="submit" disabled>Post</button>
                 </div>
             </form>
         </div>
@@ -112,7 +111,6 @@
     <div>
         <a asp-action="Index">Back to List</a>
     </div>*@
-
 
 
 

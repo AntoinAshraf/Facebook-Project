@@ -36,28 +36,59 @@ function createPosts(rr) {
         postBar.insertAdjacentHTML("afterbegin", "<div class='post_topbar' id='post_topbar'></div>");
 
         var postTopBar = document.querySelector("#post_topbar");
-        postTopBar.insertAdjacentHTML("afterbegin","<div class='usy-dt' id='usy-dt'></div>");
+        postTopBar.insertAdjacentHTML("afterbegin","<div class='usy-dt col-10' id='usy-dt'></div>");
 
         var usyDt = document.querySelector("#usy-dt");
-       
-     
-        if (item.url!==null) {
-            usyDt.insertAdjacentHTML("afterbegin", "<img id='pImg'></img>");
-            imgSrc = document.querySelector("#pImg");
-            imgSrc.src = item.Url;
+
+
+        usyDt.insertAdjacentHTML("afterbegin", "<img id='pImg'></img>");
+        var imgSrc = document.querySelector("#pImg");
+        imgSrc.src = "/images/person.png";
+        imgSrc.style.width = "10%";
+        imgSrc.style.height = "auto";
+           
+        if (item.urlUser!==null) {
+           
+            console.log(imgSrc);
+            imgSrc.src =Context.AddFileVersionToPath("/images/" + item.urluser);
+            
+            alert(imgSrc.src);
         }
 
         usyDt.insertAdjacentHTML("beforeend", "<div class='usy-name' id='usy-name'></div>");
         var usyName = document.querySelector("#usy-name");
         usyName.insertAdjacentHTML("beforeend", "<h3>" + item.fullName + "</h3>");
-        usyName.insertAdjacentHTML("beforeend", " <span> <i class='far fa-clock'></i>" + Date.parse(item.createdAt) + " ago </span>");
+        var data = new Date( item.createdAt);
+        console.log(typeof data);
+        console.log(data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear());
+        usyName.insertAdjacentHTML("beforeend", " <span> <i class='far fa-clock'></i>" + data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear() + " </span>");
         var id = item.id;
-        postTopBar.insertAdjacentHTML("beforeend",
-            "<div class='ed-opts'><a id='' href = '#' title = '' class= 'ed-opts-open' > <i class='la la-ellipsis-v'> </i> </a><ul class='ed-options'><li><a data-target='EditModal' href='/Home/EditPost/" + id + "'>Edit Post</a></li><li><a href='/Home/DeletePost/" + id + "' > Delete Post</a ></li ></ul ></div > ");
-       postBar.insertAdjacentHTML("beforeend", "<div class='job_descp'><p>"+item.postContent+"</p></div >");
+        if (item.owner === true) {
+            postTopBar.insertAdjacentHTML("beforeend",
+                "<div class='ed-opts'><a  href = ''  class= 'ed-opts-open' > <i class='la la-ellipsis-v'> </i> </a><ul class='ed-options'><li><a data-target='EditModal' href='/Home/EditPost/" + id + "'>Edit Post</a></li><li><a href='/Home/DeletePost/" + id + "' > Delete Post</a ></li ></ul ></div > ");
+        }
+            postBar.insertAdjacentHTML("beforeend", "<div class='job_descp'><p>" + item.postContent + "</p></div >");
+
+        var AllImagDiv = document.createElement("div");
+        postBar.insertAdjacentElement("beforeend", AllImagDiv);
+        for (var i = 0; i < item.urlPost.length; i++) {
+            AllImagDiv.insertAdjacentHTML("beforeend", "<img src=" + "/images/" + item.urlPost[i] + " >");
+            var AllImage = AllImagDiv.lastChild;
+            AllImage.style.width = "15%";
+            AllImage.style.margin = "5px";
+        }
+       
+       
+        //AllImage.forEach(function (item) {
+        //    item.style.width = "21%";
+        //    item.style.height = "auto";
+        //});
 
         
     });
+
+    
+
   
 
 }
