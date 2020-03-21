@@ -48,7 +48,7 @@ function Register(){
         phoneNumber.style.borderColor = "red";
         return toastr.error('This Phone Number is not valid.', 'Validation Error');
     }
-    debugger
+  
     if (gender.value === "") {
         gender.style.borderColor = "red";
         return toastr.error('Gender Field Can\'t be Empty.', 'Validation Error');

@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<script src="~/js/jquery.min.js"></script>
+<script>
+    $("#postcreate").click(function () {
+
+  //    $.ajax({
+  //        url: '/Home/CreatePost/?s=' + "esraa",
+  //        type: 'POST',
+		// contentType: 'application/json',
+		//data: JSON.stringify({
+		//	PostContent: $("#content").val(),
+		//	Id: 0
+		//}),
+		//success: function (data) {
+		//	alert(JSON.stringify(data));
+		//},
+		//error: function (e) {
+		//	alert("error")
+		//}
+  //    })
+
+
+                $.ajax({
+                    url: '/Home/CreatePost',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+			                PostContent: $("#content").val(),
+			                Id: 0
+		                  },  
+                     success: function () {  
+                         console.log("Done");  
+                     },  
+                     error: function () {  
+                         console.log('Error in Operation');  
+                     }  
+                 }); 
+    })
+</script>

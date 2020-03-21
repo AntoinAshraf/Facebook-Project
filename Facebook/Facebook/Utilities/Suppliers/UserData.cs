@@ -47,5 +47,10 @@ namespace Facebook.Utilities
             return true;
         }
 
+        public void clearData(HttpContext httpContext)
+        {
+            httpContext.Session.Clear();
+        }
+
     }
 }

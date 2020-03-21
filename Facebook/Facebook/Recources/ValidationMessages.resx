@@ -127,31 +127,34 @@
     <value>Email Address is not Valid</value>
   </data>
   <data name="EmptyBirthDate" xml:space="preserve">
-    <value>User birth date can not be empty</value>
+    <value>User Birth date can not be empty</value>
   </data>
   <data name="EmptyFirstName" xml:space="preserve">
-    <value>User first name can not be empty</value>
+    <value>User First name can not be empty</value>
   </data>
   <data name="EmptyGender" xml:space="preserve">
-    <value>User gender can not be empty</value>
+    <value>User Gender can not be empty</value>
   </data>
   <data name="EmptyLastName" xml:space="preserve">
-    <value>User last name can not be empty</value>
+    <value>User Last name can not be empty</value>
   </data>
   <data name="EmptyNumber" xml:space="preserve">
-    <value>User phone number can not be empty</value>
+    <value>User Phone Number can not be empty</value>
   </data>
   <data name="EmptyPassword" xml:space="preserve">
-    <value>User password can not be empty</value>
+    <value>User Password can not be empty</value>
   </data>
   <data name="EmptyUser" xml:space="preserve">
-    <value>User data can not be empty</value>
+    <value>User Data can not be empty</value>
   </data>
   <data name="GenderNotExsist" xml:space="preserve">
-    <value>This gender Id does not Exsist</value>
+    <value>This Gender Id does not Exsist</value>
   </data>
   <data name="IncorrectEmailOrPassword" xml:space="preserve">
     <value>Email or Password is not Correct</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Old Password is Incorrect</value>
   </data>
   <data name="LongString" xml:space="preserve">
     <value>Can't Exceed 255 character</value>

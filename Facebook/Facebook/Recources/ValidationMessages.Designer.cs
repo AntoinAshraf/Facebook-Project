@@ -88,7 +88,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User birth date can not be empty.
+        ///   Looks up a localized string similar to User Birth date can not be empty.
         /// </summary>
         public static string EmptyBirthDate {
             get {
@@ -97,7 +97,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User first name can not be empty.
+        ///   Looks up a localized string similar to User First name can not be empty.
         /// </summary>
         public static string EmptyFirstName {
             get {
@@ -106,7 +106,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User gender can not be empty.
+        ///   Looks up a localized string similar to User Gender can not be empty.
         /// </summary>
         public static string EmptyGender {
             get {
@@ -115,7 +115,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User last name can not be empty.
+        ///   Looks up a localized string similar to User Last name can not be empty.
         /// </summary>
         public static string EmptyLastName {
             get {
@@ -124,7 +124,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User phone number can not be empty.
+        ///   Looks up a localized string similar to User Phone Number can not be empty.
         /// </summary>
         public static string EmptyNumber {
             get {
@@ -133,7 +133,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User password can not be empty.
+        ///   Looks up a localized string similar to User Password can not be empty.
         /// </summary>
         public static string EmptyPassword {
             get {
@@ -142,7 +142,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User data can not be empty.
+        ///   Looks up a localized string similar to User Data can not be empty.
         /// </summary>
         public static string EmptyUser {
             get {
@@ -151,7 +151,7 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This gender Id does not Exsist.
+        ///   Looks up a localized string similar to This Gender Id does not Exsist.
         /// </summary>
         public static string GenderNotExsist {
             get {
@@ -165,6 +165,15 @@ namespace Facebook.Recources {
         public static string IncorrectEmailOrPassword {
             get {
                 return ResourceManager.GetString("IncorrectEmailOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old Password is Incorrect.
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
             }
         }
         
