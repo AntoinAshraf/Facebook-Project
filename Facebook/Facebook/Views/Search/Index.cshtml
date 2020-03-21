@@ -1,0 +1,24 @@
+﻿@model IEnumerable<FaceBook.Models.User>
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="row">
+
+        @foreach (var usr in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="company_profile_info">
+                    <div class="company-up-info">
+                        <img src="http://via.placeholder.com/90x90" alt="">
+                        <h3> @usr.FirstName @usr.LastName </h3>
+                        <h4> @usr.BirthDate </h4>
+                        <ul>
+                            <li><a href="#" title="" class="follow">Add Friend</a></li>
+                        </ul>
+                    </div>
+                    <a href="#" title="" class="view-more-pro">View Profile</a>
+                </div><!--company_profile_info end-->
+            </div>
+        }
+    </div>
