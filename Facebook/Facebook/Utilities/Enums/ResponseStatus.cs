@@ -12,5 +12,6 @@ namespace Facebook.Utilities.Enums
         Unauthorized = 401,
         NoDataFound = 404,
         Error = 500
+      
     }
 }
