@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Facebook.Utilities.Enums
+namespace Facebook.Utilities
 {
-    public enum SocialStatuses
+    public static class Status
     {
-        Friend = 1, Request = 2, Block = 3
+        public static string Friend = "Friend";
     }
 }

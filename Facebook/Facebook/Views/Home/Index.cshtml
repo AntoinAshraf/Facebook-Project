@@ -2,19 +2,100 @@
     ViewData["Title"] = "Home Page";
 }
 
-@*@if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Home/Privacy").Any())
-    {
-        <a href="/Home/Privacy">Go To Privacy</a>
-    }*@
-@await Html.PartialAsync("CreatePost.cshtml")
-@*wait Html.PartialAsync("Posts.cshtml")*@
+@*Left Side (Info & Footer)*@
+<div class="col-lg-3 col-md-4 pd-left-none no-pd">
+    <div class="main-left-sidebar no-margin">
+        <div class="user-data full-width">
+            <div class="user-profile">
+                <div class="username-dt">
+                    <div class="usr-pic">
+                        <img src="http://via.placeholder.com/100x100" alt="">
+                    </div>
+                </div><!--username-dt end-->
+                <div class="user-specs">
+                    <h3>@TempData["Users"]</h3>
+                    <span>Graphic Designer at Self Employed</span>
+                </div>
+            </div><!--user-profile end-->
+            <ul class="user-fw-status">
+                <li>
+                    <h4>Friends</h4>
+                    <span>34</span>
+                </li>
+                <li>
+                    <a href="Profile/" title="">View Profile</a>
+                </li>
+            </ul>
+        </div><!--user-data end-->
+        <div class="tags-sec full-width">
+            <ul>
 
-@*@Html.ActionLink("All", "GetPosts", "Home")*@
-<div class='posts-section' id="posts"></div>
+                <li><a href="#" title="">About</a></li>
+                <li><a href="#" title="">Language</a></li>
+                <li><a href="#" title="">Copyright Policy</a></li>
+            </ul>
+            <div class="cp-sec">
+                <img src="~/images/facebook-logo-word.png" alt="fblogo" />
+                <p>&copy; Copyright 2020</p>
+            </div>
+        </div><!--tags-sec end-->
+    </div><!--main-left-sidebar end-->
+</div>
 
+
+@*Middle Side (Post creation & Showing All Posts)*@
+<div class="col-lg-6 col-md-8 no-pd">
+    <div class="main-ws-sec">
+        @await Html.PartialAsync("CreatePost.cshtml")
+        <div class='posts-section' id="posts"></div>
+    </div>
+</div>
+
+@*Right Side (Welcome Panel & Friends List)*@
+<div class="col-lg-3 pd-right-none no-pd">
+    <div class="right-sidebar">
+        <div class="widget widget-about">
+            @*<img src="~/images/facebook-logo-big.png" alt="">*@
+            <img src="https://img.icons8.com/clouds/100/000000/facebook-f.png" />
+            <!-- <img src="images/wd-logo.png" alt=""> -->
+            <h3>Stay connected on Facebook!</h3>
+            <span style="font-weight:bold">Welcome, @TempData["Users"]!</span>
+        </div><!--widget-about end-->
+        <div class="widget suggestions full-width">
+            <div class="sd-title">
+                <h3>Friends List</h3>
+                <!-- <i class="la la-ellipsis-v"></i> -->
+            </div><!--sd-title end-->
+            <div class="suggestions-list">
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>Jessica William</h4>
+                        <span>Graphic Designer</span>
+                    </div>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>John Doe</h4>
+                        <span>PHP Developer</span>
+                    </div>
+                </div>
+
+                <div class="view-more">
+                    <a href="#" title="">View More</a>
+                </div>
+            </div><!--suggestions-list end-->
+        </div>
+    </div><!--right-sidebar end-->
+</div>
 
 @section scripts {
+
+    <script src="~/js/createPost.js"></script>
+
     <script type="text/javascript" src="~/js/getAllPosts.js"></script>
 
     <script src="~/js/UploadImage.js"></script>
+
 }
