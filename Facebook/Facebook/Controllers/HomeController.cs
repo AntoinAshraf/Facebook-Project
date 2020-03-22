@@ -129,22 +129,25 @@ namespace Facebook.Controllers
                 bool flag = true;
 
                 //Get All Friend
-                var allFriends = facebookDataContext.UserRelations.Include(p=>p.SocialStatus).Where(p => p.InitiatorId == user.Id &&p.SocialStatus.Id== (int)SocialStatuses.friend).Select(p => p.DesiderId);
+                var allFriends = facebookDataContext.UserRelations.Include(p => p.SocialStatus).Where(p => p.InitiatorId == user.Id && p.SocialStatus.Id == (int)SocialStatuses.Friend).Select(p => p.DesiderId)
+                    .Union(facebookDataContext.UserRelations.Include(p => p.SocialStatus).Where(p => p.DesiderId == user.Id && p.SocialStatus.Id == (int)SocialStatuses.Friend).Select(p => p.InitiatorId));
 
-                allFriends.Union(facebookDataContext.UserRelations.Include(p => p.SocialStatus).Where(p => p.DesiderId == user.Id && p.SocialStatus.Id == (int)SocialStatuses.friend).Select(p => p.InitiatorId));
+                // NOT WORKING? WHY??!
+                //var allFriends = facebookDataContext.UserRelations.Include(p => p.SocialStatus).Where(p => p.InitiatorId == user.Id && p.SocialStatus.Id == (int)SocialStatuses.Friend).Select(p => p.DesiderId);
+                //allFriends.Union(facebookDataContext.UserRelations.Include(p => p.SocialStatus).Where(p => p.DesiderId == user.Id && p.SocialStatus.Id == (int)SocialStatuses.Friend).Select(p => p.InitiatorId));
 
 
                 var postsResult = facebookDataContext.Posts.Include(p => p.UsersPosts).Include(p => p.PostPhotos)
               .ToList();
-                if(postsResult==null) return Json(new { statusCode = ResponseStatus.NoDataFound });
+                if(postsResult==null) 
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
+                
                 List<PostsDTO> posts = new List<PostsDTO>();
                 PostsDTO postToRetrieve;
                 for (int i = 0; i < postsResult.Count; i++)
                 {
                     if (postsResult[i].IsDeleted == false)
                     {
-                        
-
                         foreach (var users in postsResult[i].UsersPosts)
                         {
                             postToRetrieve = new PostsDTO();
@@ -158,7 +161,8 @@ namespace Facebook.Controllers
                             postToRetrieve.CreatedAt =users.CreatedAt;
                          
                             //for Edit Option
-                            if (userP.Id == user.Id) postToRetrieve.Owner = true;
+                            if (userP.Id == user.Id)
+                                postToRetrieve.Owner = true;
                             if (postToRetrieve.Owner == false)
                             {
                                 //out if Not Friend

@@ -50,7 +50,7 @@ function createPosts(rr) {
         if (item.urlUser!==null) {
            
             console.log(imgSrc);
-            imgSrc.src =Context.AddFileVersionToPath("/images/" + item.urluser);
+            imgSrc.src = Context.AddFileVersionToPath("/images/" + item.urluser);
             
             alert(imgSrc.src);
         }
@@ -60,12 +60,12 @@ function createPosts(rr) {
         usyName.insertAdjacentHTML("beforeend", "<h3>" + item.fullName + "</h3>");
         var data = new Date( item.createdAt);
         console.log(typeof data);
-        console.log(data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear());
-        usyName.insertAdjacentHTML("beforeend", " <span> <i class='far fa-clock'></i>" + data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear() + " </span>");
+        console.log(data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear() + " | " + data.getHours());
+        usyName.insertAdjacentHTML("beforeend", " <span> <i class='far fa-clock' ></i> " + " " + data.getDate() + "-" + data.getMonth() + "-" + data.getFullYear() + " | " + data.getHours() + ":" + data.getMinutes() + " </span>");
         var id = item.id;
         if (item.owner === true) {
             postTopBar.insertAdjacentHTML("beforeend",
-                "<div class='ed-opts'><a  href = ''  class= 'ed-opts-open' > <i class='la la-ellipsis-v'> </i> </a><ul class='ed-options'><li><a data-target='EditModal' href='/Home/EditPost/" + id + "'>Edit Post</a></li><li><a href='/Home/DeletePost/" + id + "' > Delete Post</a ></li ></ul ></div > ");
+                "<div class='ed-opts col-2'><a  href = '#'  class= 'ed-opts-open' > <i class='la la-ellipsis-v'> </i> </a><ul class='ed-options'><li><a data-target='EditModal' href='/Home/EditPost/" + id + "'>Edit Post</a></li><li><a href='/Home/DeletePost/" + id + "' > Delete Post</a ></li ></ul ></div > ");
         }
             postBar.insertAdjacentHTML("beforeend", "<div class='job_descp'><p>" + item.postContent + "</p></div >");
 
