@@ -23,7 +23,7 @@
                     <span>34</span>
                 </li>
                 <li>
-                    <a href="Profile/" title="">View Profile</a>
+                    <a asp-action="Profile" asp-controller="Profile" title="">View Profile</a>
                 </li>
             </ul>
         </div><!--user-data end-->
@@ -92,9 +92,11 @@
 
 @section scripts {
 
-    <script src="~/js/createPost.js"></script>
+    <script src="~/js/CreatePost.js"></script>
 
-    <script type="text/javascript" src="~/js/getAllPosts.js"></script>
+    <script src="~/js/CreatePostVald.js"></script>
+
+    <script type="text/javascript" src="~/js/GetAllPostsHome.js"></script>
 
     <script src="~/js/UploadImage.js"></script>
 

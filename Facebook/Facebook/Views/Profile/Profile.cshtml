@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewData["Title"] = @TempData["Users"];
+}
+
+@*Left Side (Info & Footer)*@
+<div class="col-lg-3 col-md-4 pd-left-none no-pd">
+    <div class="main-left-sidebar no-margin">
+        <div class="user-data full-width">
+            <div class="user-profile">
+                <div class="username-dt">
+                    <div class="usr-pic">
+                        <img src="http://via.placeholder.com/100x100" alt="">
+                    </div>
+                </div><!--username-dt end-->
+                <div class="user-specs">
+                    <h3>@TempData["Users"]</h3>
+                    <span>Graphic Designer at Self Employed</span>
+                </div>
+            </div><!--user-profile end-->
+            <ul class="user-fw-status">
+                <li>
+                    <h4>Friends</h4>
+                    <span>34</span>
+                </li>
+            </ul>
+        </div><!--user-data end-->
+        
+        <div class="suggestions full-width">
+            <div class="sd-title">
+                <h3>Friend Requests</h3>
+            </div><!--sd-title end-->
+            <div class="suggestions-list">
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>Jessica William</h4>
+                        <span>Graphic Designer</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>John Doe</h4>
+                        <span>PHP Developer</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>Poonam</h4>
+                        <span>Wordpress</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>Bill Gates</h4>
+                        <span>C++ Developer</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>Jessica William</h4>
+                        <span>Graphic Designer</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="suggestion-usd">
+                    <img src="http://via.placeholder.com/35x35" alt="">
+                    <div class="sgt-text">
+                        <h4>John Doe</h4>
+                        <span>PHP Developer</span>
+                    </div>
+                    <span><i class="la la-minus"></i></span>
+                    <span><i class="la la-plus"></i></span>
+                </div>
+                <div class="view-more">
+                    <a href="#" title="">View More</a>
+                </div>
+            </div><!--suggestions-list end-->
+        </div>
+
+        <div class="tags-sec full-width">
+            <ul>
+
+                <li><a href="#" title="">About</a></li>
+                <li><a href="#" title="">Language</a></li>
+                <li><a href="#" title="">Copyright Policy</a></li>
+            </ul>
+            <div class="cp-sec">
+                <img src="~/images/facebook-logo-word.png" alt="fblogo" />
+                <p>&copy; Copyright 2020</p>
+            </div>
+        </div><!--tags-sec end-->
+    </div><!--main-left-sidebar end-->
+</div>
+
+
+@*Middle Side (Post creation & Showing All Posts)*@
+
+<div class="col-lg-6 col-md-8 no-pd">
+    <div class="main-ws-sec">
+        <div class="user-tab-sec">
+            <h3>John Doe</h3>
+            <div class="star-descp">
+                <span>Graphic Designer at Self Employed</span>
+            </div><!--star-descp end-->
+            <div class="tab-feed">
+                <ul>
+                    <li data-tab="feed-dd" class="animated fadeIn active">
+                        <a href="#" title="">
+                            <img src="~/images/ic1.png" alt="">
+                            <span>Posts</span>
+                        </a>
+                    </li>
+                    <li data-tab="info-dd" class="animated fadeIn">
+                        <a href="#" title="">
+                            <img src="~/images/ic2.png" alt="">
+                            <span>Info</span>
+                        </a>
+                    </li>
+                </ul>
+            </div><!-- tab-feed end-->
+        </div>
+        @*@await Html.PartialAsync("CreatePost.cshtml")*@
+        <partial name="~/Views/Home/CreatePost.cshtml" />
+        <div class="product-feed-tab animated fadeIn current" id="feed-dd">
+            <div class='posts-section' id="posts"></div> @*div for get all posts*@
+        </div>@*product-feed-tab-end*@
+
+        <div class="product-feed-tab animated fadeIn current" id="info-dd">
+            <div class="user-profile-ov st2">
+                <h3><a href="#" title="" class="exp-bx-open">Experience </a><a href="#" title="" class="exp-bx-open"><i class="fa fa-pencil"></i></a> <a href="#" title="" class="exp-bx-open"></a></h3>
+                <h4>Web designer <a href="#" title=""><i class="fas fa-user-edit"></i></a></h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
+                <h4>UI / UX Designer <a href="#" title=""><i class="fas fa-pencil"></i></a></h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id.</p>
+                <h4>PHP developer <a href="#" title=""><i class="fas fa-pencil"></i></a></h4>
+                <p class="no-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
+            </div><!--user-profile-ov end-->
+        </div>
+    </div>
+</div>
+
+@*Right Side (Welcome Panel & Friends List)*@
+<div class="col-lg-3">
+    <div class="right-sidebar">
+        <div class="widget widget-portfolio">
+            <div class="wd-heady">
+                <h3>Portfolio</h3>
+                <img src="images/photo-icon.png" alt="">
+            </div>
+            <div class="pf-gallery">
+                <ul>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                </ul>
+            </div><!--pf-gallery end-->
+        </div><!--widget-portfolio end-->
+    </div><!--right-sidebar end-->
+</div>
+
+@section scripts {
+    <script src="~/js/CreatePost.js"></script>
+    
+    <script src="~/js/CreatePostVald.js"></script>
+
+    <script type="text/javascript" src="~/js/GetAllPostsProfile.js"></script>
+
+    <script src="~/js/UploadImage.js"></script>
+
+}

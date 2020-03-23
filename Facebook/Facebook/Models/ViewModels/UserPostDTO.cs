@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Facebook.Models.ViewModels
 {
-   
+   // For Post Creation
     public class UserPostDTO
     {
         public int Id { get; set; }

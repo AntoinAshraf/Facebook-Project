@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Facebook.Models.ViewModels
 {
+    // For Showing Posts
     public class PostsDTO
     {
         public int Id { get; set; }
@@ -18,7 +19,7 @@ namespace Facebook.Models.ViewModels
         public string UrlUser { get; set; }
         public DateTime CreatedAt { get; set; }
         [NotMapped]
-        public List<String> UrlPost { get; set; } = new List<string>();
+        public List<string> UrlPost { get; set; } = new List<string>();
 
         public virtual List<Comment> Comments { get; set; } = new List<Comment>();
         public virtual List<Like> Likes { get; set; } = new List<Like>();
