@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Facebook.Contracts;
 using Facebook.ExtentionClass;
+using Facebook.Mappers;
 using Facebook.Models.ViewModels;
 using Facebook.Utilities;
 using Facebook.Utilities.Enums;
@@ -23,37 +24,45 @@ namespace Facebook.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly FacebookDataContext facebookDataContext;
         private readonly IUserData userData;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, FacebookDataContext _facebookDataContext, IUserData _userData 
-            ,IHostingEnvironment hostingEnvironment)
+        public HomeController(FacebookDataContext _facebookDataContext, IUserData _userData , IWebHostEnvironment hostingEnvironment)
         {
-            userData = _userData;
+            this.userData = _userData;
             this.hostingEnvironment = hostingEnvironment;
-            _logger = logger;
-            facebookDataContext = _facebookDataContext;
+            this.facebookDataContext = _facebookDataContext;
         }
 
         //[AuthorizedAction]
         public IActionResult Index()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext); 
-            //TempData["Users"] = userData.GetUser(HttpContext).FirstName;
-            return View();
+            ViewData["Actions"] = userData.GetActions(HttpContext);
+            int userId = userData.GetUser(HttpContext).Id;
+            User userFullData = facebookDataContext.Users.Where(x => x.Id == userId)
+                .Include("UserRelationsDesider.Initiator.UsersPosts.Post.Comments.User.ProfilePhotos")
+                .Include("UserRelationsDesider.Initiator.UsersPosts.Post.Likes.User.ProfilePhotos")
+                .Include("UserRelationsDesider.Initiator.UsersPosts.Post.PostPhotos")
+                .Include("UserRelationsInitiator.Desider.UsersPosts.Post.Comments.User.ProfilePhotos")
+                .Include("UserRelationsInitiator.Desider.UsersPosts.Post.Likes.User.ProfilePhotos")
+                .Include("UserRelationsInitiator.Desider.UsersPosts.Post.PostPhotos")
+                .Include("UsersPosts.Post.Comments.User.ProfilePhotos")
+                .Include("UsersPosts.Post.Likes.User.ProfilePhotos")
+                .Include("UsersPosts.Post.PostPhotos")
+                .Include("ProfilePhotos")
+                .FirstOrDefault();
+            HomePageDto homePageDto = HomePageDtoMapper.Map(userFullData);
+            return View(homePageDto);
         }
 
-        //[AuthorizedAction]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //public IActionResult AddComment()
+        //{
+
+        //}
 
         public string test()
         {
-        
            return Path.Combine(hostingEnvironment.WebRootPath + "\\images");
         }
 
