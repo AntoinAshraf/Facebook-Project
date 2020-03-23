@@ -56,6 +56,11 @@ namespace Facebook.Controllers
             return View(homePageDto);
         }
 
+        //public IActionResult AddComment()
+        //{
+
+        //}
+
         public string test()
         {
            return Path.Combine(hostingEnvironment.WebRootPath + "\\images");

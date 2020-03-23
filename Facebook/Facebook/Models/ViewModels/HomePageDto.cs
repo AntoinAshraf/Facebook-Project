@@ -32,13 +32,15 @@ namespace Facebook.Models.ViewModels
 
     public class HomePostDto
     {
-        public HomePostDto(string _FullName, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl) 
-            => (FullName, PostDate, PostContent, HomeCommentDto, HomeLikeDto, _PostPicUrl) = (_FullName, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl);
+        public HomePostDto(string _FullName, string _ProfilePic, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl, int _PostId) 
+            => (FullName, ProfilePic, PostDate, PostContent, HomeCommentDto, HomeLikeDto, PostPicUrl, PostId) = (_FullName, _ProfilePic, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl, _PostId);
 
         public string FullName { get; set; }
+        public string ProfilePic { get; set; }
         public string PostDate { get; set; }
         public string PostContent { get; set; }
         public string PostPicUrl { get; set; }
+        public int PostId { get; set; }
         public List<HomeCommentDto> HomeCommentDto { get; set; }
         public List<HomeLikeDto> HomeLikeDto { get; set; }
     }
@@ -46,10 +48,12 @@ namespace Facebook.Models.ViewModels
     public class HomePostTempDto
     {
         public string FullName { get; set; }
+        public string ProfilePic { get; set; }
         public string PostDate { get; set; }
         public string PostContent { get; set; }
         public DateTime CreatedAt { get; set; }
         public string PostPicUrl { get; set; }
+        public int PostId { get; set; }
         public List<HomeCommentDto> HomeCommentDto { get; set; }
         public List<HomeLikeDto> HomeLikeDto { get; set; }
     }

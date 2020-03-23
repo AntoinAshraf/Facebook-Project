@@ -35,7 +35,7 @@ namespace Facebook.Mappers
                 NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count()
                                     + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count(),
                 HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl)).ToList(),
-                HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts).Select(x=> new HomePostDto(x.FullName, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl)).ToList(),
+                HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId)).ToList(),
             };
 
             return to;
@@ -65,10 +65,12 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 PostContent = from.Post.PostContent,
-                PostPicUrl = from.Post.PostPhotos.Select(x=>x.Url).FirstOrDefault(),
+                PostPicUrl = from.Post.PostPhotos.Select(x => x.Url).FirstOrDefault(),
                 CreatedAt = from.CreatedAt,
-                HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x=>x.CreatedAt)).ToList(),
-                HomeLikeDto = Map(from.Post.Likes.OrderByDescending(x=>x.CreatedAt)).ToList()
+                HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x => x.CreatedAt)).ToList(),
+                HomeLikeDto = Map(from.Post.Likes.OrderByDescending(x => x.CreatedAt)).ToList(),
+                ProfilePic = from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault(),
+                PostId = from.PostId
             };
 
             TimeSpan? DateDifference = DateTime.Now - from.CreatedAt;
@@ -198,11 +200,11 @@ namespace Facebook.Mappers
             };
 
             TimeSpan? DateDifference = DateTime.Now - from.CreatedAt;
-            if (DateDifference.Value.Days != 0) { to.LikeDate = string.Format("posted {0} days ago", (DateDifference.Value.Days)); }
+            if (DateDifference.Value.Days != 0) { to.LikeDate = string.Format("Liked {0} days ago", (DateDifference.Value.Days)); }
             if (DateDifference.Value.Days > 30) { to.LikeDate = string.Format("from {0}", from.CreatedAt.ToString("dd/MM/yyyy")); }
-            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours != 0) { to.LikeDate = string.Format("posted {0} h ago", DateDifference.Value.Hours); }
-            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours == 0 && DateDifference.Value.Minutes != 0) { to.LikeDate = string.Format("posted {0} min ago", DateDifference.Value.Minutes); }
-            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours == 0 && DateDifference.Value.Minutes == 0) { to.LikeDate = ("posted few sec ago "); }
+            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours != 0) { to.LikeDate = string.Format("Liked {0} h ago", DateDifference.Value.Hours); }
+            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours == 0 && DateDifference.Value.Minutes != 0) { to.LikeDate = string.Format("Liked {0} min ago", DateDifference.Value.Minutes); }
+            if (DateDifference.Value.Days == 0 && DateDifference.Value.Hours == 0 && DateDifference.Value.Minutes == 0) { to.LikeDate = ("Liked few sec ago "); }
 
             return to;
         }
