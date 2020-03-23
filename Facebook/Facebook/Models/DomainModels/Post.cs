@@ -8,6 +8,7 @@ namespace FaceBook.Models
         public Post()
         {
             Comments = new HashSet<Comment>();
+            Likes = new HashSet<Like>();
             PostPhotos = new HashSet<PostPhoto>();
             UsersPosts = new HashSet<UsersPost>();
         }
@@ -18,5 +19,6 @@ namespace FaceBook.Models
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<PostPhoto> PostPhotos { get; set; }
         public virtual ICollection<UsersPost> UsersPosts { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }

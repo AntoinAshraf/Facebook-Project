@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Facebook.Models.ViewModels.HomePageDto
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -13,14 +14,14 @@
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
-                    <h3>@TempData["Users"]</h3>
+                    <h3>@Model.FullName</h3>
                     <span>Graphic Designer at Self Employed</span>
                 </div>
             </div><!--user-profile end-->
             <ul class="user-fw-status">
                 <li>
                     <h4>Friends</h4>
-                    <span>34</span>
+                    <span>@Model.NumberOfFriends</span>
                 </li>
                 <li>
                     <a href="Profile/" title="">View Profile</a>
@@ -91,11 +92,7 @@
 </div>
 
 @section scripts {
-
     <script src="~/js/createPost.js"></script>
-
     <script type="text/javascript" src="~/js/getAllPosts.js"></script>
-
     <script src="~/js/UploadImage.js"></script>
-
 }
