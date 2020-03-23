@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Facebook.Contracts;
+using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
 using Microsoft.AspNetCore.Mvc;
@@ -28,13 +29,15 @@ namespace Facebook.Controllers
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users
-                .Where(usr => (usr.FirstName.Contains(search) || usr.LastName.Contains(search)) && usr.Id != 1/*loggedUserData.Id*/).ToList();
+                .Where(usr => (usr.FirstName.Contains(search) || usr.LastName.Contains(search)) && usr.Id != loggedUserData.Id).ToList();
 
             List<UserRelation> userRelations = (from usrRel in facebookDataContext.UserRelations
-                                                where usrRel.InitiatorId == 1/*loggedUserData.Id*/ || usrRel.DesiderId == 1 /*loggedUserData.Id*/
+                                                where usrRel.InitiatorId == loggedUserData.Id || usrRel.DesiderId == loggedUserData.Id
                                                 select usrRel).ToList();
 
             ViewData["usrsRelations"] = userRelations;
+            ViewData["LoggedUser"] = loggedUserData.Id;
+
 
             return View(searchUsrs);
         }

@@ -14,7 +14,23 @@
                         <h3> @usr.FirstName @usr.LastName </h3>
                         <h4> @usr.BirthDate </h4>
                         <ul>
-                            <li><a href="#" title="" class="follow">Add Friend</a></li>
+
+                            @if (((List<UserRelation>)ViewData["usrsRelations"])
+                              .Where(usrRel => usrRel.InitiatorId == usr.Id && usrRel.DesiderId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1) {
+
+                                <li><a id="AcceptTag" title="" class="follow">Accept Request</a></li>
+                            } else if (((List<UserRelation>)ViewData["usrsRelations"])
+                              .Where(usrRel => usrRel.DesiderId == usr.Id && usrRel.InitiatorId == (int)ViewData["LoggedUser"]  && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1) {
+
+                                <li><a id="CancelTag" title="" class="follow">Cancel Request</a></li>
+                            } else if (((List<UserRelation>)ViewData["usrsRelations"])
+                              .Where(usrRel => (usrRel.InitiatorId == (int)ViewData["LoggedUser"] || usrRel.DesiderId == (int)ViewData["LoggedUser"] ) && usrRel.SocialStatusId == 1 /*Friend status*/).ToList().Count == 1) {
+                                
+                                <li><a id="unfriendTag" title="" class="follow">UnFriend</a></li>
+                            } else {
+                                <li><a id="AddFriendTag" title="" class="follow">Add Friend</a></li>
+                            }
+
                         </ul>
                     </div>
                     <a href="#" title="" class="view-more-pro">View Profile</a>
