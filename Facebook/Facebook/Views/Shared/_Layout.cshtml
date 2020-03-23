@@ -88,6 +88,15 @@
                                         Account Settings
                                     </a>
                                 </li>
+                                @if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Account/AdminControl").Any())
+                                {
+                                    <li class="text-center">
+                                        <a href="/Account/AdminControl" title="">
+                                            <i class="fas fa-user-cog"></i>
+                                            Admin Control
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                             <h3 class="tc"><a href="/Account/Logout" title=""><i class="fas fa-sign-out-alt"></i> Logout</a></h3>
                         </div><!--user-account-settingss end-->
@@ -129,7 +138,10 @@
     <script src="~/lib/slick-carousel/slick.min.js"></script>
     <script src="~/js/scrollbar.js"></script>
     <script type="text/javascript" src="~/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/js/script.js"></script>
+
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
