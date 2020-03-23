@@ -77,7 +77,7 @@ function Register(){
 
     RegisterBtn.disabled  = true;
     RegisterBtn.innerHTML = "Loading";
-    RegisterBtn.style.backgroundColor = "#65a6f9";
+    //RegisterBtn.style.backgroundColor = "#65a6f9";
 
     fetch("https://localhost:44340/Account/Register", {
         method: "post",
@@ -112,12 +112,12 @@ function Register(){
         }
         RegisterBtn.disabled = false;
         RegisterBtn.innerHTML = "Get Started";
-        RegisterBtn.style.backgroundColor = "#1877F2";
+        RegisterBtn.style.backgroundColor = "#0e385f";
 
     }).catch((err) => {
         RegisterBtn.disabled = false;
         RegisterBtn.innerHTML = "Get Started";
-        RegisterBtn.style.backgroundColor = "#1877F2";
+        RegisterBtn.style.backgroundColor = "#0e385f";
         toastr.error("Something went wrong!", 'Validation Error');
     });
 }

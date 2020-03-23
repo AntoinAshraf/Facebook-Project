@@ -44,9 +44,14 @@ function signin(){
         return response.json();
     }).then((data) => {
         if (data.statusCode === 400) {
-            data.responseMessage.forEach(element => {
-                toastr.error(element.errorMessage, 'Validation Error');
-            });
+            debugger
+            if (Array.isArray(data.responseMessage)) {
+                data.responseMessage.forEach(element => {
+                    toastr.error(element.errorMessage, 'Validation Error');
+                });
+            } else {
+                toastr.error(data.responseMessage, 'Validation Error');
+            }
         }
         if (data.statusCode === 200) {
             toastr.success('Sign in complete.', 'Done');

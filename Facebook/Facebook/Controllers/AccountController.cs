@@ -12,6 +12,7 @@ using Facebook.Validators;
 using FaceBook.Models;
 using FacebookDbContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Facebook.Controllers
@@ -155,6 +156,7 @@ namespace Facebook.Controllers
         [AuthorizedAction]
         public ActionResult ChangePassword()
         {
+            ViewData["Actions"] = userData.GetActions(HttpContext);
             return View();
         }
 
@@ -184,6 +186,64 @@ namespace Facebook.Controllers
             userData.clearData(HttpContext);
             return RedirectToAction("Register");
         }
+
+        [AuthorizedAction]
+        public IActionResult AdminControl()
+        {
+            ViewData["Actions"] = userData.GetActions(HttpContext);
+            User user = userData.GetUser(HttpContext);
+            List<UserAdminControlDto> users = new List<UserAdminControlDto>(); 
+            if (user.RoleId == (int)UserType.SuperAdmin)
+            {
+                ViewData["Roles"] = db.Roles.Where(x=>x.Id != (int)UserType.SuperAdmin).ToList();
+                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.Id != user.Id).Include(x => x.ProfilePhotos).ToList());
+            }
+            else if (user.RoleId == (int)UserType.Admin)
+            {
+                ViewData["Roles"] = db.Roles.Where(x => x.Id != (int)UserType.SuperAdmin && x.Id != (int)UserType.Admin).ToList();
+                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.RoleId != (int)UserType.SuperAdmin && x.RoleId != (int)UserType.Admin).Include(x => x.ProfilePhotos).ToList());
+            }
+            return View(users);
+        }
+
+        [AuthorizedAction]
+        [HttpGet("Account/UserBan/{userId}")]
+        public IActionResult UserBan([FromRoute]int userId, [FromQuery]bool ban)
+        {
+            User currentUser = userData.GetUser(HttpContext);
+            if (currentUser.RoleId == (int)UserType.SuperAdmin || currentUser.RoleId == (int)UserType.Admin)
+            {
+                User user = db.Users.Where(x => x.Id == userId).FirstOrDefault();
+                if (user != null && ban)
+                    user.IsActive = false;
+                else if(user != null && !ban)
+                    user.IsActive = true;
+                else
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
+
+                db.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            return Json(new { statusCode = ResponseStatus.Unauthorized });
+        }
+
+        [AuthorizedAction]
+        [HttpGet("Account/ChangeRole/{userId}")]
+        public IActionResult ChangeRole([FromRoute]int userId, [FromQuery]int roleId)
+        {
+            User currentUser = userData.GetUser(HttpContext);
+            if (currentUser.RoleId == (int)UserType.SuperAdmin || currentUser.RoleId == (int)UserType.Admin)
+            {
+                User user = db.Users.Where(x => x.Id == userId).FirstOrDefault();
+                if (user == null || !db.Roles.Any(x => x.Id == roleId))
+                    return Json(new { statusCode = ResponseStatus.ValidationError });
+
+                user.RoleId = roleId;
+                db.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            return Json(new { statusCode = ResponseStatus.Unauthorized });
+        }
         /////////////////////////////////////////////////////////////////////////////////////
         //helper
 
@@ -193,7 +253,7 @@ namespace Facebook.Controllers
             user.IsDeleted = false;
             user.IsCreatedByAdmin = false;
             user.CreatedAt = DateTime.Now;
-            user.RoleId = 1; //normal user
+            user.RoleId = (int)UserType.User; //normal user
         }
     }
 }

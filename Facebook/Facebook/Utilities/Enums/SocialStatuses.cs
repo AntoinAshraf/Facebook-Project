@@ -7,6 +7,6 @@ namespace Facebook.Utilities.Enums
 {
     public enum SocialStatuses
     {
-        friend = 1, request = 2, block = 3
+        Friend = 1, Request = 2, Block = 3
     }
 }

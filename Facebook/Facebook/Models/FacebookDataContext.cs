@@ -51,7 +51,7 @@ namespace FacebookDbContext
         public virtual DbSet<UserRelation> UserRelations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UsersPost> UsersPosts { get; set; }
-        public DbSet<Facebook.Models.ViewModels.UserPostDTO> UserPostDTO { get; set; }
-        public DbSet<Facebook.Models.ViewModels.PostsDTO> PostsDTO { get; set; }
+        //public DbSet<Facebook.Models.ViewModels.UserPostDTO> UserPostDTO { get; set; }
+        //public DbSet<Facebook.Models.ViewModels.PostsDTO> PostsDTO { get; set; }
     }
 }
