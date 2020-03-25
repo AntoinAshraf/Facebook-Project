@@ -52,7 +52,7 @@
             @foreach (var post in Model.HomePostDto)
             {
 
-                <div class="posty">
+                <div id="post_@post.PostId" class="posty">
                     <div class="post-bar no-margin">
                         <div class="post_topbar">
                             <div class="usy-dt">
@@ -62,39 +62,56 @@
                                     <span><img src="images/clock.png" alt="">@post.PostDate</span>
                                 </div>
                             </div>
-                            <div class="ed-opts">
-                                <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                                <ul class="ed-options">
-                                    <li><a href="#" title="">Edit Post</a></li>
-                                    <li><a href="#" title="">Delete Post</a></li>
-                                </ul>
-                            </div>
+                            @if (post.CanEditDelete)
+                            {
+                                <div class="ed-opts">
+                                    <a title="" href="#" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                                    <ul class="ed-options">
+                                        <li><a onclick="getPostById(@post.PostId)" title="">Edit Post</a></li>
+                                        <li><a onclick="deletePost(@post.PostId)" title="">Delete Post</a></li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
 
                         <div class="job_descp">
-                            <p>@post.PostContent</p>
+                            <p id="postContent_@post.PostId">@post.PostContent</p>
                             <img style="margin-left:30%" src="~/PostPics/@post.PostPicUrl" />
                         </div>
                         <div class="job-status-bar">
                             <ul class="like-com">
                                 <li>
-                                    <a><i class="la la-heart"></i><button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Like</button></a>
+                                    <a>
+                                        <i id="heart_@post.PostId" onclick="SendLike(@post.PostId)" style="color:@{
+                                        if (post.IsLike)
+                                        {
+                                            @:blue
+                                        }
+                                        else
+                                        {
+                                            @:gray
+                                        }
+                                            }" class="la la-heart"></i><button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Like</button>
+                                    </a>
                                     <img src="images/liked-img.png" alt="">
-                                    <span style="margin-left:1px">@post.HomeLikeDto.Count()</span>
+                                    <span id="likeNumber_@post.PostId" style="margin-left:1px">@post.HomeLikeDto.Count()</span>
                                 </li>
-                                <li><a title="" class="com"><img src="images/com.png" alt=""> Comment @post.HomeCommentDto.Count()</a></li>
+                                <li>
+                                    <a style="margin-top:16px" title="" class="com"><img src="images/com.png" alt=""> Comment </a>
+                                    <span id="commentNumber_@post.PostId" style="margin-left:1px">@post.HomeCommentDto.Count()</span>
+                                </li>
                             </ul>
                         </div>
                     </div><!--post-bar end-->
                     <div class="comment-section">
                         <div class="comment-sec">
-                            <ul>
+                            <ul id="commentContainer_@post.PostId">
                                 @foreach (var comment in post.HomeCommentDto)
                                 {
                                     <li>
                                         <div class="comment-list">
                                             <div class="bg-img">
-                                                <img class="friendListPic" src="~/ProfilePics/@comment.ProfilePicUrl" alt="">
+                                                <img class="friendListPic" src="@comment.ProfilePicUrl" alt="">
                                             </div>
                                             <div class="comment">
                                                 <h3>@comment.FullName</h3>
@@ -109,8 +126,8 @@
                         <div class="post-comment">
                             <div class="comment_box">
                                 <form>
-                                    <input type="text" placeholder="Post a comment">
-                                    <button type="submit">Send</button>
+                                    <input id="commentTextBox_@post.PostId" type="text" placeholder="Post a comment">
+                                    <button id="sendBtn_@post.PostId" type="button" onclick="SendComment(@post.PostId)">Send</button>
                                 </form>
                             </div>
                         </div><!--post-comment end-->
@@ -128,14 +145,14 @@
                                 </button>
                             </div>
 
-                            <div class="modal-body">
+                            <div id="likesContainer_@post.PostId" class="modal-body">
                                 @if (post.HomeLikeDto.Count() != 0)
                                 {
                                     @foreach (var like in post.HomeLikeDto)
                                     {
                                         <div class="comment-list">
                                             <div class="bg-img">
-                                                <img class="friendListPic" src="~/ProfilePics/@like.ProfilePicUrl" alt="">
+                                                <img class="friendListPic" src="@like.ProfilePicUrl" alt="">
                                             </div>
                                             <div class="comment">
                                                 <h3>@like.FullName</h3>
@@ -146,9 +163,7 @@
                                 }
                                 else
                                 {
-                                    <div class="comment-list">
-                                        There is no reactions for this post yet .
-                                    </div>
+                                    @:There is no reactions for this post yet .
                                 }
                             </div>
                             <div class="modal-footer">
@@ -196,11 +211,41 @@
     </div><!--right-sidebar end-->
 </div>
 
+<div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="post-body">
+                    <div class="row">
+                        <div class="col-lg-12 form-group">
+                            <textarea class="form-control" rows="3" id="postContentTextArea" name="PostContent" onkeydown="checkform()" placeholder="What's in your mind..."></textarea>
+                            <input style="display:none" type="text" id="postIdTextBox" />
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="EditPost()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
 @section scripts {
     <script src="~/js/createPost.js"></script>
+    <script src="~/js/CommentLike.js"></script>
+    <script src="~/js/PostCrud.js"></script>
     @*<script type="text/javascript" src="~/js/getAllPosts.js"></script>*@
     <script src="~/js/UploadImage.js"></script>
 }
