@@ -32,8 +32,8 @@ namespace Facebook.Models.ViewModels
 
     public class HomePostDto
     {
-        public HomePostDto(string _FullName, string _ProfilePic, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl, int _PostId) 
-            => (FullName, ProfilePic, PostDate, PostContent, HomeCommentDto, HomeLikeDto, PostPicUrl, PostId) = (_FullName, _ProfilePic, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl, _PostId);
+        public HomePostDto(string _FullName, string _ProfilePic, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl, int _PostId, bool _CanEditDelete, bool _IsLike) 
+            => (FullName, ProfilePic, PostDate, PostContent, HomeCommentDto, HomeLikeDto, PostPicUrl, PostId, CanEditDelete, IsLike) = (_FullName, _ProfilePic, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl, _PostId, _CanEditDelete, _IsLike);
 
         public string FullName { get; set; }
         public string ProfilePic { get; set; }
@@ -41,6 +41,8 @@ namespace Facebook.Models.ViewModels
         public string PostContent { get; set; }
         public string PostPicUrl { get; set; }
         public int PostId { get; set; }
+        public bool CanEditDelete { get; set; }
+        public bool IsLike { get; set; }
         public List<HomeCommentDto> HomeCommentDto { get; set; }
         public List<HomeLikeDto> HomeLikeDto { get; set; }
     }
@@ -54,6 +56,8 @@ namespace Facebook.Models.ViewModels
         public DateTime CreatedAt { get; set; }
         public string PostPicUrl { get; set; }
         public int PostId { get; set; }
+        public bool CanEditDelete { get; set; }
+        public bool IsLike { get; set; }
         public List<HomeCommentDto> HomeCommentDto { get; set; }
         public List<HomeLikeDto> HomeLikeDto { get; set; }
     }
