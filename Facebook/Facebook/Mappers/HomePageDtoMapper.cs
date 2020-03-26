@@ -32,12 +32,15 @@ namespace Facebook.Mappers
             var to = new HomePageDto
             {
                 FullName = $"{from.FirstName} {from.LastName}",
-                ProfilePicUrl  = from.ProfilePhotos.Where(x=>x.IsCurrent).Select(x=>x.Url).FirstOrDefault(),
                 NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count()
                                     + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count(),
                 HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl)).ToList(),
                 HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts, hostingEnvironment, from.Id).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId, x.CanEditDelete, x.IsLike)).ToList(),
             };
+
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            byte[] b = System.IO.File.ReadAllBytes(path);
+            to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
             return to;
         }
@@ -66,14 +69,23 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 PostContent = from.Post.PostContent,
-                PostPicUrl = from.Post.PostPhotos.Select(x => x.Url).FirstOrDefault(),
                 CreatedAt = from.CreatedAt,
                 HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
                 HomeLikeDto = Map(from.Post.Likes.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
-                ProfilePic = from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault(),
                 PostId = from.PostId,
                 IsLike = from.Post.Likes.Any(x=>x.PostId == from.PostId && x.UserId == currentUserId)
             };
+
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg") ;
+            byte[] b = System.IO.File.ReadAllBytes(path);
+            to.ProfilePic = "data:image/png;base64," + Convert.ToBase64String(b);
+
+            if(from.Post.PostPhotos.Select(x => x.Url).FirstOrDefault() != null)
+            {
+                string path2 = hostingEnvironment.WebRootPath + "/PostPics/" + from.Post.PostPhotos.Select(x => x.Url).FirstOrDefault();
+                byte[] b2 = System.IO.File.ReadAllBytes(path2);
+                to.PostPicUrl = "data:image/png;base64," + Convert.ToBase64String(b2);
+            }
 
             TimeSpan? DateDifference = DateTime.Now - from.CreatedAt;
             if (DateDifference.Value.Days != 0) { to.PostDate = string.Format("posted {0} days ago", (DateDifference.Value.Days)); }
@@ -116,8 +128,11 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.Desider.FirstName} {from.Desider.LastName}",
                 HomePostDto = Map(from.Desider.UsersPosts, hostingEnvironment, currentUserId).ToList(),
-                ProfilePicUrl = from.Desider.ProfilePhotos.Where(x=>x.IsCurrent).Select(x=>x.Url).FirstOrDefault()
             };
+
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Desider.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            byte[] b = System.IO.File.ReadAllBytes(path);
+            to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
             return to;
         }
@@ -130,9 +145,11 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.Initiator.FirstName} {from.Initiator.LastName}",
                 HomePostDto = Map(from.Initiator.UsersPosts, hostingEnvironment, currentUserId).ToList(),
-                ProfilePicUrl = from.Initiator.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault()
-
             };
+
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Initiator.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            byte[] b = System.IO.File.ReadAllBytes(path);
+            to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
             return to;
         }
@@ -163,7 +180,7 @@ namespace Facebook.Mappers
                 CommentContent = from.CommentContent,
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault();
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl =  "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -203,7 +220,7 @@ namespace Facebook.Mappers
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault();
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -217,7 +234,8 @@ namespace Facebook.Mappers
             return to;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////
+        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         public static List<HomePostTempDto> GetAllPosts(List<HomeUserTempDto> homeUserDtos, IEnumerable<UsersPost> from, IWebHostEnvironment hostingEnvironment, int currentUserId)
         {

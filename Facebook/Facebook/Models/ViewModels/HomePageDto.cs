@@ -77,4 +77,13 @@ namespace Facebook.Models.ViewModels
         public string LikeDate { get; set; }
     }
 
+    public class CreatedPostDto
+    {
+        public string FullName { get; set; }
+        public string ProfilePic { get; set; }
+        public string PostDate { get; set; }
+        public string PostContent { get; set; }
+        public string PostPicUrl { get; set; }
+        public int PostId { get; set; }
+    }
 }

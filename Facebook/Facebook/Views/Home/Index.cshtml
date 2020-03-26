@@ -10,7 +10,7 @@
             <div class="user-profile">
                 <div class="username-dt">
                     <div class="usr-pic">
-                        <img src="~/ProfilePics/@Model.ProfilePicUrl" alt="">
+                        <img src="@Model.ProfilePicUrl" alt="">
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
@@ -47,7 +47,53 @@
 @*Middle Side (Post creation & Showing All Posts)*@
 <div class="col-lg-6 col-md-8 no-pd">
     <div class="main-ws-sec">
-        @*@await Html.PartialAsync("CreatePost.cshtml")*@
+        <div class="post-topbar">
+            <div class="post-st">
+                <ul>
+                    <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
+                </ul>
+            </div><!--post-st end-->
+        </div>
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog-edit">
+                <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form enctype="multipart/form-data">
+                        <div class="modal-header model-header-edit">
+                            <h3 id="createTitle">Create Post</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="post-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <textarea id="postTextArea" class="form-control" rows="3" name="PostContent" placeholder="What's in your mind..."></textarea>
+                                    </div>
+                                    <div class="col-lg-12 row " id="image-category">
+                      
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="postImage">
+                                            <label class="custom-file-label" for="customFile">Choose Image</label>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div><!--post-project-fields end-->
+                        </div>
+                        <div class="modal-footer-Edit modal-footer" style="float:right">
+                            <button type="button" class="btn btn-default bg-danger text-white" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn text-white" style="background-color:#0e385f" id="submit" onclick="createPost()">Post</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
         <div class='posts-section' id="posts">
             @foreach (var post in Model.HomePostDto)
             {
@@ -56,7 +102,7 @@
                     <div class="post-bar no-margin">
                         <div class="post_topbar">
                             <div class="usy-dt">
-                                <img class="friendListPic" src="~/ProfilePics/@post.ProfilePic" alt="">
+                                <img class="friendListPic" src="@post.ProfilePic" alt="">
                                 <div class="usy-name">
                                     <h3>@post.FullName</h3>
                                     <span><img src="images/clock.png" alt="">@post.PostDate</span>
@@ -76,7 +122,10 @@
 
                         <div class="job_descp">
                             <p id="postContent_@post.PostId">@post.PostContent</p>
-                            <img style="margin-left:30%" src="~/PostPics/@post.PostPicUrl" />
+                            @if (post.PostPicUrl != null)
+                            {
+                                <img style="margin-left:23%; width:250px" src="@post.PostPicUrl" />
+                            }
                         </div>
                         <div class="job-status-bar">
                             <ul class="like-com">
@@ -196,7 +245,7 @@
                 @foreach (var user in Model.HomeUserDtos)
                 {
                     <div class="suggestion-usd">
-                        <img class="friendListPic" src="~/ProfilePics/@user.ProfilePicUrl" alt="">
+                        <img class="friendListPic" src="@user.ProfilePicUrl" alt="">
                         <div class="sgt-text">
                             <h4>@user.FullName</h4>
                             <span>Graphic Designer</span>
@@ -243,9 +292,15 @@
 
 
 @section scripts {
-    <script src="~/js/createPost.js"></script>
+    @*<script src="~/js/createPost.js"></script>*@
     <script src="~/js/CommentLike.js"></script>
     <script src="~/js/PostCrud.js"></script>
+    <script>
+        $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    </script>
     @*<script type="text/javascript" src="~/js/getAllPosts.js"></script>*@
-    <script src="~/js/UploadImage.js"></script>
+    @*<script src="~/js/UploadImage.js"></script>*@
 }
