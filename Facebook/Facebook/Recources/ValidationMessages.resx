@@ -150,6 +150,9 @@
   <data name="EmptyPassword" xml:space="preserve">
     <value>User Password can not be empty</value>
   </data>
+  <data name="EmptyPostText" xml:space="preserve">
+    <value>Post text can not be Empty</value>
+  </data>
   <data name="EmptyUser" xml:space="preserve">
     <value>User Data can not be empty</value>
   </data>
@@ -182,5 +185,8 @@
   </data>
   <data name="WrongCode" xml:space="preserve">
     <value>Code you Entered is not Correct</value>
+  </data>
+  <data name="WrongFormat" xml:space="preserve">
+    <value>Image Extention must be jpg or png</value>
   </data>
 </root>

@@ -160,6 +160,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Post text can not be Empty.
+        /// </summary>
+        public static string EmptyPostText {
+            get {
+                return ResourceManager.GetString("EmptyPostText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Data can not be empty.
         /// </summary>
         public static string EmptyUser {
@@ -255,6 +264,15 @@ namespace Facebook.Recources {
         public static string WrongCode {
             get {
                 return ResourceManager.GetString("WrongCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Extention must be jpg or png.
+        /// </summary>
+        public static string WrongFormat {
+            get {
+                return ResourceManager.GetString("WrongFormat", resourceCulture);
             }
         }
     }
