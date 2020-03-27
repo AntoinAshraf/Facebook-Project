@@ -3,38 +3,104 @@
     ViewData["Title"] = "Index";
 }
 
-    <div class="row">
 
-        @foreach (var usr in Model)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="company_profile_info">
-                    <div class="company-up-info">
-                        <img src="http://via.placeholder.com/90x90" alt="">
-                        <h3> @usr.FirstName @usr.LastName </h3>
-                        <h4> @usr.BirthDate </h4>
-                        <ul>
+@foreach (var usr in Model)
+{
+    <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="company_profile_info">
+            <div class="company-up-info">
+                <img src="http://via.placeholder.com/90x90" alt="">
+                <h3> @usr.FirstName @usr.LastName </h3>
+                <h4> @usr.BirthDate </h4>
+                <ul>
 
-                            @if (((List<UserRelation>)ViewData["usrsRelations"])
-                              .Where(usrRel => usrRel.InitiatorId == usr.Id && usrRel.DesiderId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1) {
+                    @if (((List<UserRelation>)ViewData["usrsRelations"])
+                       .Where(usrRel => usrRel.InitiatorId == usr.Id && usrRel.DesiderId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
+                    {
 
-                                <li><a id="AcceptTag" title="" class="follow">Accept Request</a></li>
-                            } else if (((List<UserRelation>)ViewData["usrsRelations"])
-                              .Where(usrRel => usrRel.DesiderId == usr.Id && usrRel.InitiatorId == (int)ViewData["LoggedUser"]  && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1) {
+                        <li id="usr_@usr.Id"><a href="" onclick='ConfirmFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</a></li>
+                    }
+                    else if (((List<UserRelation>)ViewData["usrsRelations"])
+                      .Where(usrRel => usrRel.DesiderId == usr.Id && usrRel.InitiatorId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
+                    {
 
-                                <li><a id="CancelTag" title="" class="follow">Cancel Request</a></li>
-                            } else if (((List<UserRelation>)ViewData["usrsRelations"])
-                              .Where(usrRel => (usrRel.InitiatorId == (int)ViewData["LoggedUser"] || usrRel.DesiderId == (int)ViewData["LoggedUser"] ) && usrRel.SocialStatusId == 1 /*Friend status*/).ToList().Count == 1) {
-                                
-                                <li><a id="unfriendTag" title="" class="follow">UnFriend</a></li>
-                            } else {
-                                <li><a id="AddFriendTag" title="" class="follow">Add Friend</a></li>
-                            }
+                        <li id="usr_@usr.Id"><a href="" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @usr.Id)' id="CancelTag" title="" class="follow">Cancel Request</a></li>
+                    }
+                    else if (((List<UserRelation>)ViewData["usrsRelations"])
+                      .Where(usrRel => (usrRel.InitiatorId == (int)ViewData["LoggedUser"] || usrRel.DesiderId == (int)ViewData["LoggedUser"]) && usrRel.SocialStatusId == 1 /*Friend status*/).ToList().Count == 1)
+                    {
 
-                        </ul>
-                    </div>
-                    <a href="#" title="" class="view-more-pro">View Profile</a>
-                </div><!--company_profile_info end-->
+                        <li id="usr_@usr.Id"><a href="" onclick='UnFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</a></li>
+                    }
+                    else
+                    {
+                        <li id="usr_@usr.Id"><a href="" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @usr.Id)' id="AddFriendTag" title="" class="follow">Add Friend</a></li>
+                    }
+
+                </ul>
             </div>
-        }
+            <a href="#" title="" class="view-more-pro">View Profile</a>
+        </div><!--company_profile_info end-->
     </div>
+}
+
+@section scripts {
+    <script>
+
+        function ConfirmFriendAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "PUT",
+                    url: `/Search/ConfirmFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+
+                    success: function (Response) {
+                        alert("success");
+                        if (Response.success) {
+
+                            var unfrientTextTag = "<a href='' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='follow'>UnFriend</a>";
+
+                            $("#usr_" + InitiatorId).html(unfrientTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+
+                });
+            }
+        }
+
+        function UnFriendAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/Search/UnFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (Response) {
+                        if (Response.success) {
+
+                            var unfrientTextTag = "<a href='' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='follow'>Add Friend</a>";
+
+                            $("#usr_" + InitiatorId).html(unfrientTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+
+                });
+            }
+        }
+
+    </script>
+}
