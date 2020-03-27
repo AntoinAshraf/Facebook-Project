@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
+////DESKTOP-J75213F\SQLEXPRESS
 namespace Facebook.Controllers
 {
     public class ProfileController : Controller
@@ -35,16 +35,32 @@ namespace Facebook.Controllers
         {
 
             ViewData["Actions"] = userData.GetActions(HttpContext);
-            TempData["Users"] = userData.GetUser(HttpContext).FirstName;
+            TempData["Users"] = userData.GetUser(HttpContext);
             return View();
         }
 
-        public IActionResult GetPosts()
-        {
+
+        [HttpGet]
+        /***
+         * id --> this user Id
+         */
+        public IActionResult GetPosts(int?id)
+        { // is DELTEDDDDDDDDDDDDDDDDDDDDDDDDD, posts comment??????????????????
             try
             {
-                // is DELTEDDDDDDDDDDDDDDDDDDDDDDDDD, posts comment??????????????????
+                if(id==null) return Json(new { statusCode = ResponseStatus.NoDataFound });              
                 User user = userData.GetUser(HttpContext);
+
+                //to check who is user?
+                bool flag = true;//to check Owner prop
+                if(id!=user.Id)
+                {
+                    user = facebookDataContext.Users.SingleOrDefault(p => p.Id == id);
+                    flag = false;
+                }
+
+
+
                 PostsMapper postsMapper = new PostsMapper(facebookDataContext);
 
                 var postsResult = facebookDataContext.UsersPosts.Where(p => p.UserId == user.Id && p.Post.IsDeleted == false)
@@ -58,7 +74,7 @@ namespace Facebook.Controllers
 
                 // Mapping
                 List<PostsDTO> postsToRetrieve = postsMapper.Map(postsResult, user).ToList();
-                postsToRetrieve.ForEach(o => o.Owner = true);
+                postsToRetrieve.ForEach(o => o.Owner = flag);
 
                 return Json(new { statusCode = ResponseStatus.Success, responseMessage = postsToRetrieve });
             }
@@ -68,11 +84,6 @@ namespace Facebook.Controllers
             }
         }
 
-        public string test()
-        {
-            User user = userData.GetUser(HttpContext);
-            return user.UsersPosts?.FirstOrDefault().Post.PostContent.ToString();
-        }
-
+       
     }
 }

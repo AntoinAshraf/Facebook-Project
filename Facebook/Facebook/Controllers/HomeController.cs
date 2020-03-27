@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Facebook.Controllers
 {
@@ -40,8 +41,8 @@ namespace Facebook.Controllers
         //[AuthorizedAction]
         public IActionResult Index()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext); 
-            //TempData["Users"] = userData.GetUser(HttpContext).FirstName;
+            ViewData["Actions"] = userData.GetActions(HttpContext);
+          
             return View();
         }
 

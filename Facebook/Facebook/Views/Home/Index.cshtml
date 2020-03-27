@@ -1,7 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@{
+        User user = null;
+        if (TempData["Users"] != null)
+        {
+            user = TempData["user"] as User;
+            TempData.Keep("Users");
+        }
 
+}
 @*Left Side (Info & Footer)*@
 <div class="col-lg-3 col-md-4 pd-left-none no-pd">
     <div class="main-left-sidebar no-margin">
@@ -13,7 +21,17 @@
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
-                    <h3>@TempData["Users"]</h3>
+                    @{if (user != null)
+                            {
+                                <h3>@user.FirstName</h3>
+
+                            }
+                            else
+                            {
+                                <h3>hacker</h3>
+                            }
+                        }
+
                     <span>Graphic Designer at Self Employed</span>
                 </div>
             </div><!--user-profile end-->
@@ -59,7 +77,16 @@
             <img src="https://img.icons8.com/clouds/100/000000/facebook-f.png" />
             <!-- <img src="images/wd-logo.png" alt=""> -->
             <h3>Stay connected on Facebook!</h3>
-            <span style="font-weight:bold">Welcome, @TempData["Users"]!</span>
+            @*@{if (user != null)
+                    {
+                        <span style="font-weight:bold">Welcome, @user.FirstName!</span>
+                    }
+                    else
+                    {
+
+                        <span style="font-weight:bold">Welcome, Hacker**!</span>
+                    }
+                }*@
         </div><!--widget-about end-->
         <div class="widget suggestions full-width">
             <div class="sd-title">
