@@ -17,19 +17,16 @@
                     @if (((List<UserRelation>)ViewData["usrsRelations"])
                        .Where(usrRel => usrRel.InitiatorId == usr.Id && usrRel.DesiderId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
                     {
-
                         <li id="usr_@usr.Id"><a href="" onclick='ConfirmFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</a></li>
                     }
                     else if (((List<UserRelation>)ViewData["usrsRelations"])
                       .Where(usrRel => usrRel.DesiderId == usr.Id && usrRel.InitiatorId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
                     {
-
                         <li id="usr_@usr.Id"><a href="" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @usr.Id)' id="CancelTag" title="" class="follow">Cancel Request</a></li>
                     }
                     else if (((List<UserRelation>)ViewData["usrsRelations"])
                       .Where(usrRel => (usrRel.InitiatorId == (int)ViewData["LoggedUser"] || usrRel.DesiderId == (int)ViewData["LoggedUser"]) && usrRel.SocialStatusId == 1 /*Friend status*/).ToList().Count == 1)
                     {
-
                         <li id="usr_@usr.Id"><a href="" onclick='UnFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</a></li>
                     }
                     else
@@ -57,7 +54,7 @@
                         "DesiderId": DesiderId
                     },
                     dataType: "json",
-
+                    contentType: "application/json; charset=utf-8",
                     success: function (Response) {
                         alert("success");
                         if (Response.success) {

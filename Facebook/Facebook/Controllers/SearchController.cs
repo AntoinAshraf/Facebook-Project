@@ -65,5 +65,31 @@ namespace Facebook.Controllers
 
 
         }
+
+        [HttpDelete]
+        public IActionResult UnFriendAction(int InitiatorId, int DesiderId) {
+            var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => (usrRel.InitiatorId == InitiatorId || usrRel.InitiatorId == DesiderId) && (usrRel.InitiatorId == DesiderId || usrRel.DesiderId == DesiderId)).FirstOrDefault();
+            if (userRelSelect == null)
+                return Json(new { success = false});
+
+            facebookDataContext.UserRelations.Remove(userRelSelect);
+            facebookDataContext.SaveChanges();
+
+            return Json(new { success = true});
+        }
+
+        [HttpPost]
+        public IActionResult RequestFriendAction(int InitiatorId, int DesiderId) {
+            UserRelation newUserRel = new UserRelation() {
+                    CreatedAt = DateTime.Now,
+                    DesiderId = DesiderId,
+                    InitiatorId = InitiatorId,
+                    IsDeleted = false,
+                    SocialStatusId = (int)SocialStatuses.Request
+                };
+            facebookDataContext.UserRelations.Add(newUserRel);
+            facebookDataContext.SaveChanges();
+            return Json(new { success = true});
+        }
     }
 }
