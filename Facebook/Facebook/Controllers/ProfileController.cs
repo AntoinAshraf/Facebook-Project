@@ -35,7 +35,7 @@ namespace Facebook.Controllers
         {
 
             ViewData["Actions"] = userData.GetActions(HttpContext);
-            TempData["Users"] = userData.GetUser(HttpContext).FirstName;
+            ViewData["Users"] = userData.GetUser(HttpContext);
             return View();
         }
 

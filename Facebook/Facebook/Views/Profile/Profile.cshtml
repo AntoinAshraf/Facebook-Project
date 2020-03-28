@@ -2,7 +2,15 @@
 @{
     ViewData["Title"] = @TempData["Users"];
 }
+@{
+    User user = null;
+    if (TempData["Users"] != null)
+    {
+        user = TempData["user"] as User;
+        TempData.Keep("Users");
+    }
 
+}
 @*Left Side (Info & Footer)*@
 <div class="col-lg-3 col-md-4 pd-left-none no-pd">
     <div class="main-left-sidebar no-margin">
@@ -25,7 +33,7 @@
                 </li>
             </ul>
         </div><!--user-data end-->
-        
+
         <div class="suggestions full-width">
             <div class="sd-title">
                 <h3>Friend Requests</h3>
@@ -183,7 +191,7 @@
 
 @section scripts {
     <script src="~/js/CreatePost.js"></script>
-    
+
     <script src="~/js/CreatePostVald.js"></script>
 
     <script type="text/javascript" src="~/js/GetAllPostsProfile.js"></script>
