@@ -32,6 +32,7 @@ namespace Facebook.Mappers
             info.BirthDate = From.BirthDate;
             info.GenderName = From.Gender.GenderName;
             info.PhoneNumber = From.PhoneNumber;
+            info.id = From.Id;
 
             return info;
         }
@@ -67,6 +68,7 @@ namespace Facebook.Mappers
                         FriendRequest friendRequest = new FriendRequest();
                         friendRequest.FullName = $"{item.Initiator.FirstName} {item.Initiator.LastName}";
                         friendRequest.Photo = item.Initiator.ProfilePhotos.Where(photo => photo.IsCurrent == true).Select(photo => photo.Url).FirstOrDefault();
+                        friendRequest.initiatorId = item.InitiatorId;
                         friendRequests.Add(friendRequest);
                     }
                 }

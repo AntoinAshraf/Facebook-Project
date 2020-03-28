@@ -7,6 +7,7 @@ namespace Facebook.Models.ViewModels
 {
     public class ProfilePageDto
     {
+       
         //Info
        public  userInfo UserInfo { get; set; }
         //Photo
@@ -30,6 +31,7 @@ namespace Facebook.Models.ViewModels
         public DateTime BirthDate { get; set; }
         public string GenderName { get; set; }
         public string PhoneNumber { get; set; }
+        public int id { get; set; }
     }
     public class userPost
     {
@@ -69,5 +71,6 @@ namespace Facebook.Models.ViewModels
     {
         public string FullName { get; set; }
         public string Photo { get; set; }
+        public int initiatorId { get; set; }
     }
 }
