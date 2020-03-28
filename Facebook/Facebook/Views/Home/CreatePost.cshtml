@@ -1,4 +1,4 @@
-﻿@model Facebook.Models.ViewModels.UserPostDTO
+﻿@*@model Facebook.Models.ViewModels.UserPostDTO*@
 
 <div class="post-topbar">
 
@@ -42,10 +42,10 @@
                             </div>
                             <div class="col-lg-12">
                                 @*<label>Upload Image</label>*@
-                                
+
                                 <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
 
-                                <input asp-for="image" class="btn text-white" style="background-color:#0e385f; width:55%" onchange="upload(event)">
+                                <input class="btn text-white" style="background-color:#0e385f; width:55%" onchange="upload(event)">
                             </div>
                             <hr />
                         </div>

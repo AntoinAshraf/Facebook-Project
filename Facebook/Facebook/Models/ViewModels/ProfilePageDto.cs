@@ -33,12 +33,14 @@ namespace Facebook.Models.ViewModels
     }
     public class userPost
     {
+        public int PostId { get; set; }
         public string PostContent { get; set; }
         public string PostPhoto { get; set; }
         public string PostDate { get; set; }
         public bool CanChange { get; set; }
         public bool IsLike { get; set; }
         public int numOfLikes { get; set; }
+        public int numOfComments { get; set; }
         //comments
         public List<postComment> Comments { get; set; } = new List<postComment>();
         //likes

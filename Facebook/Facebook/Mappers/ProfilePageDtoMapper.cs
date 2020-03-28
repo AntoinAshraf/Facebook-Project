@@ -28,7 +28,7 @@ namespace Facebook.Mappers
         public static userInfo mapperInfo(User From)
         {
             userInfo info = new userInfo();
-            info.FullName = $"{From.FirstName} ${From.LastName}";
+            info.FullName = $"{From.FirstName} {From.LastName}";
             info.BirthDate = From.BirthDate;
             info.GenderName = From.Gender.GenderName;
             info.PhoneNumber = From.PhoneNumber;
@@ -100,9 +100,11 @@ namespace Facebook.Mappers
                     userPost.CanChange = item.IsCreator;
                     userPost.IsLike = item.Post.Likes.Any(u => u.UserId == id&&u.IsDeleted==false);
                     userPost.numOfLikes = item.Post.Likes.Where(u=>u.IsDeleted==false).Count();
+                    userPost.numOfComments = item.Post.Comments.Where(c=>c.IsDeleted==false).Count();
                     userPost.Likes = GetPostLikes(item.Post.Likes.ToList());
                     userPost.Comments = GetPostComments(item.Post.Comments.ToList());
                     userPost.PostPhoto = item.Post.PostPhotos.Select(p => p.Url).FirstOrDefault();
+                    userPost.PostId = item.PostId;
 
                     userPosts.Add(userPost);
                 }
@@ -152,11 +154,12 @@ namespace Facebook.Mappers
             DateTime requestTime = DateTime.Now;
             var result = requestTime - PostDate;
 
-            if (result.TotalDays > 5) return string.Format("{0}", result.ToString("dd/MM/yyyy"));
-            if (result.TotalDays != 0) return string.Format("{0} Days ago", result.TotalDays);
-            if (result.TotalHours != 0) return string.Format("{0} Hours ago", result.TotalHours);
-            if (result.TotalMinutes != 0) return string.Format("{0} Minutes ago", result.TotalMinutes);
-            if(result.TotalSeconds!=0) return string.Format("{0} Seconds ago", result.TotalSeconds);
+            
+            if (result.TotalDays > 5) return string.Format("{0}", PostDate.ToString("dd/MM/yyyy"));
+            if (result.TotalDays >= 1) return string.Format("{0} Days ago", result.Days);
+            if (result.TotalHours != 0) return string.Format("{0} Hours ago", result.Hours);
+            if (result.TotalMinutes != 0) return string.Format("{0} Minutes ago", result.Minutes);
+            if(result.TotalSeconds!=0) return string.Format("{0} Seconds ago", result.Seconds);
             return "";
         }
 

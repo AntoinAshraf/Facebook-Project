@@ -67,15 +67,19 @@
                                 </a>
                             </li>
                             <li>
+                                <a asp-action="Profile" asp-controller="Profile" asp-route-id="2" title="">
+                                    <div><i class="fas fa-user-circle fa-lg"></i></div>
+                                    Profile
+                                </a>
                                 @*@{if (user != null)
-                                    {
-                                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
-                                            <div><i class="fas fa-user-circle fa-lg"></i></div>
-                                            Profile
-                                        </a>
-                                    }
+            {
+                <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
+                    <div><i class="fas fa-user-circle fa-lg"></i></div>
+                    Profile
+                </a>
+            }
 
-                                }*@
+        }*@
                             </li>
                         </ul>
                     </nav><!--nav end-->
