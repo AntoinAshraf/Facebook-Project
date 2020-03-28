@@ -61,6 +61,15 @@ namespace Facebook.Recources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You Already Like This Post.
+        /// </summary>
+        public static string AlreadyLike {
+            get {
+                return ResourceManager.GetString("AlreadyLike", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email not Exsist.
         /// </summary>
         public static string EmailNotExsist {
@@ -93,6 +102,15 @@ namespace Facebook.Recources {
         public static string EmptyBirthDate {
             get {
                 return ResourceManager.GetString("EmptyBirthDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment Content can not be Empty.
+        /// </summary>
+        public static string EmptyComment {
+            get {
+                return ResourceManager.GetString("EmptyComment", resourceCulture);
             }
         }
         
@@ -138,6 +156,15 @@ namespace Facebook.Recources {
         public static string EmptyPassword {
             get {
                 return ResourceManager.GetString("EmptyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post text can not be Empty.
+        /// </summary>
+        public static string EmptyPostText {
+            get {
+                return ResourceManager.GetString("EmptyPostText", resourceCulture);
             }
         }
         
@@ -237,6 +264,15 @@ namespace Facebook.Recources {
         public static string WrongCode {
             get {
                 return ResourceManager.GetString("WrongCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Extention must be jpg or png.
+        /// </summary>
+        public static string WrongFormat {
+            get {
+                return ResourceManager.GetString("WrongFormat", resourceCulture);
             }
         }
     }
