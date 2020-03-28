@@ -157,18 +157,21 @@
                             <ul id="commentContainer_@post.PostId">
                                 @foreach (var comment in post.HomeCommentDto)
                                 {
-                                    <li>
-                                        <div class="comment-list">
-                                            <div class="bg-img">
-                                                <img class="friendListPic" src="@comment.ProfilePicUrl" alt="">
-                                            </div>
-                                            <div class="comment">
-                                                <h3>@comment.FullName</h3>
-                                                <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
-                                                <p>@comment.CommentContent</p>
-                                            </div>
-                                        </div><!--comment-list end-->
-                                    </li>
+                                <li id="comment_@comment.CommentId">
+                                    <div class="comment-list" style="color:firebrick">
+                                        <div class="bg-img">
+                                            <img class="friendListPic" src="@comment.ProfilePicUrl" alt="">
+                                        </div>
+                                        <div class="comment">
+                                            <h3>@comment.FullName</h3>
+                                            <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
+                                            <p>@comment.CommentContent</p>
+                                        </div>
+                                        <div class="comment">
+                                            <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
+                                        </div>
+                                    </div><!--comment-list end-->
+                                </li>
                                 }
                             </ul>
                         </div><!--comment-sec end-->
@@ -199,7 +202,7 @@
                                 {
                                     @foreach (var like in post.HomeLikeDto)
                                     {
-                                        <div class="comment-list">
+                                        <div id="like_@like.LikeId" class="comment-list">
                                             <div class="bg-img">
                                                 <img class="friendListPic" src="@like.ProfilePicUrl" alt="">
                                             </div>

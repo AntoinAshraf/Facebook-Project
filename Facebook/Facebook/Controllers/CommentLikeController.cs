@@ -39,7 +39,7 @@ namespace Facebook.Controllers
             try { facebookDataContext.SaveChanges(); }
             catch { return Json(new { statusCode = ResponseStatus.Error }); }
             comment = facebookDataContext.Comments.Where(x => x.Id == comment.Id).Include("User.ProfilePhotos").FirstOrDefault();
-            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(comment, hostingEnvironment) });
+            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(comment, hostingEnvironment), postId = comment.PostId });
         }
 
         [HttpGet]
@@ -48,14 +48,37 @@ namespace Facebook.Controllers
             if (postId == 0)
                 return Json(new { statusCode = ResponseStatus.ValidationError });
             User user = userData.GetUser(HttpContext);
-            if(facebookDataContext.Likes.Any(x=>x.UserId == user.Id && x.PostId == postId))
-                return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.AlreadyLike });
+            Like alreadyExsistLike = facebookDataContext.Likes.Include("User.ProfilePhotos").FirstOrDefault(x => x.UserId == user.Id && x.PostId == postId);
+            if (alreadyExsistLike != null)
+            {
+                alreadyExsistLike.IsDeleted = !alreadyExsistLike.IsDeleted;
+                try { facebookDataContext.SaveChanges(); }
+                catch { return Json(new { statusCode = ResponseStatus.Error }); }
+                return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(alreadyExsistLike, hostingEnvironment), IsLike = alreadyExsistLike.IsDeleted, LikeId = alreadyExsistLike.Id });
+            }
             Like like = new Like() { PostId = postId, CreatedAt = DateTime.Now, IsDeleted = false, ReactionStatusId = (int)ReactionStatuses.Like, UserId = user.Id };
             facebookDataContext.Likes.Add(like);
             try { facebookDataContext.SaveChanges(); }
             catch { return Json(new { statusCode = ResponseStatus.Error }); }
             like = facebookDataContext.Likes.Where(x => x.Id == like.Id).Include("User.ProfilePhotos").FirstOrDefault();
-            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(like, hostingEnvironment) });
+            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(like, hostingEnvironment), IsLike = like.IsDeleted, LikeId = like.Id });
+        }
+
+
+        [HttpGet]
+        public IActionResult DeleteComment([FromQuery]int commentId)
+        {
+            if (commentId == 0)
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+
+            Comment comment = facebookDataContext.Comments.FirstOrDefault(x => x.Id == commentId);
+            if(comment == null)
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+
+            comment.IsDeleted = true;
+            try { facebookDataContext.SaveChanges(); }
+            catch { return Json(new { statusCode = ResponseStatus.Error }); }
+            return Json(new { statusCode = ResponseStatus.Success });
         }
     }
 }

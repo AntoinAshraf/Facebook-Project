@@ -1,22 +1,32 @@
 function deletePost(postId) {
-    const post = document.getElementById("post_" + postId);
+    Swal.fire({
+        title: 'Are you sure you want to delete this post?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        const post = document.getElementById("post_" + postId);
 
-    fetch("https://localhost:44340/Home/DeletePost?postId=" + postId, {
-        method: "get"
-    }).then((response) => {
-        return response.json();
-    }).then((data) => {
-        if (data.statusCode === 400) {
-            toastr.error('You can not delete this post', 'Validation Error');
-        }
-        if (data.statusCode === 200) {
-            post.remove();
-            toastr.success('Post has been Deleted Successfuly', 'Done');
-        }
+        fetch("https://localhost:44340/Home/DeletePost?postId=" + postId, {
+            method: "get"
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            if (data.statusCode === 400) {
+                toastr.error('You can not delete this post', 'Validation Error');
+            }
+            if (data.statusCode === 200) {
+                post.remove();
+                toastr.success('Post has been Deleted Successfuly', 'Done');
+            }
 
-    }).catch((err) => {
-        toastr.error("Something went wrong!", 'Validation Error');
-    });
+        }).catch((err) => {
+            toastr.error("Something went wrong!", 'Validation Error');
+        });
+    })
 }
 
 function getPostById(postId) {
