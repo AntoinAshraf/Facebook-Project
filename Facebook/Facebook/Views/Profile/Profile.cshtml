@@ -1,15 +1,6 @@
-﻿
+﻿@model Facebook.Models.ViewModels.ProfilePageDto
 @{
     ViewData["Title"] = @TempData["Users"];
-}
-@{
-    User user = null;
-    if (TempData["Users"] != null)
-    {
-        user = (User)TempData["user"];
-        TempData.Keep("Users");
-    }
-
 }
 
 <div class="col-lg-3 col-md-4 pd-left-none no-pd">
@@ -18,28 +9,18 @@
             <div class="user-profile">
                 <div class="username-dt">
                     <div class="usr-pic">
-                        <img src="http://via.placeholder.com/100x100" alt="">
+                        <img src="@Model.UserProfilePhoto" alt="">
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
-                    @{if (user != null)
-                        {
-                            <h3>@user.FirstName</h3>
-
-                        }
-                        else
-                        {
-                            <h3>hacker</h3>
-                        }
-                    }
-
+                    <h3>@Model.UserInfo.FullName</h3>
                     <span>Graphic Designer at Self Employed</span>
                 </div>
             </div><!--user-profile end-->
             <ul class="user-fw-status">
                 <li>
                     <h4>Friends</h4>
-                    <span>34</span>
+                    <span>@Model.NumberOfFriends</span>
                 </li>
             </ul>
         </div><!--user-data end-->
@@ -48,65 +29,32 @@
             <div class="sd-title">
                 <h3>Friend Requests</h3>
             </div><!--sd-title end-->
+            @foreach (var friendRequest in Model.FriendRequests)
+            {
             <div class="suggestions-list">
                 <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
+                    @{
+                        if (friendRequest.Photo == null)
+                        {
+                            <img src="~/ProfilePics/default.jpg" alt="">
+                        }
+                        else
+                        {
+                            <img src="~/ProfilePics/@friendRequest.Photo" alt="">
+                        }
+                    }
                     <div class="sgt-text">
-                        <h4>Jessica William</h4>
+                        <h4>@friendRequest.FullName</h4>
                         <span>Graphic Designer</span>
                     </div>
                     <span><i class="la la-minus"></i></span>
                     <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                    <div class="sgt-text">
-                        <h4>John Doe</h4>
-                        <span>PHP Developer</span>
-                    </div>
-                    <span><i class="la la-minus"></i></span>
-                    <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                    <div class="sgt-text">
-                        <h4>Poonam</h4>
-                        <span>Wordpress</span>
-                    </div>
-                    <span><i class="la la-minus"></i></span>
-                    <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                    <div class="sgt-text">
-                        <h4>Bill Gates</h4>
-                        <span>C++ Developer</span>
-                    </div>
-                    <span><i class="la la-minus"></i></span>
-                    <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                    <div class="sgt-text">
-                        <h4>Jessica William</h4>
-                        <span>Graphic Designer</span>
-                    </div>
-                    <span><i class="la la-minus"></i></span>
-                    <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="suggestion-usd">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                    <div class="sgt-text">
-                        <h4>John Doe</h4>
-                        <span>PHP Developer</span>
-                    </div>
-                    <span><i class="la la-minus"></i></span>
-                    <span><i class="la la-plus"></i></span>
-                </div>
-                <div class="view-more">
-                    <a href="#" title="">View More</a>
                 </div>
             </div><!--suggestions-list end-->
+            }
+            <div class="view-more">
+                <a href="#" title="">View More</a>
+            </div>
         </div>
 
         <div class="tags-sec full-width">
@@ -130,7 +78,7 @@
 <div class="col-lg-6 col-md-8 no-pd">
     <div class="main-ws-sec">
         <div class="user-tab-sec">
-            <h3>John Doe</h3>
+            @*<h3>@Model.UserInfo.FullName</h3>*@
             <div class="star-descp">
                 <span>Graphic Designer at Self Employed</span>
             </div><!--star-descp end-->
