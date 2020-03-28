@@ -2,6 +2,15 @@
 @{
     Layout = null;
 }
+@*@{
+    User user = null;
+    if (TempData["Users"] != null)
+    {
+        user = (User)TempData["user"];
+        TempData.Keep("Users");
+    }
+
+}*@
 
 <!DOCTYPE html>
 <html>
@@ -53,17 +62,24 @@
                         <ul>
                             <li>
                                 <a asp-action="Index" asp-controller="Home" title="">
-                                    @*<span><img src="~/images/icon1.png" alt=""></span>*@
                                     <div><i class="fas fa-home fa-lg"></i></div>
                                     Home
                                 </a>
                             </li>
                             <li>
-                                <a asp-action="Profile" asp-controller="Profile" title="">
-                                    @*<span><img src="~/images/icon4.png" alt=""></span>*@
+                                <a asp-action="Profile" asp-controller="Profile" asp-route-id="2" title="">
                                     <div><i class="fas fa-user-circle fa-lg"></i></div>
                                     Profile
                                 </a>
+                                @*@{if (user != null)
+            {
+                <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
+                    <div><i class="fas fa-user-circle fa-lg"></i></div>
+                    Profile
+                </a>
+            }
+
+        }*@
                             </li>
                         </ul>
                     </nav><!--nav end-->
@@ -73,11 +89,16 @@
                     <div class="user-account">
                         <div class="user-info">
                             <img src="http://via.placeholder.com/30x30" alt="">
-                            <a href="#" title="">@*@ViewBag.User*@ @TempData["Users"]</a>
-                            @{
-                                TempData.Keep("Users");
-                            }
-                            @*<i class="la la-sort-down"></i>*@
+                            @*@{if (user != null)
+                                {
+                                    <a href="#" title="">@user.FirstName</a>
+                                }
+                                else 
+                                  {
+                                    <a href="#" title="">hacker</a>
+                                  }
+                                }*@
+
                             <i class="fas fa-chevron-circle-down"></i>
                         </div>
                         <div class="user-account-settingss">
@@ -115,8 +136,8 @@
                     <div class="main-section-data">
                         <div class="row">
 
-                            
-                                    @RenderBody()
+
+                            @RenderBody()
                         </div>
                     </div><!-- main-section-data end-->
                 </div>
