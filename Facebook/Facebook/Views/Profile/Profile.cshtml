@@ -36,42 +36,42 @@
         </div><!--user-data end-->
 
 
-        @{ 
+        @{
             if (Model.CanEditProfileWritePost)
             {
 
-              <div class="suggestions full-width">
-            <div class="sd-title">
-                <h3>Friend Requests</h3>
-            </div><!--sd-title end-->
-            @foreach (var friendRequest in Model.FriendRequests)
-            {
-                <div class="suggestions-list">
-                    <div class="suggestion-usd">
-                        @{
-                            if (friendRequest.Photo == null)
-                            {
-                                <img src="~/ProfilePics/default.jpg" alt="">
-                            }
-                            else
-                            {
-                                <img src="~/ProfilePics/@friendRequest.Photo" alt="">
-                            }
-                        }
-                        <div class="sgt-text">
-                            <h4>@friendRequest.FullName</h4>
-                            <span>Graphic Designer</span>
-                        </div>
-                        <span><i class="la la-minus" onclick="rejectRequest()"></i></span>
-                        <span><i class="la la-plus" onclick="AcceptRequest()"></i></span>
+                <div class="suggestions full-width">
+                    <div class="sd-title">
+                        <h3>Friend Requests</h3>
+                    </div><!--sd-title end-->
+                    @foreach (var friendRequest in Model.FriendRequests)
+                    {
+                        <div class="suggestions-list">
+                            <div class="suggestion-usd" id="Req_@friendRequest.initiatorId">
+                                @{
+                                    if (friendRequest.Photo == null)
+                                    {
+                                        <img class="friendListPic" src="~/ProfilePics/default.jpg" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="friendListPic" src="~/ProfilePics/@friendRequest.Photo" alt="">
+                                    }
+                                }
+                                <div class="sgt-text">
+                                    <h4>@friendRequest.FullName</h4>
+                                    <span>Graphic Designer</span>
+                                </div>
+                                <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
+                                <span><i class="la la-plus" onclick="AcceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
+                            </div>
+                        </div><!--suggestions-list end-->
+                    }
+                    <div class="view-more">
+                        <a href="#" title="">View More</a>
                     </div>
-                </div><!--suggestions-list end-->
-            }
-            <div class="view-more">
-                <a href="#" title="">View More</a>
-            </div>
-        </div>
-            
+                </div>
+
             }
         }
 
@@ -325,8 +325,10 @@
 
         <div class="product-feed-tab animated fadeIn" id="info-dd">
             <div class="user-profile-ov st2">
-                <h3><a href="#" title="" class="exp-bx-open"> </a>
-                <a href="#" title="" class="exp-bx-open"><i class="fa fa-pencil"></i></a> <a href="#" title="" class="exp-bx-open"></a></h3>
+                <h3>
+                    <a href="#" title="" class="exp-bx-open"> </a>
+                    <a href="#" title="" class="exp-bx-open"><i class="fa fa-pencil"></i></a> <a href="#" title="" class="exp-bx-open"></a>
+                </h3>
                 <h4>Web designer <a href="#" title=""><i class="fa fa-pencil"></i></a></h4>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor aliquam felis, nec condimentum ipsum commodo id. Vivamus sit amet augue nec urna efficitur tincidunt. Vivamus consectetur aliquam lectus commodo viverra. </p>
                 <h4>UI / UX Designer <a href="#" title=""><i class="fa fa-pencil"></i></a></h4>
@@ -371,6 +373,7 @@
     <script src="~/js/CreatePost.js"></script>
 
     <script src="~/js/CreatePostVald.js"></script>
+    <script src="~/js/UserRelationCrud.js"></script>
 
     <script type="text/javascript" src="~/js/GetAllPostsProfile.js"></script>
 

@@ -65,6 +65,27 @@ namespace Facebook.Controllers
         }
 
 
+        [HttpPut]
+        public IActionResult rejectRequest([FromQuery]int? intiatorId,[FromQuery] int?DeciderId)
+        {
+            if(intiatorId ==null|| DeciderId==null )
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+            }
+            try
+            {
+                var result = facebookDataContext.UserRelations.
+                    Where(R => R.InitiatorId == intiatorId && R.DesiderId == DeciderId && R.IsDeleted != false).FirstOrDefault();
+                result.IsDeleted = true;
+                facebookDataContext.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            catch
+            {
+                return Json(new { statusCode = ResponseStatus.Error });
+            }
+            
+        }
 
         #region OldGetPostsVersion
         //[HttpGet]
