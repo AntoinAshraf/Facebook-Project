@@ -64,6 +64,7 @@ namespace Facebook.Models.ViewModels
 
     public class HomeCommentDto
     {
+        public int CommentId { get; set; }
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
         public string CommentContent { get; set; }
@@ -72,6 +73,7 @@ namespace Facebook.Models.ViewModels
 
     public class HomeLikeDto
     {
+        public int LikeId { get; set; }
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
         public string LikeDate { get; set; }

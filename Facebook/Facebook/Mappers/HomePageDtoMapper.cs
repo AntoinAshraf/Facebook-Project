@@ -78,7 +78,7 @@ namespace Facebook.Mappers
                 HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
                 HomeLikeDto = Map(from.Post.Likes.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
                 PostId = from.PostId,
-                IsLike = from.Post.Likes.Any(x=>x.PostId == from.PostId && x.UserId == currentUserId)
+                IsLike = from.Post.Likes.Any(x=>x.PostId == from.PostId && x.UserId == currentUserId && x.IsDeleted == false)
             };
 
             string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg") ;
@@ -109,7 +109,7 @@ namespace Facebook.Mappers
             var to = new List<HomeUserTempDto>();
             if (fromInitiator != null && fromInitiator.Count() > 0)
             {
-                foreach (var item in fromInitiator)
+                foreach (var item in fromInitiator.Where(x=>x.SocialStatusId == (int)SocialStatuses.Friend))
                 {
                     to.Add(MapInitiator(item, hostingEnvironment, currentUserId));
                 }
@@ -117,7 +117,7 @@ namespace Facebook.Mappers
 
             if (fromDecider != null && fromDecider.Count() > 0)
             {
-                foreach (var item in fromDecider)
+                foreach (var item in fromDecider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend))
                 {
                     to.Add(MapDecider(item, hostingEnvironment, currentUserId));
                 }
@@ -166,7 +166,7 @@ namespace Facebook.Mappers
             var to = new List<HomeCommentDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from)
+                foreach (var item in from.Where(x=>x.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment));
                 }
@@ -183,6 +183,7 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 CommentContent = from.CommentContent,
+                CommentId = from.Id
             };
 
             string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
@@ -207,7 +208,7 @@ namespace Facebook.Mappers
             var to = new List<HomeLikeDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from)
+                foreach (var item in from.Where(x=>x.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment));
                 }
@@ -223,6 +224,7 @@ namespace Facebook.Mappers
             var to = new HomeLikeDto
             {
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
+                LikeId = from.Id
             };
 
             string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
