@@ -2,24 +2,27 @@
 @{
     Layout = null;
 }
-@*@{
+
+@{
     User user = null;
-    if (TempData["Users"] != null)
+    if (ViewData["Users"] != null)
     {
-        user = (User)TempData["user"];
+        user = (User)ViewData["Users"];
         TempData.Keep("Users");
     }
-
-}*@
+}
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Facebook - Home</title>
+    <title>Facebook - @ViewData["Title"]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
+    @* Website Icon *@
+    <link rel="shortcut icon" type="image/svg" href="~/FBIcon/facebook-icon.svg" sizes="32x32" />
+
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
     <link href="~/lib/slick-carousel/slick.css" rel="stylesheet" />
@@ -67,19 +70,16 @@
                                 </a>
                             </li>
                             <li>
-                                <a asp-action="Profile" asp-controller="Profile" asp-route-id="2" title="">
-                                    <div><i class="fas fa-user-circle fa-lg"></i></div>
-                                    Profile
-                                </a>
-                                @*@{if (user != null)
-            {
-                <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
-                    <div><i class="fas fa-user-circle fa-lg"></i></div>
-                    Profile
-                </a>
-            }
+                                
+                                @{if (user != null)
+                                    {
+                                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
+                                            <div><i class="fas fa-user-circle fa-lg"></i></div>
+                                            Profile
+                                        </a>
+                                    }
 
-        }*@
+                                }
                             </li>
                         </ul>
                     </nav><!--nav end-->
@@ -88,16 +88,35 @@
                     </div><!--menu-btn end-->
                     <div class="user-account">
                         <div class="user-info">
-                            <img src="http://via.placeholder.com/30x30" alt="">
-                            @*@{if (user != null)
+                            @{
+                                if (user.ProfilePhotos.Count > 0)
                                 {
-                                    <a href="#" title="">@user.FirstName</a>
+                                    <img class="profilePic" src="" alt="">
                                 }
-                                else 
-                                  {
+                                else
+                                {
+                                    if (user.GenderId == 1 /* Male*/)
+                                    {
+                                        <img class="profilePic" style="background:whitesmoke;" 
+                                             src="~/ProfilePics/default.jpg" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="profilePic" style="background:whitesmoke;"
+                                             src="~/ProfilePics/default_female.png" alt="">
+                                    }
+                                }
+                            }
+                            @*<img src="http://via.placeholder.com/30x30" alt="">*@
+                            @{if (user != null)
+                                {
+                                    <a class="fullNameCurrent" href="#" title="">@user.FirstName</a>
+                                }
+                                else
+                                {
                                     <a href="#" title="">hacker</a>
-                                  }
-                                }*@
+                                }
+                            }
 
                             <i class="fas fa-chevron-circle-down"></i>
                         </div>

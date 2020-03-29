@@ -37,8 +37,13 @@ namespace Facebook.Mappers
                 HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl)).ToList(),
                 HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts, hostingEnvironment, from.Id).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId, x.CanEditDelete, x.IsLike)).ToList(),
             };
+            string defaultPic = "";
+            if (from.GenderId == 1 /* Male */)
+                defaultPic = "default.jpg";
+            else
+                defaultPic = "default_female.png";
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? defaultPic);
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 

@@ -10,6 +10,7 @@ using FaceBook.Models;
 using FacebookDbContext;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 ////DESKTOP-J75213F\SQLEXPRESS
@@ -31,19 +32,20 @@ namespace Facebook.Controllers
             facebookDataContext = _facebookDataContext;
         }
 
-        
-        [HttpGet]
-        public IActionResult Profile(int?id)
-        {
-             
-            ViewData["Actions"] = userData.GetActions(HttpContext);
-           
-            User currentUser = userData.GetUser(HttpContext); 
 
-           //to confirm Valid Id
-            if(id!=currentUser.Id)
+        [HttpGet]
+        public IActionResult Profile(int? id)
+        {
+            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["Users"] = userData.GetUser(HttpContext);
+
+
+            User currentUser = userData.GetUser(HttpContext);
+
+            //to confirm Valid Id
+            if (id != currentUser.Id)
             {
-                var user= facebookDataContext.Users.Any(u=>u.IsDeleted==false&&u.Id==id);
+                var user = facebookDataContext.Users.Any(u => u.IsDeleted == false && u.Id == id);
                 if (!user)
                 {
                     return RedirectToAction("Login", "Account");
@@ -59,23 +61,27 @@ namespace Facebook.Controllers
                 .Include("UsersPosts.Post.Likes.User.ProfilePhotos")//postsAndLikes/user
                 .Include("UsersPosts.Post.PostPhotos").SingleOrDefault();//postsAndPhoto
 
-            ProfilePageDto profilePageDto= ProfilePageDtoMapper.Mapper(AllUserdata,(int)id);
+            ProfilePageDto profilePageDto = ProfilePageDtoMapper.Mapper(AllUserdata, (int)id);
+
+            ViewBag.Gender = new SelectList(facebookDataContext.Gender, "Id", "GenderName", AllUserdata.GenderId);
+
 
             return View(profilePageDto);
         }
 
 
-        [HttpPut]
-        public IActionResult rejectRequest([FromQuery]int? intiatorId,[FromQuery] int?DeciderId)
+        [HttpDelete]
+        public IActionResult rejectRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
         {
-            if(intiatorId ==null|| DeciderId==null )
+            if (intiatorId == null || deciderId == null)
             {
                 return Json(new { statusCode = ResponseStatus.ValidationError });
             }
             try
             {
                 var result = facebookDataContext.UserRelations.
-                    Where(R => R.InitiatorId == intiatorId && R.DesiderId == DeciderId && R.IsDeleted != false).FirstOrDefault();
+                    Where(R => R.InitiatorId == intiatorId && R.DesiderId == deciderId && R.IsDeleted == false
+                    && R.SocialStatusId == (int)SocialStatuses.Request).FirstOrDefault();
                 result.IsDeleted = true;
                 facebookDataContext.SaveChanges();
                 return Json(new { statusCode = ResponseStatus.Success });
@@ -84,8 +90,70 @@ namespace Facebook.Controllers
             {
                 return Json(new { statusCode = ResponseStatus.Error });
             }
-            
+
         }
+
+        [HttpPut]
+        public IActionResult acceptRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
+        {
+            if (intiatorId == null || deciderId == null)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+            }
+            try
+            {
+                var resultFriendRequest = facebookDataContext.UserRelations.
+                    Where(R => R.InitiatorId == intiatorId && R.DesiderId == deciderId && R.IsDeleted == false
+                    && R.SocialStatusId == (int)SocialStatuses.Request).FirstOrDefault();
+                resultFriendRequest.SocialStatusId = 1; // Friend
+                facebookDataContext.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            catch
+            {
+                return Json(new { statusCode = ResponseStatus.Error });
+            }
+
+        }
+
+        [HttpPut]
+        public IActionResult EditInfo([FromBody] userInfo userInfoToUpdate)
+        {
+            if (userInfoToUpdate == null || userInfoToUpdate.id == 0)
+            {
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+            }
+
+            try
+            {
+                User user = facebookDataContext.Users.Where(u => u.Id == userInfoToUpdate.id).FirstOrDefault();
+
+                if(user ==null)
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
+
+                user.BirthDate = userInfoToUpdate.BirthDate; 
+                user.PhoneNumber = userInfoToUpdate.PhoneNumber; 
+                user.BirthDate = userInfoToUpdate.BirthDate;
+
+                if (userInfoToUpdate.GenderName == "Male")
+                    user.GenderId = 1;
+                else // female
+                    user.GenderId = 2;
+
+                string[] nameSplitted =  userInfoToUpdate.FullName.Split(" "); // to get first, last name
+                user.FirstName = nameSplitted[0]; 
+                user.LastName = nameSplitted[1];
+
+                facebookDataContext.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            catch (Exception)
+            {
+                return Json(new { statusCode = ResponseStatus.Error });
+            }
+        }
+
+
 
         #region OldGetPostsVersion
         //[HttpGet]

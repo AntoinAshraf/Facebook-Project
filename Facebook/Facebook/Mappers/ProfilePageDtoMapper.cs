@@ -32,7 +32,7 @@ namespace Facebook.Mappers
             info.BirthDate = From.BirthDate;
             info.GenderName = From.Gender.GenderName;
             info.PhoneNumber = From.PhoneNumber;
-            info.id = From.Id;
+            info.id = From.Id; // userId
 
             return info;
         }
@@ -63,7 +63,8 @@ namespace Facebook.Mappers
                 foreach (var item in From.UserRelationsDesider)
                 {
                    
-                    if (item.Initiator.IsDeleted == false)
+                    if (item.IsDeleted == false && item.Initiator.IsDeleted == false 
+                        && item.SocialStatusId == (int)SocialStatuses.Request)
                     {
                         FriendRequest friendRequest = new FriendRequest();
                         friendRequest.FullName = $"{item.Initiator.FirstName} {item.Initiator.LastName}";

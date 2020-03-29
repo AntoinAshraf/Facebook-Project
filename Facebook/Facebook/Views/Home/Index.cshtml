@@ -1,6 +1,6 @@
 ﻿@model Facebook.Models.ViewModels.HomePageDto
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 @*Left Side (Info & Footer)*@
@@ -212,7 +212,12 @@
                                 }
                                 else
                                 {
-                                    @:There is no reactions for this post yet .
+                                    @*@:There is no reactions for this post yet.*@
+                                    <div class="comment-list">
+                                        <div class="comment">
+                                            <h3>There are no reactions for this post yet.</h3>
+                                        </div>
+                                    </div>
                                 }
                             </div>
                             <div class="modal-footer">
@@ -234,7 +239,7 @@
             <img src="https://img.icons8.com/clouds/100/000000/facebook-f.png" />
             <!-- <img src="images/wd-logo.png" alt=""> -->
             <h3>Stay connected on Facebook!</h3>
-            <span style="font-weight:bold">Welcome, @Model.FullName !</span>
+            <span style="font-weight:bold">Welcome, @Model.FullName!</span>
         </div><!--widget-about end-->
         <div class="widget suggestions full-width">
             <div class="sd-title">

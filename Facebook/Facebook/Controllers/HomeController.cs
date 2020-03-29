@@ -41,6 +41,7 @@ namespace Facebook.Controllers
         public IActionResult Index()
         {
             ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["Users"] = userData.GetUser(HttpContext);
             int userId = userData.GetUser(HttpContext).Id;
             User userFullData = facebookDataContext.Users.Where(x => x.Id == userId)
                 .Include("UserRelationsDesider.Initiator.UsersPosts.Post.Comments.User.ProfilePhotos")

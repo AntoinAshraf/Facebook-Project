@@ -3479,7 +3479,7 @@ footer {
     -o-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
     opacity: 0;
-    visibility: hidden;
+    /*visibility: hidden;*/
     z-index: 0;
 }
 
@@ -3516,7 +3516,7 @@ footer {
     float: left;
     width: 100%;
     background-color: #fff;
-    padding: 30px 20px;
+    /*padding: 30px 20px;*/
 }
 
     .overview-edit h3 {
@@ -3552,16 +3552,21 @@ footer {
             width: 100%;
             border: 1px solid #e5e5e5;
             resize: none;
-            color: #b2b2b2;
+            color: #0e275f;
             font-size: 14px;
         }
 
         .overview-edit form select {
             line-height: 40px;
-            padding-left: 40px;
+            padding-left: 15px;
             margin-bottom: 20px;
         }
 
+        /*.overview-edit-gender {
+            line-height: 0px;
+            padding-left: 0px;
+            margin-bottom: 20px;
+        }*/
         .overview-edit form textarea {
             height: 160px;
             margin-bottom: 30px;
@@ -6212,4 +6217,9 @@ a:hover {
 .friendListPic{
     width: 50px;
     height: 50px;
+}
+
+.profilePic{
+    width: 30px;
+    height: 30px;
 }
