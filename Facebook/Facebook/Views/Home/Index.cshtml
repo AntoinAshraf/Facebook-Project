@@ -167,9 +167,12 @@
                                             <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
                                             <p>@comment.CommentContent</p>
                                         </div>
-                                        <div class="comment">
-                                            <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
-                                        </div>
+                                        @if (comment.CanDelete)
+                                        {
+                                            <div class="comment">
+                                                <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
+                                            </div>
+                                        }
                                     </div><!--comment-list end-->
                                 </li>
                                 }
