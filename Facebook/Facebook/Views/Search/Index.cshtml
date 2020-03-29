@@ -1,37 +1,34 @@
-﻿@model IEnumerable<FaceBook.Models.User>
+﻿@model IEnumerable<Facebook.Models.ViewModels.SearchUserDto>
 @{
     ViewData["Title"] = "Index";
 }
 
 
-@foreach (var usr in Model)
+@foreach (var user in Model)
 {
     <div class="col-lg-3 col-md-4 col-sm-6">
         <div class="company_profile_info">
             <div class="company-up-info">
-                <img src="http://via.placeholder.com/90x90" alt="">
-                <h3> @usr.FirstName @usr.LastName </h3>
-                <h4> @usr.BirthDate </h4>
+                <img src="~/ProfilePics/@user.ProfilePic" alt="">
+                <h3> @user.Fullname </h3>
+                <h4> @user.Email </h4>
                 <ul>
 
-                    @if (((List<UserRelation>)ViewData["usrsRelations"])
-                       .Where(usrRel => usrRel.InitiatorId == usr.Id && usrRel.DesiderId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
+                    @if (user.SocialStatus == 2 && user.Initiator == false)
                     {
-                        <li id="usr_@usr.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</button></li>
                     }
-                    else if (((List<UserRelation>)ViewData["usrsRelations"])
-                      .Where(usrRel => usrRel.DesiderId == usr.Id && usrRel.InitiatorId == (int)ViewData["LoggedUser"] && usrRel.SocialStatusId == 2 /*Request status*/).ToList().Count == 1)
+                    else if (user.SocialStatus == 2 && user.Initiator == true)
                     {
-                        <li id="usr_@usr.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @usr.Id)' id="CancelTag" title="" class="follow">Cancel Request</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="CancelTag" title="" class="follow">Cancel Request</button></li>
                     }
-                    else if (((List<UserRelation>)ViewData["usrsRelations"])
-                      .Where(usrRel => (usrRel.InitiatorId == (int)ViewData["LoggedUser"] || usrRel.DesiderId == (int)ViewData["LoggedUser"]) && usrRel.SocialStatusId == 1 /*Friend status*/).ToList().Count == 1)
+                    else if (user.SocialStatus == 1)
                     {
-                        <li id="usr_@usr.Id"><button type="button" onclick='UnFriendAjaxCall(@usr.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='UnFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</button></li>
                     }
-                    else
+                    else if(user.SocialStatus == 0)
                     {
-                        <li id="usr_@usr.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @usr.Id)' id="AddFriendTag" title="" class="follow">Add Friend</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="AddFriendTag" title="" class="follow">Add Friend</button></li>
                     }
 
                 </ul>
