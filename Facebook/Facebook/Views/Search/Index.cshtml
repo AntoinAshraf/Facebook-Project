@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Facebook.Models.ViewModels.SearchUserDto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@foreach (var user in Model)
+{
+    <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="company_profile_info">
+            <div class="company-up-info">
+                <img src="~/ProfilePics/@user.ProfilePic" alt="">
+                <h3> @user.Fullname </h3>
+                <h4> @user.Email </h4>
+                <ul>
+
+                    @if (user.SocialStatus == 2 && user.Initiator == false)
+                    {
+                        <li id="usr_@user.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</button></li>
+                    }
+                    else if (user.SocialStatus == 2 && user.Initiator == true)
+                    {
+                        <li id="usr_@user.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="CancelTag" title="" class="follow">Cancel Request</button></li>
+                    }
+                    else if (user.SocialStatus == 1)
+                    {
+                        <li id="usr_@user.Id"><button type="button" onclick='UnFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</button></li>
+                    }
+                    else if(user.SocialStatus == 0)
+                    {
+                        <li id="usr_@user.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="AddFriendTag" title="" class="follow">Add Friend</button></li>
+                    }
+
+                </ul>
+            </div>
+            <a href="#" title="" class="view-more-pro">View Profile</a>
+        </div><!--company_profile_info end-->
+    </div>
+}
+
+@section scripts {
+    <script>
+
+        function ConfirmFriendAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "PUT",
+                    url: `/Search/ConfirmFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+                    success: function (Response) {
+                        
+                        if (Response.success) {
+
+                            var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='follow'>UnFriend</button>";
+
+                            $("#usr_" + InitiatorId).html(unfrientTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+
+                });
+            }
+        }
+
+        function UnFriendAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/Search/UnFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+                    success: function (Response) {
+                        if (Response.success) {
+
+                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + DesiderId + ", " + InitiatorId + ")' id='CancelTag' title='' class='follow'>Add Friend</button>";
+
+                            $("#usr_" + InitiatorId).html(addFriendTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+
+                });
+            }
+        }
+
+        function AddFriendAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "POST",
+                    url: `/Search/RequestFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+                    success: function (Response) {
+                        if (Response.success) {
+                            var cancelRequestTextTag = "<button type='button' onclick='CancelRequestAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='follow'>Cancel Request</button>";
+                            $("#usr_" + DesiderId).html(cancelRequestTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+                });
+            }
+        }
+
+        function CancelRequestAjaxCall(InitiatorId, DesiderId) {
+            if (InitiatorId && DesiderId) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/Search/UnFriendAction`,
+                    data: {
+                        "InitiatorId": InitiatorId,
+                        "DesiderId": DesiderId
+                    },
+                    dataType: "json",
+                    success: function (Response) {
+                        if (Response.success) {
+
+                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='follow'>Add Friend</button>";
+
+                            $("#usr_" + DesiderId).html(addFriendTextTag);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Error Happen " + error);
+                    }
+                });
+            }
+        }
+
+    </script>
+}
