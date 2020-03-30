@@ -35,10 +35,11 @@ namespace Facebook.Controllers
             }
             searchStr = search;
             ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["Users"] = userData.GetUser(HttpContext);
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users
-                .Where(usr => (usr.FirstName.Contains(search) || usr.LastName.Contains(search)) && usr.Id != loggedUserData.Id).ToList();
+                .Where(usr => (usr.FirstName.ToUpper().Contains(search.ToUpper()) || usr.LastName.ToUpper().Contains(search.ToUpper())) && usr.Id != loggedUserData.Id).ToList();
 
             List<UserRelation> userRelations = (from usrRel in facebookDataContext.UserRelations
                                                 where usrRel.InitiatorId == loggedUserData.Id || usrRel.DesiderId == loggedUserData.Id

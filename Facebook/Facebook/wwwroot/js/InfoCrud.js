@@ -57,3 +57,8 @@
         toastr.error("Something went wrong!", 'Validation Error');
     });
 }
+
+
+function showInfo() {
+    document.getElementById("infoContainer").style.display = "block";
+}

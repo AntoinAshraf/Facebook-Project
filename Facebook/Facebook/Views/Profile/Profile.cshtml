@@ -76,12 +76,12 @@
                                 <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
                             </div>
                         </div><!--suggestions-list end-->
-                                    }
+                    }
                     <div class="view-more">
                         <a href="#" title="">View More</a>
                     </div>
                 </div>
-                                    }
+            }
         }
 
         <div class="tags-sec full-width">
@@ -117,7 +117,7 @@
                         </a>
                     </li>
                     <li data-tab="info-dd" class="animated fadeIn">
-                        <a href="#" title="">
+                        <a href="#" title="" onclick="showInfo()">
                             <img src="~/images/ic2.png" alt="">
                             <span>Info</span>
                         </a>
@@ -178,9 +178,9 @@
 
                         </div>
                     </div>
-                    <!-- Modal -->
                 }
             }
+                    <!-- Modal -->
 
 
 
@@ -332,7 +332,7 @@
         </div><!--product-feed-tab end-->
         
         <div class="product-feed-tab animated fadeIn current" id="info-dd">
-            <div class="user-profile-ov st2">
+            <div class="user-profile-ov st2 animated fadeIn" id="infoContainer" style="display:none;">
                 @*<h3>Info <a href="#" title="" class="exp-bx-open"<i class="fas fa-user-edit"></i></a></h3>*@
             <h3>Info <a id="infoModal" data-toggle="modal" data-target="#editInfoModal">
                 <i class="fas fa-user-edit"></i></a></h3>
