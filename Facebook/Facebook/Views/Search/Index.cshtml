@@ -54,7 +54,7 @@
                     success: function (Response) {
                         
                         if (Response.success) {
-
+                            toastr.success('Friend Is Added...', 'Done');
                             var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='btn btn-dander'>UnFriend</button>";
 
                             $("#usr_" + InitiatorId).html(unfrientTextTag);
@@ -80,7 +80,7 @@
                     dataType: "json",
                     success: function (Response) {
                         if (Response.success) {
-
+                            toastr.success('Unfriended Successfully...', 'Done');
                             var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + DesiderId + ", " + InitiatorId + ")' id='CancelTag' title='' class='btn btn-primary'>Add Friend</button>";
 
                             $("#usr_" + InitiatorId).html(addFriendTextTag);
@@ -106,6 +106,7 @@
                     dataType: "json",
                     success: function (Response) {
                         if (Response.success) {
+                            toastr.success('Request is Sent...', 'Done');
                             var cancelRequestTextTag = "<button type='button' onclick='CancelRequestAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-warning'>Cancel Request</button>";
                             $("#usr_" + DesiderId).html(cancelRequestTextTag);
                         }
@@ -129,7 +130,7 @@
                     dataType: "json",
                     success: function (Response) {
                         if (Response.success) {
-
+                            toastr.success('Request is Canceled...', 'Done');
                             var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-success'>Add Friend</button>";
 
                             $("#usr_" + DesiderId).html(addFriendTextTag);
