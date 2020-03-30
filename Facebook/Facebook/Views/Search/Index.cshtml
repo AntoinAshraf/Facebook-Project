@@ -14,21 +14,21 @@
                 <h4> @user.Email </h4>
                 <ul>
 
-                    @if (user.SocialStatus == 2 && user.Initiator == false)
+                    @if (user.SocialStatus == 2 && user.Initiator == true)
                     {
-                        <li id="usr_@user.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="follow">Accept Request</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="btn btn-success">Accept Request</button></li>
                     }
-                    else if (user.SocialStatus == 2 && user.Initiator == true)
+                    else if (user.SocialStatus == 2 && user.Initiator == false)
                     {
-                        <li id="usr_@user.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="CancelTag" title="" class="follow">Cancel Request</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="CancelTag" title="" class="btn btn-warning">Cancel Request</button></li>
                     }
                     else if (user.SocialStatus == 1)
                     {
-                        <li id="usr_@user.Id"><button type="button" onclick='UnFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="follow">UnFriend</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='UnFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="btn btn-danger">UnFriend</button></li>
                     }
                     else if(user.SocialStatus == 0)
                     {
-                        <li id="usr_@user.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="AddFriendTag" title="" class="follow">Add Friend</button></li>
+                        <li id="usr_@user.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="AddFriendTag" title="" class="btn btn-primary">Add Friend</button></li>
                     }
 
                 </ul>
@@ -55,7 +55,7 @@
                         
                         if (Response.success) {
 
-                            var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='follow'>UnFriend</button>";
+                            var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='btn btn-dander'>UnFriend</button>";
 
                             $("#usr_" + InitiatorId).html(unfrientTextTag);
                         }
@@ -81,7 +81,7 @@
                     success: function (Response) {
                         if (Response.success) {
 
-                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + DesiderId + ", " + InitiatorId + ")' id='CancelTag' title='' class='follow'>Add Friend</button>";
+                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + DesiderId + ", " + InitiatorId + ")' id='CancelTag' title='' class='btn btn-primary'>Add Friend</button>";
 
                             $("#usr_" + InitiatorId).html(addFriendTextTag);
                         }
@@ -106,7 +106,7 @@
                     dataType: "json",
                     success: function (Response) {
                         if (Response.success) {
-                            var cancelRequestTextTag = "<button type='button' onclick='CancelRequestAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='follow'>Cancel Request</button>";
+                            var cancelRequestTextTag = "<button type='button' onclick='CancelRequestAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-warning'>Cancel Request</button>";
                             $("#usr_" + DesiderId).html(cancelRequestTextTag);
                         }
                     },
@@ -130,7 +130,7 @@
                     success: function (Response) {
                         if (Response.success) {
 
-                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='follow'>Add Friend</button>";
+                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-success'>Add Friend</button>";
 
                             $("#usr_" + DesiderId).html(addFriendTextTag);
                         }
