@@ -13,8 +13,8 @@ namespace Facebook.Validators
         {
             RuleFor(x => x.Title).MustnotBeEmpty().MustnotStartWithWhiteSpace();
             RuleFor(x => x.Description).MustnotBeEmpty().MustnotStartWithWhiteSpace();
-            RuleFor(x => x.CreatedBy).MustnotBeEmpty().MustnotStartWithWhiteSpace().PropLengthRange();
-            RuleFor(x => x.UpdatedBy).MustnotBeEmpty().MustnotStartWithWhiteSpace().PropLengthRange();
+            //RuleFor(x => x.CreatedBy).MustnotBeEmpty().MustnotStartWithWhiteSpace().PropLengthRange();
+            //RuleFor(x => x.UpdatedBy).MustnotBeEmpty().MustnotStartWithWhiteSpace().PropLengthRange();
             //RuleFor(x => x.CreatedAt).NotNull().WithMessage("Date is required.");
             //RuleFor(x => x.UpdatedAt).NotNull().WithMessage("Date is required.");
 

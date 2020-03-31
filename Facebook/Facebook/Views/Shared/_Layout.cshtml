@@ -109,6 +109,15 @@
                                         Account Settings
                                     </a>
                                 </li>
+                                @if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Roles/Index").Any())
+                                {
+                                    <li class="text-center">
+                                        <a href="/Roles/Index" title="">
+                                            <i class="fas fa-user-cog"></i>
+                                            Roles
+                                        </a>
+                                    </li>
+                                }
                                 @if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Account/AdminControl").Any())
                                 {
                                     <li class="text-center">
@@ -160,6 +169,8 @@
     <script src="~/js/scrollbar.js"></script>
     <script type="text/javascript" src="~/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/script.js"></script>
 
 

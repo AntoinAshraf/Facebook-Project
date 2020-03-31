@@ -93,25 +93,27 @@ function deleteComment(commentId, postId) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonText: 'Yes',
+        allowOutsideClick: false,
     }).then((result) => {
-        fetch("https://localhost:44340/CommentLike/DeleteComment?commentId=" + commentId, {
-            method: "get"
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            if (data.statusCode === 400) {
-                toastr.error("can not delete this comment", 'Validation Error');
-            }
-            if (data.statusCode === 200) {
-                debugger
-                toastr.success('Comment has been Deleted Successfuly', 'Done');
-                commentNumber.innerHTML = Number.parseInt(commentNumber.innerHTML) - 1;
-                document.getElementById("comment_" + commentId).remove();
-            }
-        }).catch((err) => {
-            toastr.error("Something went wrong!", 'Validation Error');
-        });
-
+        if (result.value) {
+            fetch("https://localhost:44340/CommentLike/DeleteComment?commentId=" + commentId, {
+                method: "get"
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                if (data.statusCode === 400) {
+                    toastr.error("can not delete this comment", 'Validation Error');
+                }
+                if (data.statusCode === 200) {
+                    debugger
+                    toastr.success('Comment has been Deleted Successfuly', 'Done');
+                    commentNumber.innerHTML = Number.parseInt(commentNumber.innerHTML) - 1;
+                    document.getElementById("comment_" + commentId).remove();
+                }
+            }).catch((err) => {
+                toastr.error("Something went wrong!", 'Validation Error');
+            });
+        }
     })
 }
