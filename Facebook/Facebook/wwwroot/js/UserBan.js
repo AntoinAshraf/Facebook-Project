@@ -6,7 +6,8 @@ function UserBan(userId) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonText: 'Yes',
+        allowOutsideClick: false,
     }).then((result) => {
         if (result.value) {
             let Pan;
@@ -68,7 +69,8 @@ function changeRole(userId) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonText: 'Yes',
+        allowOutsideClick: false,
     }).then((result) => {
         if (result.value) {
             const sel = document.getElementById('Select_' + userId);

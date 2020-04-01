@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FaceBook.Models
 {
@@ -11,6 +12,7 @@ namespace FaceBook.Models
             Users = new HashSet<User>();
         }
         public int Id { get; set; }
+        [Required(ErrorMessage ="Tilte Field can't be Empty")]
         public string Title { get; set; }
         public string Description { get; set; }
         public string CreatedBy { get; set; }

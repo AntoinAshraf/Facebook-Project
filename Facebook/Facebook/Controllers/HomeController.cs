@@ -121,7 +121,6 @@ namespace Facebook.Controllers
             }
 
             User user = userData.GetUser(HttpContext);
-            string userProfilePic = facebookDataContext.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id).Url;
 
             Post post = new Post() { IsDeleted = false, PostContent = postText };
             facebookDataContext.Posts.Add(post);
