@@ -34,6 +34,7 @@ namespace FaceBook.Models
         public DateTime BirthDate { get; set; }
         public int GenderId { get; set; }
         public string PhoneNumber { get; set; }
+        public string Bio { get; set; }
 
         public virtual Gender Gender { get; set; }
         public virtual Role Role { get; set; }

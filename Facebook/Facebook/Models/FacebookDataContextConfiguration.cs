@@ -30,6 +30,7 @@ namespace FacebookDbContext
                 builder.Property(e => e.RoleId).IsRequired().HasColumnName("Role_Id");
                 builder.Property(e => e.UpdatedAt).HasColumnType("datetime");
                 builder.Property(e => e.UpdatedBy).HasMaxLength(255);
+                builder.Property(e => e.Bio).HasMaxLength(255);
 
                 builder.HasOne(d => d.Gender)
                     .WithMany(p => p.Users)

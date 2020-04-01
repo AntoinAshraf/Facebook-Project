@@ -27,11 +27,11 @@ namespace Facebook.Controllers
             facebookDataContext = _facebookDataContext;
         }
 
-        
+
 
         public IActionResult Index(string search) {
 
-            if(string.IsNullOrEmpty(search)) {
+            if (string.IsNullOrEmpty(search)) {
                 return RedirectToAction("/Home/Index");
             }
             ViewData["Actions"] = userData.GetActions(HttpContext);
@@ -39,8 +39,8 @@ namespace Facebook.Controllers
 
             var loggedUserData = userData.GetUser(HttpContext);
 
-            List<User> searchUsrs = facebookDataContext.Users.Include(x=>x.UserRelationsDesider).Include(x=>x.UserRelationsInitiator).Include(x=>x.ProfilePhotos)
-                .Where(usr => (usr.FirstName.Contains(search) || usr.LastName.Contains(search)) && usr.Id != loggedUserData.Id).ToList();
+            List<User> searchUsrs = facebookDataContext.Users.Include(x => x.UserRelationsDesider).Include(x => x.UserRelationsInitiator).Include(x => x.ProfilePhotos)
+                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim()))  && usr.Id != loggedUserData.Id).ToList();
 
             List<SearchUserDto> searchUserDtos = SearchUserMapper.Map(searchUsrs, loggedUserData.Id).ToList();
 
