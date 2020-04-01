@@ -32,7 +32,7 @@ function SendComment(postId) {
         }
         if (data.statusCode === 200) {
             toastr.success('Comment has been Added Successfuly', 'Done');
-            commentContainer.insertAdjacentHTML('afterbegin', '<li id="comment_' + data.responseMessage.commentId + '"><div class= "comment-list"><div class="bg-img"><img class="friendListPic" src="' + data.responseMessage.profilePicUrl + '" alt=""></div><div class="comment"><h3>' + data.responseMessage.fullName + '</h3><span><img src="images/clock.png" alt="">' + data.responseMessage.commentDate + '</span><p>' + data.responseMessage.commentContent + '</p></div><div class="comment"><i onclick = "deleteComment(' + data.responseMessage + ', ' + data.postId +')" class= "la la-trash" ></i ></div ></div></li>');
+            commentContainer.insertAdjacentHTML('afterbegin', '<li id="comment_' + data.responseMessage.commentId + '"><div class= "comment-list" style="color:firebrick"><div class="bg-img"><img class="friendListPic" src="' + data.responseMessage.profilePicUrl + '" alt=""></div><div class="comment"><h3>' + data.responseMessage.fullName + '</h3><span><img src="images/clock.png" alt="">' + data.responseMessage.commentDate + '</span><p>' + data.responseMessage.commentContent + '</p></div><div class="comment"><i onclick = "deleteComment(' + data.responseMessage.commentId + ', ' + data.postId +')" class= "la la-trash" ></i ></div ></div></li>');
             commentTextBox.value = "";
             commentNumber.innerHTML = Number.parseInt(commentNumber.innerHTML) + 1;
         }

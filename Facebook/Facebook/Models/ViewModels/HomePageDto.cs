@@ -69,6 +69,7 @@ namespace Facebook.Models.ViewModels
         public string ProfilePicUrl { get; set; }
         public string CommentContent { get; set; }
         public string CommentDate { get; set; }
+        public bool CanDelete { get; set; }
     }
 
     public class HomeLikeDto

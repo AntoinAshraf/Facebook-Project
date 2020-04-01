@@ -75,7 +75,7 @@ namespace Facebook.Mappers
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 PostContent = from.Post.PostContent,
                 CreatedAt = from.CreatedAt,
-                HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
+                HomeCommentDto = Map(from.Post.Comments.OrderByDescending(x => x.CreatedAt), hostingEnvironment, currentUserId).ToList(),
                 HomeLikeDto = Map(from.Post.Likes.OrderByDescending(x => x.CreatedAt), hostingEnvironment).ToList(),
                 PostId = from.PostId,
                 IsLike = from.Post.Likes.Any(x=>x.PostId == from.PostId && x.UserId == currentUserId && x.IsDeleted == false)
@@ -161,21 +161,21 @@ namespace Facebook.Mappers
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static IEnumerable<HomeCommentDto> Map(IEnumerable<Comment> from, IWebHostEnvironment hostingEnvironment)
+        public static IEnumerable<HomeCommentDto> Map(IEnumerable<Comment> from, IWebHostEnvironment hostingEnvironment, int currentUserId)
         {
             var to = new List<HomeCommentDto>();
             if (from != null && from.Count() > 0)
             {
                 foreach (var item in from.Where(x=>x.IsDeleted == false))
                 {
-                    to.Add(Map(item, hostingEnvironment));
+                    to.Add(Map(item, hostingEnvironment, currentUserId));
                 }
             }
 
             return to;
         }
 
-        public static HomeCommentDto Map(Comment from, IWebHostEnvironment hostingEnvironment)
+        public static HomeCommentDto Map(Comment from, IWebHostEnvironment hostingEnvironment, int currentUserId)
         {
             if (from == null) return null;
 
@@ -183,7 +183,8 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 CommentContent = from.CommentContent,
-                CommentId = from.Id
+                CommentId = from.Id,
+                CanDelete = from.UserId == currentUserId
             };
 
             string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");

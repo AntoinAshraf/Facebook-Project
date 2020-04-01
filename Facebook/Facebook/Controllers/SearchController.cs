@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Facebook.Contracts;
+using Facebook.Mappers;
+using Facebook.Models.ViewModels;
 using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Nancy.Json;
 
@@ -17,39 +20,31 @@ namespace Facebook.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly FacebookDataContext facebookDataContext;
         private readonly IUserData userData;
-        private static string searchStr;
 
         public SearchController(ILogger<HomeController> logger, FacebookDataContext _facebookDataContext, IUserData _userData) {
             userData = _userData;
             _logger = logger;
             facebookDataContext = _facebookDataContext;
-            searchStr = "";
         }
 
         
 
         public IActionResult Index(string search) {
 
-            if(search == "") {
+            if(string.IsNullOrEmpty(search)) {
                 return RedirectToAction("/Home/Index");
             }
-            searchStr = search;
             ViewData["Actions"] = userData.GetActions(HttpContext);
-            ViewData["Users"] = userData.GetUser(HttpContext);
             var loggedUserData = userData.GetUser(HttpContext);
 
-            List<User> searchUsrs = facebookDataContext.Users
-                .Where(usr => (usr.FirstName.ToUpper().Contains(search.ToUpper()) || usr.LastName.ToUpper().Contains(search.ToUpper())) && usr.Id != loggedUserData.Id).ToList();
+            List<User> searchUsrs = facebookDataContext.Users.Include(x=>x.UserRelationsDesider).Include(x=>x.UserRelationsInitiator).Include(x=>x.ProfilePhotos)
+                .Where(usr => (usr.FirstName.Contains(search) || usr.LastName.Contains(search)) && usr.Id != loggedUserData.Id).ToList();
 
-            List<UserRelation> userRelations = (from usrRel in facebookDataContext.UserRelations
-                                                where usrRel.InitiatorId == loggedUserData.Id || usrRel.DesiderId == loggedUserData.Id
-                                                select usrRel).ToList();
+            List<SearchUserDto> searchUserDtos = SearchUserMapper.Map(searchUsrs, loggedUserData.Id).ToList();
 
-            ViewData["usrsRelations"] = userRelations;
             ViewData["LoggedUser"] = loggedUserData.Id;
 
-
-            return View(searchUsrs);
+            return View(searchUserDtos);
         }
 
         [HttpPut]

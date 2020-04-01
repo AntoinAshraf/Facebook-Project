@@ -39,7 +39,7 @@ namespace Facebook.Controllers
             try { facebookDataContext.SaveChanges(); }
             catch { return Json(new { statusCode = ResponseStatus.Error }); }
             comment = facebookDataContext.Comments.Where(x => x.Id == comment.Id).Include("User.ProfilePhotos").FirstOrDefault();
-            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(comment, hostingEnvironment), postId = comment.PostId });
+            return Json(new { statusCode = ResponseStatus.Success, responseMessage = HomePageDtoMapper.Map(comment, hostingEnvironment, user.Id), postId = comment.PostId });
         }
 
         [HttpGet]
