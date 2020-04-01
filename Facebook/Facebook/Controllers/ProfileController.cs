@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Facebook.Contracts;
 using Facebook.Mappers;
 using Facebook.Models.ViewModels;
+using Facebook.Recources;
 using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -154,6 +157,57 @@ namespace Facebook.Controllers
         }
 
 
+        [HttpPut]
+        public IActionResult ChangeProfilePhoto(/*[FromBody]*/IFormFile profileImage, [FromQuery] int? userId)
+        {
+            string fileName = "";
+            DateTime dateTimeNow = DateTime.Now;
+
+            if(profileImage == null)
+                return Json(new { statusCode = ResponseStatus.Error });
+
+            if (profileImage != null)
+            {
+                if (profileImage.ContentType != "image/jpeg" && profileImage.ContentType != "image/jpg" && profileImage.ContentType != "image/png")
+                    return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.WrongFormat });
+
+                var uploads = Path.Combine(hostingEnvironment.WebRootPath, "ProfilePics");
+                fileName = profileImage.FileName.Split(".")[0] + "_" + DateTime.Now.ToFileTime() + "." + profileImage.FileName.Split(".")[1];
+                var filePath = Path.Combine(uploads, fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    profileImage.CopyTo(fileStream);
+                }
+            }
+
+            if (profileImage != null)
+            {
+                // Set the changed profile photo from isCurrent = ture -> false
+                ProfilePhoto oldProfilePhoto = facebookDataContext.ProfilePhotos.
+                    Where(p => p.UserId == userId && p.IsCurrent == true).FirstOrDefault();
+                if(oldProfilePhoto != null)
+                {
+                    oldProfilePhoto.IsCurrent = false;
+                    try { facebookDataContext.SaveChanges(); }
+                    catch { return Json(new { statusCode = ResponseStatus.Error }); }
+                }
+
+                // Assigning values of the new profile photo
+                ProfilePhoto newProfilePhoto = new ProfilePhoto()
+                {
+                    UserId = (int)userId,
+                    Url = fileName,
+                    IsCurrent = true,
+                    CreatedAt = dateTimeNow,
+                    IsDeleted = false
+                };
+                facebookDataContext.ProfilePhotos.Add(newProfilePhoto);
+                try { facebookDataContext.SaveChanges(); }
+                catch { return Json(new { statusCode = ResponseStatus.Error }); }
+            }
+
+            return Json(new { statusCode = ResponseStatus.Success });
+        }
 
         #region OldGetPostsVersion
         //[HttpGet]

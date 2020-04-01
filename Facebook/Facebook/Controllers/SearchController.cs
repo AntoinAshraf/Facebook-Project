@@ -35,6 +35,8 @@ namespace Facebook.Controllers
                 return RedirectToAction("/Home/Index");
             }
             ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["Users"] = userData.GetUser(HttpContext);
+
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users.Include(x=>x.UserRelationsDesider).Include(x=>x.UserRelationsInitiator).Include(x=>x.ProfilePhotos)

@@ -80,6 +80,7 @@ function EditPost() {
             toastr.success('Post Edited Successfuly', 'Done');
             postContent.innerHTML = postContentTextArea.value;
             $('#editModel').modal("hide");
+
         }
     }).catch((err) => {
         toastr.error("Something went wrong!", 'Validation Error');

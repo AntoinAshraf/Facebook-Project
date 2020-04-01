@@ -62,3 +62,99 @@
 function showInfo() {
     document.getElementById("infoContainer").style.display = "block";
 }
+
+
+function changePhoto(userId) {
+
+    const profileImage = document.getElementById("profileImage");
+
+    const extension = profileImage.value.split('.');
+
+    const currentProfilePhoto = document.querySelector(".usr-pic img");
+
+    // Assure that the extension is is image of (jpg, png)
+    if (extension[1].toLowerCase() !== "jpg" && extension[1].toLowerCase() !== "jpeg"
+        && extension[1].toLowerCase() !== "png")
+        return toastr.error("Image Extention must be jpg/jpeg or png.", 'Validation Error');
+
+    var file = profileImage.files[0];
+
+    var formData = new FormData();
+    //var file = postImage.files[0];
+    formData.append("profileImage", file);
+    //formData.append("postText", postTextArea.value);
+
+    $.ajax({
+        url: "https://localhost:44340/Profile/ChangeProfilePhoto?userId=" + userId,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.statusCode === 400) {
+                toastr.error(result.responseMessage, 'Validation Error');
+            }
+            if (result.statusCode === 200) {
+                toastr.success('Profile Photo Changed Successfuly!', 'Done');
+                currentProfilePhoto.src = URL.createObjectURL(profileImage.files[0]);
+                $('#myModalUpload').modal("hide");
+                window.location.href = '/Profile/Profile/'+ userId +'';
+            }
+        },
+        error: function () {
+            toastr.error("Something went wrong!", 'Validation Error');
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+    //fetch("https://localhost:44340/Profile/ChangeProfilePhoto?userId=" + userId, {
+    //    method: "PUT",
+    //    body: formData
+    //    //headers: {
+    //    //    'Accept': 'application/json',
+    //    //    'Content-Type': 'application/json'
+    //    //}
+    //}).then((response) => {
+    //    return response.json();
+    //}).then((data) => {
+    //    if (data.statusCode === 400) {
+    //            toastr.error(data.responseMessage, 'Validation Error');
+    //    }
+    //    if (data.statusCode === 200) {
+    //        toastr.success('Profile Photo Changed Successfuly!', 'Done');
+    //        currentProfilePhoto.src = URL.createObjectURL(profileImage.files[0]);
+    //        $('#myModalUpload').modal("hide");
+    //        window.location.href = "/Profile/Profile'+ userId+'";
+
+    //    }
+    //}).catch((err) => {
+    //    toastr.error("Something went wrong!", 'Validation Error');
+    //});
+
+}
+
+function dispalyPhoto() {
+    const profileImage = document.getElementById("profileImage");
+    const profileImageContainer = document.getElementById("profileImageHolder");
+
+    var extension = profileImage.value.split('.');
+
+    // Assure that the extension is is image of (jpg, png)
+    if (extension[1].toLowerCase() !== "jpg" && extension[1].toLowerCase() !== "jpeg"
+        && extension[1].toLowerCase() !== "png")
+        return toastr.error("Image Extention must be jpg/jpeg or png.", 'Validation Error');
+
+    // Change the background-image to the current user selected by the user
+    profileImageContainer.style.backgroundImage = 'url(' + URL.createObjectURL(profileImage.files[0]) + ')';
+
+    //console.log(URL.createObjectURL(profileImage.files[0]));
+    //console.log(profileImage.files[0]);
+}

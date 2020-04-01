@@ -36,7 +36,7 @@
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/css/toastr.min.css">
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
-
+    <link href="~/css/profilestyle.css" rel="stylesheet" />
 </head>
 
 
@@ -91,7 +91,7 @@
                             @{
                                 if (user.ProfilePhotos.Count > 0)
                                 {
-                                    <img class="profilePic" src="" alt="">
+                                    <img class="profilePic" src="~/ProfilePics/@user.ProfilePhotos" alt="">
                                 }
                                 else
                                 {

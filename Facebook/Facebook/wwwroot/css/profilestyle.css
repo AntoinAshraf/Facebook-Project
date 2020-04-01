@@ -1,0 +1,44 @@
+﻿
+#uploadImage {
+    position: absolute;
+    top: 40px;
+    left: 91px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #0e385f70;
+    margin: 0 auto;
+    margin-bottom: -48px;
+    display:block;
+}
+
+.usr-pic:hover #uploadImage {
+    /*background-color: red;*/
+    display: block;
+}
+
+#cameraUploadImage {
+    color: #f8f9facf;
+    top: 27px;
+    position: relative;
+    font-size: 28px;
+}
+
+#profileImageHolder {
+    width: 150px;
+    background-image: url("/ProfilePics/default.jpg");
+    height: 150px;
+    border-radius: 50%;
+    margin: auto;
+    background-size: cover;
+}
+/*input[type="file"] {
+    display: none;
+}*/
+
+.custom-file-upload {
+    /*border: 1px solid #ccc;*/
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
