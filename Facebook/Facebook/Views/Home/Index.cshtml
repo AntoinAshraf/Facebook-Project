@@ -255,19 +255,29 @@
                 <!-- <i class="la la-ellipsis-v"></i> -->
             </div><!--sd-title end-->
             <div class="suggestions-list">
-                @foreach (var user in Model.HomeUserDtos)
+                @if (Model.HomeUserDtos.Count() > 0)
+                {
+                    @foreach (var user in Model.HomeUserDtos)
+                    {
+                        <div class="suggestion-usd">
+                            <img class="friendListPic" src="@user.ProfilePicUrl" alt="">
+                            <div class="sgt-text">
+                                <h4><a href="~/Profile/Profile/@user.UserId" title="">@user.FullName</a></h4>
+                                <span>@user.Bio</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
                 {
                     <div class="suggestion-usd">
-                        <img class="friendListPic" src="@user.ProfilePicUrl" alt="">
-                        <div class="sgt-text">
-                            <h4><a href="~/Profile/Profile/@user.UserId" title="">@user.FullName</a></h4>
-                            <span>@user.Bio</span>
-                        </div>
+                        Have no Friends yet .
                     </div>
                 }
-                <div class="view-more">
+
+                @*<div class="view-more">
                     <a href="#" title="">View More</a>
-                </div>
+                </div>*@
             </div><!--suggestions-list end-->
         </div>
     </div><!--right-sidebar end-->

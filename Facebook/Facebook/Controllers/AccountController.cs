@@ -60,7 +60,7 @@ namespace Facebook.Controllers
         [HttpPost]
         public IActionResult Login([FromBody]UserLoginDTO userLoginDto)
         {
-            User user = db.Users.FirstOrDefault(x => x.Email == userLoginDto.Email);
+            User user = db.Users.Include(x=>x.ProfilePhotos).FirstOrDefault(x => x.Email == userLoginDto.Email && x.IsDeleted == false);
             if (user == null)
             {
                 return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.IncorrectEmailOrPassword });
@@ -83,7 +83,7 @@ namespace Facebook.Controllers
             if (TokenIsValid)
             {
                 int userId = int.Parse(jwt.GetId(token));
-                User user = db.Users.Where(s => s.Id == userId).FirstOrDefault();
+                User user = db.Users.Include(x=>x.ProfilePhotos).Where(s => s.Id == userId).FirstOrDefault();
                 if (!user.IsActive)
                 {
                     user.IsActive = true;
@@ -102,7 +102,7 @@ namespace Facebook.Controllers
 
         public ActionResult SendForgetPasswordCode([FromQuery]string Email)
         {
-            var user = db.Users.Where(s => s.Email == Email).FirstOrDefault();
+            var user = db.Users.Include(x => x.ProfilePhotos).Where(s => s.Email == Email).FirstOrDefault();
             if (user == null)
             {
                 return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.EmailNotExsist });
@@ -123,7 +123,7 @@ namespace Facebook.Controllers
             if (TokenIsValid)
             {
                 int userId = int.Parse(jwt.GetId(token));
-                User user = db.Users.Where(s => s.Id == userId).FirstOrDefault();
+                User user = db.Users.Where(s => s.Id == userId && s.IsDeleted == false).FirstOrDefault();
                 return View(user);
             }
             return View();
@@ -132,7 +132,7 @@ namespace Facebook.Controllers
         [HttpPost]
         public ActionResult RecoverPassword([FromBody]UserLoginDTO userLoginDTO, [FromQuery]string code)
         {
-            User user = db.Users.Where(s => s.Email == userLoginDTO.Email).FirstOrDefault();
+            User user = db.Users.Include(x => x.ProfilePhotos).Where(s => s.Email == userLoginDTO.Email && s.IsDeleted == false).FirstOrDefault();
             if (user == null)
             {
                 return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.EmailNotExsist });
@@ -156,7 +156,7 @@ namespace Facebook.Controllers
         [AuthorizedAction]
         public ActionResult ChangePassword()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             return View();
         }
 
@@ -190,18 +190,18 @@ namespace Facebook.Controllers
         [AuthorizedAction]
         public IActionResult AdminControl()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             User user = userData.GetUser(HttpContext);
             List<UserAdminControlDto> users = new List<UserAdminControlDto>(); 
             if (user.RoleId == (int)UserType.SuperAdmin)
             {
                 ViewData["Roles"] = db.Roles.Where(x=>x.Id != (int)UserType.SuperAdmin).ToList();
-                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.Id != user.Id).Include(x => x.ProfilePhotos).ToList());
+                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.Id != user.Id && x.IsDeleted == false).Include(x => x.ProfilePhotos).ToList());
             }
             else if (user.RoleId == (int)UserType.Admin)
             {
                 ViewData["Roles"] = db.Roles.Where(x => x.Id != (int)UserType.SuperAdmin && x.Id != (int)UserType.Admin).ToList();
-                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.RoleId != (int)UserType.SuperAdmin && x.RoleId != (int)UserType.Admin).Include(x => x.ProfilePhotos).ToList());
+                users = UserToUserBanDtoMapper.Map(db.Users.Where(x=>x.RoleId != (int)UserType.SuperAdmin && x.RoleId != (int)UserType.Admin && x.IsDeleted == false).Include(x => x.ProfilePhotos).ToList());
             }
             return View(users);
         }

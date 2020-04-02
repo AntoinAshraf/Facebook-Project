@@ -34,13 +34,13 @@ namespace Facebook.Controllers
             if (string.IsNullOrEmpty(search)) {
                 return RedirectToAction("/Home/Index");
             }
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             ViewData["Users"] = userData.GetUser(HttpContext);
 
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users.Include(x => x.UserRelationsDesider).Include(x => x.UserRelationsInitiator).Include(x => x.ProfilePhotos)
-                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim()))  && usr.Id != loggedUserData.Id).ToList();
+                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim()))  && usr.Id != loggedUserData.Id && usr.IsDeleted == false).ToList();
 
             List<SearchUserDto> searchUserDtos = SearchUserMapper.Map(searchUsrs, loggedUserData.Id).ToList();
 

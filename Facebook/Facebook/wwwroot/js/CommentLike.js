@@ -68,12 +68,14 @@ function SendLike(postId) {
                 likeNumber.innerHTML = Number.parseInt(likeNumber.innerHTML) - 1;
                 document.getElementById("like_" + data.likeId).remove();
                 if (likesContainer.innerHTML.trim() === "")
-                    likesContainer.innerHTML = "There is no reactions for this post yet ."
+                    likesContainer.innerHTML = "There is no reactions for this post yet."
             } else {
                 heart.style.color = "blue";
                 toastr.success('Like has been Added Successfuly', 'Done');
                 likeNumber.innerHTML = Number.parseInt(likeNumber.innerHTML) + 1;
-                if (likesContainer.innerHTML.trim() === "There is no reactions for this post yet .")
+                debugger
+                var x = likesContainer.innerHTML.trim();
+                if (likesContainer.innerHTML.trim() === "There is no reactions for this post yet.")
                     likesContainer.innerHTML = "";
                 likesContainer.insertAdjacentHTML('afterbegin', '<div id="like_' + data.responseMessage.likeId + '" class="comment-list"><div class= "bg-img" ><img class="friendListPic" src="' + data.responseMessage.profilePicUrl + '" alt=""></div><div class="comment"><h3><a href="~/Profile/Profile/' + data.responseMessage.userId + '" title="">' + data.responseMessage.fullName + '</a></h3><span><img src="images/clock.png" alt="">' + data.responseMessage.likeDate + '</span></div></div>');
             }

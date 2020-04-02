@@ -28,14 +28,14 @@ namespace Facebook.Mappers
         {
             if (from == null) return null;
 
-            List<HomeUserTempDto> homeUserDtos = Map(from.UserRelationsInitiator, from.UserRelationsDesider, hostingEnvironment, from.Id).ToList();
+            List<HomeUserTempDto> homeUserDtos = Map(from.UserRelationsInitiator.Where(x=>x.Desider.IsDeleted == false), from.UserRelationsDesider.Where(x=>x.Initiator.IsDeleted == false), hostingEnvironment, from.Id).ToList();
             var to = new HomePageDto
             {
                 FullName = $"{from.FirstName} {from.LastName}",
                 Bio = from.Bio,
                 UserId = from.Id,
-                NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count()
-                                    + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count(),
+                NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend && x.Initiator.IsDeleted == false).Count()
+                                    + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend && x.Desider.IsDeleted == false).Count(),
                 HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl, x.Bio, x.UserId)).ToList(),
                 HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts, hostingEnvironment, from.Id).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId, x.CanEditDelete, x.IsLike, x.UserId)).ToList(),
             };
@@ -59,7 +59,7 @@ namespace Facebook.Mappers
             var to = new List<HomePostTempDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.Post.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.Post.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment, currentUserId));
                 }
@@ -173,7 +173,7 @@ namespace Facebook.Mappers
             var to = new List<HomeCommentDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment, currentUserId));
                 }
@@ -217,7 +217,7 @@ namespace Facebook.Mappers
             var to = new List<HomeLikeDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment));
                 }

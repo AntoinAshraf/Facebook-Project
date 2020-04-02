@@ -1,4 +1,5 @@
-﻿using FaceBook.Models;
+﻿using Facebook.Models.ViewModels;
+using FaceBook.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
@@ -12,5 +13,6 @@ namespace Facebook.Contracts
         void SetUser(HttpContext httpContext, User user);
         void SetActions(HttpContext httpContext, List<Actions> actions);
         void clearData(HttpContext httpContext);
+        LayoutUserDto GetLayoutData(HttpContext httpContext);
     }
 }

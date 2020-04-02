@@ -10,7 +10,7 @@ namespace Facebook.Models.ViewModels
         public int Id { get; set; }
         public int RoleId { get; set; }
         public string Fullname { get; set; }
-        public string Email { get; set; }
+        public string Bio { get; set; }
         public string ProfilePhotoUrl { get; set; }
         public bool IsActive { get; set; }
     }

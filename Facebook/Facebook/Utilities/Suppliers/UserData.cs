@@ -1,4 +1,5 @@
 ﻿using Facebook.Contracts;
+using Facebook.Models.ViewModels;
 using FaceBook.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -36,6 +37,12 @@ namespace Facebook.Utilities
                 return httpContext.Session.GetComplexData<User>("User");
             }
             return null;
+        }
+
+        public LayoutUserDto GetLayoutData(HttpContext httpContext)
+        {
+            User user = GetUser(httpContext);
+            return new LayoutUserDto() { userId = user.Id, FullName = $"{user.FirstName} {user.LastName}", ProfilePic = user.ProfilePhotos.FirstOrDefault(x=>x.UserId == user.Id).Url ?? (user.GenderId == 1 ? "default.jpg" : "default_female.png"), actions = GetActions(httpContext) };
         }
 
         public bool IsAuthorize(HttpContext httpContext)
