@@ -111,7 +111,7 @@
                                 <img class="friendListPic" src="@post.ProfilePic" alt="">
                                 <div class="usy-name">
                                     <h3><a href="~/Profile/Profile/@post.UserId" title="">@post.FullName</a></h3>
-                                    <span><i class="far fa-clock"> </i> @post.PostDate</span>
+                                    <span><i class="far fa-clock"></i> @post.PostDate</span>
                                 </div>
                             </div>
                             @if (post.CanEditDelete)
@@ -183,7 +183,7 @@
                                             </div>
                                             <div class="comment">
                                                 <h3><a href="~/Profile/Profile/@comment.UserId" title="">@comment.FullName</a></h3>
-                                                <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
+                                                <span><i class="far fa-clock"></i> @comment.CommentDate</span>
                                                 <p>@comment.CommentContent</p>
                                             </div>
                                             @if (comment.CanDelete)
@@ -236,7 +236,7 @@
                                             </div>
                                             <div class="comment">
                                                 <h3><a href="~/Profile/Profile/@like.UserId" title="">@like.FullName</a></h3>
-                                                <span><img src="images/clock.png" alt="">@like.LikeDate</span>
+                                                <span><i class="far fa-clock"></i> @like.LikeDate</span>
                                             </div>
                                         </div>
                                     }
@@ -293,9 +293,10 @@
                 }
                 else
                 {
-                    <div class="suggestion-usd">
-                        Have no Friends yet .
-                    </div>
+            <div class="suggestion-usd">
+                Feeling lonely?
+                Find friends now through the search bar!
+            </div>
                 }
 
                 @*<div class="view-more">
