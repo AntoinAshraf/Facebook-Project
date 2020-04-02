@@ -283,8 +283,10 @@
                     @foreach (var user in Model.HomeUserDtos)
                     {
                         <div class="suggestion-usd">
-                            <img class="friendListPic" src="@user.ProfilePicUrl" alt="">
-                            <div class="sgt-text">
+                            <div class="sgt-text col-md-3">
+                                <img class="friendListPic" src="@user.ProfilePicUrl" alt="">
+                            </div>
+                            <div class="sgt-text col-md-9">
                                 <h4><a href="~/Profile/Profile/@user.UserId" title="">@user.FullName</a></h4>
                                 <span>@user.Bio</span>
                             </div>
@@ -293,10 +295,10 @@
                 }
                 else
                 {
-            <div class="suggestion-usd">
-                Feeling lonely?
-                Find friends now through the search bar!
-            </div>
+                    <div class="suggestion-usd">
+                        Feeling lonely?
+                        Find friends now through the search bar!
+                    </div>
                 }
 
                 @*<div class="view-more">
