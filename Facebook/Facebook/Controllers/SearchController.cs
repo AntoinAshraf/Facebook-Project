@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Facebook.Contracts;
 using Facebook.Mappers;
 using Facebook.Models.ViewModels;
+using Facebook.Utilities;
 using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
@@ -29,7 +30,9 @@ namespace Facebook.Controllers
 
 
 
-        public IActionResult Index(string search) {
+        [AuthorizedAction]
+        public IActionResult Index(string search)
+        {
 
             if (string.IsNullOrEmpty(search)) {
                 return RedirectToAction("/Home/Index");
@@ -50,6 +53,7 @@ namespace Facebook.Controllers
         }
 
         [HttpPut]
+        [AuthorizedAction]
         public IActionResult ConfirmFriendAction(int InitiatorId, int DesiderId) {
 
             var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => usrRel.InitiatorId == InitiatorId && usrRel.DesiderId == DesiderId).FirstOrDefault();
@@ -65,6 +69,7 @@ namespace Facebook.Controllers
         }
 
         [HttpDelete]
+        [AuthorizedAction]
         public IActionResult UnFriendAction(int InitiatorId, int DesiderId) {
             var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => (usrRel.InitiatorId == InitiatorId || usrRel.InitiatorId == DesiderId) && (usrRel.InitiatorId == DesiderId || usrRel.DesiderId == DesiderId)).FirstOrDefault();
             if (userRelSelect == null)
@@ -77,6 +82,7 @@ namespace Facebook.Controllers
         }
 
         [HttpPost]
+        [AuthorizedAction]
         public IActionResult RequestFriendAction(int InitiatorId, int DesiderId) {
             UserRelation newUserRel = new UserRelation() {
                     CreatedAt = DateTime.Now,

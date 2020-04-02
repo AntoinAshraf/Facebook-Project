@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Facebook.Models.ViewModels.SearchUserDto>
 @{
     ViewData["Title"] = "Index";
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
 
@@ -17,24 +18,22 @@
                     <div class="col-1"></div>
                 </div>
                 <ul>
-
-                    @if (user.SocialStatus == 2 && user.Initiator == true)
+                    @if (user.SocialStatus == 2 && user.Initiator == true && layoutUserDto.actions.Where(x => x.Url == "/Search/ConfirmFriendAction").Any())
                     {
                         <li id="usr_@user.Id"><button type="button" onclick='ConfirmFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="AcceptTag" title="" class="btn btn-success">Accept Request</button></li>
                     }
-                    else if (user.SocialStatus == 2 && user.Initiator == false)
+                    else if (user.SocialStatus == 2 && user.Initiator == false && layoutUserDto.actions.Where(x => x.Url == "/Search/RequestFriendAction").Any())
                     {
                         <li id="usr_@user.Id"><button type="button" onclick='CancelRequestAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="CancelTag" title="" class="btn btn-warning">Cancel Request</button></li>
                     }
-                    else if (user.SocialStatus == 1)
+                    else if (user.SocialStatus == 1 && layoutUserDto.actions.Where(x => x.Url == "/Search/UnFriendAction").Any())
                     {
                         <li id="usr_@user.Id"><button type="button" onclick='UnFriendAjaxCall(@user.Id, @ViewData["LoggedUser"])' id="unfriendTag" title="" class="btn btn-danger">UnFriend</button></li>
                     }
-                    else if(user.SocialStatus == 0)
+                    else if(user.SocialStatus == 0 && layoutUserDto.actions.Where(x => x.Url == "/Search/RequestFriendAction").Any())
                     {
                         <li id="usr_@user.Id"><button type="button" onclick='AddFriendAjaxCall(@ViewData["LoggedUser"], @user.Id)' id="AddFriendTag" title="" class="btn btn-primary">Add Friend</button></li>
                     }
-
                 </ul>
             </div>
             <a href="~/Profile/Profile/@user.Id" title="" class="view-more-pro">View Profile</a>

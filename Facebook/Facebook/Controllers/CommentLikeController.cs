@@ -6,6 +6,7 @@ using Facebook.Contracts;
 using Facebook.Mappers;
 using Facebook.Models.ViewModels;
 using Facebook.Recources;
+using Facebook.Utilities;
 using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
@@ -29,6 +30,7 @@ namespace Facebook.Controllers
         }
 
         [HttpPost]
+        [AuthorizedAction]
         public IActionResult AddComment([FromBody]CommentPostDto commentPostDto)
         {
             if (commentPostDto == null || commentPostDto.CommentContent == null)
@@ -43,6 +45,7 @@ namespace Facebook.Controllers
         }
 
         [HttpGet]
+        [AuthorizedAction]
         public IActionResult AddLike([FromQuery]int postId)
         {
             if (postId == 0)
@@ -66,6 +69,7 @@ namespace Facebook.Controllers
 
 
         [HttpGet]
+        [AuthorizedAction]
         public IActionResult DeleteComment([FromQuery]int commentId)
         {
             if (commentId == 0)

@@ -4049,6 +4049,7 @@ a:hover {
         font-size: 14px;
         font-weight: 500;
         margin-bottom: 21px;
+        min-height: 35px;
     }
 
     .company-up-info ul {

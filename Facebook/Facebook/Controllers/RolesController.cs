@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FaceBook.Models;
 using FacebookDbContext;
 using Facebook.Contracts;
+using Facebook.Utilities;
 
 namespace Facebook.Controllers
 {
@@ -23,6 +24,7 @@ namespace Facebook.Controllers
         }
 
         // GET: Roles
+        [AuthorizedAction]
         public async Task<IActionResult> Index()
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -30,6 +32,7 @@ namespace Facebook.Controllers
         }
 
         // GET: Roles/Create
+        [AuthorizedAction]
         public IActionResult Create()
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -40,6 +43,7 @@ namespace Facebook.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [AuthorizedAction]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt")] Role role)
         {
@@ -55,6 +59,7 @@ namespace Facebook.Controllers
         }
 
         // GET: Roles/Edit/5
+        [AuthorizedAction]
         public async Task<IActionResult> Edit(int? id)
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -77,6 +82,7 @@ namespace Facebook.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizedAction]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CreatedBy,CreatedAt,UpdatedBy,UpdatedAt")] Role role)
         {
             if (id != role.Id)
@@ -110,6 +116,7 @@ namespace Facebook.Controllers
         }
 
         // GET: Roles/Delete/5
+        [AuthorizedAction]
         public async Task<IActionResult> Delete(int? id)
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -131,6 +138,7 @@ namespace Facebook.Controllers
         // POST: Roles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AuthorizedAction]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var role = await _context.Roles.FindAsync(id);

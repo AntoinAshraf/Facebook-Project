@@ -2,12 +2,17 @@
 
 @{
     ViewData["Title"] = "Index";
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
-    
-<p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
-</p>
+
+@if (layoutUserDto.actions.Where(x => x.Url == "/Roles/Create").Any())
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create">Create New</a>
+    </p>
+}
+
 <table style="margin-top:20px" class="table table-hover">
     <thead>
         <tr>
@@ -21,19 +26,26 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (layoutUserDto.actions.Where(x => x.Url == "/Roles/Edit").Any())
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    }
+                    @if (layoutUserDto.actions.Where(x => x.Url == "/Roles/Delete").Any())
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
