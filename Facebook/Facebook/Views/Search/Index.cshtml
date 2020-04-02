@@ -58,7 +58,7 @@
                         
                         if (Response.success) {
                             toastr.success('Friend Is Added...', 'Done');
-                            var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='btn btn-dander'>UnFriend</button>";
+                            var unfrientTextTag = "<button type='button' onclick='UnFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='unfriendTag' title='' class='btn btn-danger'>UnFriend</button>";
 
                             $("#usr_" + InitiatorId).html(unfrientTextTag);
                         }
@@ -134,7 +134,7 @@
                     success: function (Response) {
                         if (Response.success) {
                             toastr.success('Request is Canceled...', 'Done');
-                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-success'>Add Friend</button>";
+                            var addFriendTextTag = "<button type='button' onclick='AddFriendAjaxCall(" + InitiatorId + ", " + DesiderId + ")' id='CancelTag' title='' class='btn btn-primary'>Add Friend</button>";
 
                             $("#usr_" + DesiderId).html(addFriendTextTag);
                         }

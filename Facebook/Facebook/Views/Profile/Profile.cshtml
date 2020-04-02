@@ -1,6 +1,7 @@
 ﻿@model Facebook.Models.ViewModels.ProfilePageDto
 @{
     ViewData["Title"] = @Model.UserInfo.FullName /*@TempData["Users"]*/;
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
 @*Left Side (Info & Friend Requests & Footer)*@
@@ -64,8 +65,10 @@
                     </span>
 
                     @{
-                        if (!@Model.CanEditProfileWritePost  /*Do not show buttons*/)
+                        if (layoutUserDto.actions.Where(x => x.Url == "/Profile/AddFriend").Any())
                         {
+                            if (!@Model.CanEditProfileWritePost  /*Do not show buttons*/)
+                            {
                             <div id="addRemoveFriendContainer" class="addRemoveFriend">
                                 @if (Model.btnRelationStatus == FriendRelationStatus.Remove)
                                 {
@@ -87,8 +90,9 @@
                                     </button>
                                 }
                             </div>
+                                }
+                            }
                         }
-                    }
                 </div>
             </div><!--user-profile end-->
             <ul class="user-fw-status">
@@ -125,7 +129,6 @@
                                             @friendRequest.FullName
                                         </a>
                                     </h4>
-                                    <span>@Model.UserInfo.Bio</span>
                                 </div>
                                 <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id,@Model.FriendRequests.Count)"></i></span>
                                 <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id,@Model.FriendRequests.Count)"></i></span>
