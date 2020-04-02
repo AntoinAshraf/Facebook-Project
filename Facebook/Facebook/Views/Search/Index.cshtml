@@ -11,7 +11,11 @@
             <div class="company-up-info">
                 <img src="~/ProfilePics/@user.ProfilePic" alt="">
                 <h3> <a href="~/Profile/Profile/@user.Id" title="" class="view-more-pro">@user.Fullname</a> </h3>
-                <h4> @user.Bio </h4>
+                <div class="row" style="text-align:center;">
+                    <div class="col-1"></div>
+                    <div class="col-9"> <h4 class="embed-responsive"> @user.Bio </h4> </div>
+                    <div class="col-1"></div>
+                </div>
                 <ul>
 
                     @if (user.SocialStatus == 2 && user.Initiator == true)
@@ -33,7 +37,7 @@
 
                 </ul>
             </div>
-            <a href="~/Profile/Profile/@user.Id" title="" class="view-more-pro">View Profile</a>
+            <a href="#" title="" class="view-more-pro">View Profile</a>
         </div><!--company_profile_info end-->
     </div>
 }
