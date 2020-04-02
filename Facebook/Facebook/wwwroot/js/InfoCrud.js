@@ -1,20 +1,26 @@
 ﻿function editInfo(userId) {
     const name = document.getElementById("infoName");
+    const bio = document.getElementById("infoBio");
     const bd = document.getElementById("infoBd");
     const phone = document.getElementById("infoPhone");
     const gender = document.getElementById("infoGender");
 
     const nameOld = document.getElementById("infoNameCurrent");
+    const bioOld = document.getElementById("infoBioCurrent");
     const bdOld = document.getElementById("infoBdCurrent");
     const phoneOld = document.getElementById("infoPhoneCurrent");
     const genderOld = document.getElementById("infoGenderCurrent");
-    // update user full name in profile page
+    // update user full name in profile page & Bio
     const fullNameOld = document.getElementsByClassName("fullNameCurrent");
+    const bioToUpdate = document.getElementsByClassName("bioInfo");
+
 
     const regex = /^01[0-2]{1}[0-9]{8}$/;
 
     if (name.value == null)
         return toastr.error("Name cannot be empty!", 'Validation Error');
+    if (bio.value == null)
+        return toastr.error("Bio cannot be empty!", 'Validation Error');
     if (!regex.test(phone.value))
         return toastr.error("Phone number should have 11 digits!", 'Validation Error');
 
@@ -23,6 +29,7 @@
         method: "put",
         body: JSON.stringify({
             FullName: name.value,
+            Bio: bio.value,
             BirthDate: bd.value,
             GenderName: gender.options[gender.selectedIndex].text,
             PhoneNumber: phone.value,
@@ -42,12 +49,17 @@
             toastr.success('Info Edited!', 'Done');
 
             nameOld.innerHTML = name.value;
+            bioOld.innerHTML = bio.value;
             bdOld.innerHTML = bd.value;
             phoneOld.innerHTML = phone.value;
             genderOld.innerHTML = gender.options[gender.selectedIndex].text;
 
             for (var i = 0; i < fullNameOld.length; i++) {
                 fullNameOld[i].innerHTML = name.value;
+            }
+
+            for (var i = 0; i < bioToUpdate.length; i++) {
+                bioToUpdate[i].innerHTML = bio.value;
             }
             
 
@@ -70,7 +82,7 @@ function changePhoto(userId) {
 
     const extension = profileImage.value.split('.');
 
-    const currentProfilePhoto = document.querySelector(".usr-pic img");
+    const currentProfilePhoto = document.querySelector(".user-pic-edit img");
 
     // Assure that the extension is is image of (jpg, png)
     if (extension[1].toLowerCase() !== "jpg" && extension[1].toLowerCase() !== "jpeg"

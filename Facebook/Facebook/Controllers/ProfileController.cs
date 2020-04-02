@@ -40,7 +40,9 @@ namespace Facebook.Controllers
         [HttpGet]
         public IActionResult Profile(int? id)
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
+            
+            //ViewData["Actions"] = userData.GetActions(HttpContext);
             ViewData["Users"] = userData.GetUser(HttpContext);
 
 
@@ -61,10 +63,10 @@ namespace Facebook.Controllers
 
             var AllUserdata = facebookDataContext.Users.Where(user => user.Id == id)
                 .Include("Gender")
-                .Include("ProfilePhotos")//profilePhotos
+                //.Include("ProfilePhotos")//profilePhotos
                 .Include("UserRelationsDesider.Initiator.ProfilePhotos")//requests&countFriend
                 .Include("UserRelationsDesider.Desider.ProfilePhotos")
-                 .Include("UserRelationsInitiator")//CountFriend
+                .Include("UserRelationsInitiator")//CountFriend
                 .Include("UsersPosts.Post.Comments.User.ProfilePhotos")//commenets
                 .Include("UsersPosts.Post.Likes.User.ProfilePhotos")//postsAndLikes/user
                 .Include("UsersPosts.Post.PostPhotos").SingleOrDefault();//postsAndPhoto
@@ -143,7 +145,8 @@ namespace Facebook.Controllers
                 if(user ==null)
                     return Json(new { statusCode = ResponseStatus.NoDataFound });
 
-                user.BirthDate = userInfoToUpdate.BirthDate; 
+
+                user.Bio = userInfoToUpdate.Bio; 
                 user.PhoneNumber = userInfoToUpdate.PhoneNumber; 
                 user.BirthDate = userInfoToUpdate.BirthDate;
 
@@ -157,6 +160,9 @@ namespace Facebook.Controllers
                 user.LastName = nameSplitted[1];
 
                 facebookDataContext.SaveChanges();
+
+                // Saving user for session
+                userData.SetUser(HttpContext, user);
                 return Json(new { statusCode = ResponseStatus.Success });
             }
             catch (Exception)
@@ -219,6 +225,7 @@ namespace Facebook.Controllers
                     return Json(new { statusCode = ResponseStatus.NoDataFound });
                 }
                 relationToRemove.IsDeleted = true; // remove the relationship
+                facebookDataContext.UserRelations.Remove(relationToRemove);
                 facebookDataContext.SaveChanges();
 
                 return Json(new { statusCode = ResponseStatus.Success });
@@ -235,6 +242,8 @@ namespace Facebook.Controllers
         {
             string fileName = "";
             DateTime dateTimeNow = DateTime.Now;
+
+            User user = userData.GetUser(HttpContext);
 
             if (profileImage == null)
                 return Json(new { statusCode = ResponseStatus.Error });
@@ -274,8 +283,15 @@ namespace Facebook.Controllers
                     CreatedAt = dateTimeNow,
                     IsDeleted = false
                 };
+
+                user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId).Url = fileName;
+                
                 facebookDataContext.ProfilePhotos.Add(newProfilePhoto);
-                try { facebookDataContext.SaveChanges(); }
+                try 
+                {
+                    facebookDataContext.SaveChanges();
+                    userData.SetUser(HttpContext, user);
+                }
                 catch { return Json(new { statusCode = ResponseStatus.Error }); }
             }
 

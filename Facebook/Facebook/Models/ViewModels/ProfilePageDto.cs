@@ -22,18 +22,21 @@ namespace Facebook.Models.ViewModels
        public List<string> AllProfilePhotos { get; set; } = new List<string>();
         //friendRequest
        public List<FriendRequest> FriendRequests { get; set; } = new List<FriendRequest>();
+        //Add Remove Relation Button
        public FriendRelationStatus btnRelationStatus { get; set; }
-       public int CurrentUserId { get; set; }
+       // Current User Id
+        public int CurrentUserId { get; set; }
        
     }
 
     public class userInfo
     {
+        public int id { get; set; }
         public string FullName { get; set; }
+        public string Bio { get; set; }
         public DateTime BirthDate { get; set; }
         public string GenderName { get; set; }
         public string PhoneNumber { get; set; }
-        public int id { get; set; }
     }
     public class userPost
     {

@@ -52,12 +52,12 @@
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
-                    <h3 class="fullNameCurrent">
-                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@Model.UserInfo.id">
+                    <h3>
+                        <a class="fullNameCurrent" asp-action="Profile" asp-controller="Profile" asp-route-id="@Model.UserInfo.id">
                             @Model.UserInfo.FullName
                         </a>
                     </h3>
-                    <span>@Model.UserInfo.PhoneNumber</span>
+                    <span class="bioInfo">@Model.UserInfo.Bio</span>
 
                     @{
                         if (!@Model.CanEditProfileWritePost  /*Do not show buttons*/)
@@ -97,7 +97,7 @@
         @{
             if (Model.CanEditProfileWritePost && Model.FriendRequests.Count > 0)
             {
-                <div class="suggestions full-width">
+                <div id="requestsContainer" class="suggestions full-width">
                     <div class="sd-title">
                         <h3>Friend Requests</h3>
                     </div><!--sd-title end-->
@@ -121,10 +121,10 @@
                                             @friendRequest.FullName
                                         </a>
                                     </h4>
-                                    <span>Graphic Designer</span>
+                                    <span>@Model.UserInfo.Bio</span>
                                 </div>
-                                <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
-                                <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
+                                <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id,@Model.FriendRequests.Count)"></i></span>
+                                <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id,@Model.FriendRequests.Count)"></i></span>
                             </div>
                         </div><!--suggestions-list end-->
                     }
@@ -154,7 +154,7 @@
         <div class="user-tab-sec">
             <h3 class="fullNameCurrent">@Model.UserInfo.FullName</h3>
             <div class="star-descp">
-                <span>Graphic Designer at Self Employed</span>
+                <span class="bioInfo">@Model.UserInfo.Bio</span>
             </div><!--star-descp end-->
             <div class="tab-feed">
                 <ul>
@@ -325,6 +325,8 @@
                 </h3>
                 <h4>Name</h4>
                 <p id="infoNameCurrent"> @Model.UserInfo.FullName </p>
+                <h4>Bio</h4>
+                <p id="infoBioCurrent"> @Model.UserInfo.Bio </p>
                 <h4>Birthdate</h4>
                 <p id="infoBdCurrent"> @Model.UserInfo.BirthDate </p>
                 <h4>Phone #</h4>
@@ -348,6 +350,12 @@
             </div>
             <div class="pf-gallery">
                 <ul>
+                    @foreach (var photo in @Model.AllProfilePhotos)
+                    {
+
+                        <li><a href="#" title=""><img src="~/ProfilePics/@photo" alt=""></a></li>
+                    }
+                    @*<li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
@@ -357,9 +365,7 @@
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
                     <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
-                    <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
-                    <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
-                    <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>
+                    <li><a href="#" title=""><img src="~/images/70x70.png" alt=""></a></li>*@
                 </ul>
             </div><!--pf-gallery end-->
         </div><!--widget-portfolio end-->
@@ -385,6 +391,8 @@
                                 <form>
                                     <label>Name </label><input type="text" name="Name" placeholder="Name"
                                                                value="@Model.UserInfo.FullName" id="infoName" required>
+                                    <label>Bio </label><input type="text" name="Bio" placeholder="Bio"
+                                                               value="@Model.UserInfo.Bio" id="infoBio" required>
 
                                     <label>Birthdate </label><input asp-for="@Model.UserInfo.BirthDate"
                                                                     placeholder="Birthdate" id="infoBd" required>
@@ -409,6 +417,7 @@
         </div>
     </div>
 </div><!--esraaaaaaaaaaaaa-->
+
 @*Profile Image Upload Modal*@
 <div id="myModalUpload" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-edit">
@@ -544,7 +553,15 @@
                         {
                             <div id="like_@like.LikeId" class="comment-list">
                                 <div class="bg-img">
-                                    <img class="friendListPic" src="~/ProfilePics/@like.PhotoCreatorLike" alt="">
+                                    @if (@like.PhotoCreatorLike != null)
+                                    {
+                                        <img class="friendListPic" src="~/ProfilePics/@like.PhotoCreatorLike" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="friendListPic" src="~/ProfilePics/default.jpg" alt="">
+                                    }
+
                                 </div>
                                 <div class="comment">
                                     <h3>
@@ -559,13 +576,12 @@
                     }
                     else
                     {
-                        //WHEN UNLIKING FROM PROFILE feh mushkela!!!!!!!!!!
                         @:There is no reactions for this post yet.
                         @*<div class="comment-list">
-                <div class="comment">
-                    <h3>There are no reactions for this post yet.</h3>
-                </div>
-            </div>*@
+                         <div class="comment">
+                           <h3>There are no reactions for this post yet.</h3>
+                        </div>
+                        </div>*@
                     }
                 </div>
                 <div class="modal-footer">

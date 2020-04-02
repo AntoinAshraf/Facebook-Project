@@ -33,8 +33,9 @@ function RemoveFriend(initiatorId, UserInfoId) {
         toastr.error("Something went wrong!", 'Validation Error');
     });
 }
-function rejectRequest(initiatorId, UserInfoId)
+function rejectRequest(initiatorId, UserInfoId, friendRequestsCount)
 {
+    console.log(friendRequestsCount);
     fetch("https://localhost:44340/profile/rejectRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'DELETE'
     }).then((response) => {
@@ -44,7 +45,10 @@ function rejectRequest(initiatorId, UserInfoId)
             toastr.error('You can not reject the request!', 'Validation Error');
         }
         if (data.statusCode === 200) {
-            deleteRequestRow(initiatorId);
+            if (friendRequestsCount == 1)
+                deleteRequestContainer();
+            else
+                deleteRequestRow(initiatorId);
             toastr.success('Friend request rejected!', 'Done');
         }
 
@@ -53,7 +57,7 @@ function rejectRequest(initiatorId, UserInfoId)
     });
 }
 
-function acceptRequest(initiatorId, UserInfoId) {
+function acceptRequest(initiatorId, UserInfoId, friendRequestsCount) {
     fetch("https://localhost:44340/profile/acceptRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'PUT'
     }).then((response) => {
@@ -63,8 +67,13 @@ function acceptRequest(initiatorId, UserInfoId) {
             toastr.error('You can not accept the request!', 'Validation Error');
         }
         if (data.statusCode === 200) {
-            deleteRequestRow(initiatorId);
-            updateFriendsNumber();
+            if (friendRequestsCount == 1)
+                deleteRequestContainer();
+            else
+            {
+                deleteRequestRow(initiatorId);
+                updateFriendsNumber();
+            }
             toastr.success('Friend Request Accepted!', 'Done');
         }
 
@@ -96,4 +105,8 @@ function updateFriendsNumber() {
 
     result.innerText++; // Incrementing the number of friends for the user to be shown dynamically 
     console.log(result.innerText);
+}
+
+function deleteRequestContainer(){
+    document.getElementById("requestsContainer").remove();
 }

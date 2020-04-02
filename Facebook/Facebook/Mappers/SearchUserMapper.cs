@@ -40,9 +40,9 @@ namespace Facebook.Mappers
                 to.SocialStatus = from.UserRelationsDesider.FirstOrDefault(x => x.InitiatorId == currentUerId).SocialStatusId;
                 to.Initiator = false;
             }
-            else if (from.UserRelationsInitiator.Any(x => x.DesiderId == currentUerId))
+            else if (from.UserRelationsInitiator.Any(x => x.DesiderId == currentUerId && x.IsDeleted == false))
             {
-                to.SocialStatus = from.UserRelationsInitiator.FirstOrDefault(x => x.DesiderId == currentUerId).SocialStatusId;
+                to.SocialStatus = from.UserRelationsInitiator.FirstOrDefault(x => x.DesiderId == currentUerId && x.IsDeleted == false).SocialStatusId;
                 to.Initiator = true;
             }
             else

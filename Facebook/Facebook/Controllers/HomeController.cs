@@ -52,7 +52,7 @@ namespace Facebook.Controllers
                 .Include("UsersPosts.Post.Comments.User.ProfilePhotos")
                 .Include("UsersPosts.Post.Likes.User.ProfilePhotos")
                 .Include("UsersPosts.Post.PostPhotos")
-                .Include("ProfilePhotos")
+                //.Include("ProfilePhotos")
                 .FirstOrDefault();
             HomePageDto homePageDto = HomePageDtoMapper.Map(userFullData, hostingEnvironment);
             return View(homePageDto);

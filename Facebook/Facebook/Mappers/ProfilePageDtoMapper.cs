@@ -52,6 +52,7 @@ namespace Facebook.Mappers
         {
             userInfo info = new userInfo();
             info.FullName = $"{From.FirstName} {From.LastName}";
+            info.Bio = From.Bio;
             info.BirthDate = From.BirthDate;
             info.GenderName = From.Gender.GenderName;
             info.PhoneNumber = From.PhoneNumber;
@@ -148,18 +149,18 @@ namespace Facebook.Mappers
             {
                 //if(comment.IsDeleted == false)
                 //{
-                    postComment postComment = new postComment();
+                postComment postComment = new postComment();
 
                 postComment.CommentId = comment.Id;
-                    postComment.CommentCreatorId = comment.UserId;
-                    postComment.CommentContent = comment.CommentContent;
-                    postComment.commentDate = GetPostCreateDate(comment.CreatedAt);
-                    postComment.CreatorPhoto = comment.User.ProfilePhotos.Where(p => p.IsCurrent == true).Select(p => p.Url).FirstOrDefault();
-                    postComment.FullNameCreator = $"{comment.User.FirstName} {comment.User.LastName}";
+                postComment.CommentCreatorId = comment.UserId;
+                postComment.CommentContent = comment.CommentContent;
+                postComment.commentDate = GetPostCreateDate(comment.CreatedAt);
+                postComment.CreatorPhoto = comment.User.ProfilePhotos.Where(p => p.IsCurrent == true).Select(p => p.Url).FirstOrDefault();
+                postComment.FullNameCreator = $"{comment.User.FirstName} {comment.User.LastName}";
                 postComment.canRemove = (comment.UserId == loggedUserId);
-                    postComments.Add(postComment);
-                
-                    //return postComments;
+                postComments.Add(postComment);
+
+                //return postComments;
                 //}
             }
             return postComments;
@@ -182,10 +183,9 @@ namespace Facebook.Mappers
                         .FirstOrDefault();
                     postLike.DateCreatedLike = $"Liked {GetPostCreateDate(like.CreatedAt)}";
                     postLikes.Add(postLike);
-                    return postLikes;
                 }
             }
-            return null;
+              return postLikes.Count > 0 ? postLikes : null;
         }
 
         public static string GetPostCreateDate(DateTime PostDate)
