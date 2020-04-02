@@ -42,7 +42,8 @@ namespace Facebook.Utilities
         public LayoutUserDto GetLayoutData(HttpContext httpContext)
         {
             User user = GetUser(httpContext);
-            return new LayoutUserDto() { userId = user.Id, FullName = $"{user.FirstName} {user.LastName}", ProfilePic = "default.jpg" /*user.ProfilePhotos.FirstOrDefault(x=>x.UserId == user.Id).Url ?? (user.GenderId == 1 ? "default.jpg" : "default_female.png")*/, actions = GetActions(httpContext) };
+            string profilePic = user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id) == null ? (user.GenderId == 1 ? "default.jpg" : "default_female.png") : user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id).Url;
+            return new LayoutUserDto() { userId = user.Id, FullName = $"{user.FirstName}", ProfilePic = profilePic, actions = GetActions(httpContext) };
         }
 
         public bool IsAuthorize(HttpContext httpContext)
