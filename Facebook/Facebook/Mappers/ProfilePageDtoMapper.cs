@@ -69,7 +69,7 @@ namespace Facebook.Mappers
 
         public static List<string> mapperAllPhoto(User From)
         {
-            List<string> AllPhoto = From.ProfilePhotos.Where(photo => photo.IsDeleted == true).Select(photo => photo.Url).ToList();
+            List<string> AllPhoto = From.ProfilePhotos.Where(photo => photo.IsDeleted == false).Select(photo => photo.Url).ToList();
             return AllPhoto;
         }
 

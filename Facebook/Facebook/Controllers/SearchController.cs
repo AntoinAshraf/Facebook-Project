@@ -73,12 +73,13 @@ namespace Facebook.Controllers
         public IActionResult UnFriendAction(int InitiatorId, int DesiderId) {
             var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => (usrRel.InitiatorId == InitiatorId || usrRel.InitiatorId == DesiderId) && (usrRel.InitiatorId == DesiderId || usrRel.DesiderId == DesiderId)).FirstOrDefault();
             if (userRelSelect == null)
-                return Json(new { success = false});
+                return Json(new { success = false });
 
             facebookDataContext.UserRelations.Remove(userRelSelect);
             facebookDataContext.SaveChanges();
 
-            return Json(new { success = true});
+            return Json(new { success = true });
+
         }
 
         [HttpPost]

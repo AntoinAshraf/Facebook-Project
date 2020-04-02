@@ -57,7 +57,11 @@
                             @Model.UserInfo.FullName
                         </a>
                     </h3>
-                    <span class="bioInfo">@Model.UserInfo.Bio</span>
+                    <span class="bioInfo">
+                        <p id="bioContent">
+                            @Model.UserInfo.Bio
+                        </p>
+                    </span>
 
                     @{
                         if (!@Model.CanEditProfileWritePost  /*Do not show buttons*/)
@@ -200,7 +204,16 @@
                                 <div class="usy-dt">
                                     @{
                                         if (@Model.UserProfilePhoto == null)
-                                        {<img class="friendListPic" src="~/ProfilePics/default.jpg" alt=""> }
+                                        {
+                                            if (@Model.UserInfo.GenderName == "Male")
+                                            {
+                                                <img class="friendListPic" src="~/ProfilePics/default.jpg" alt="">
+                                            }
+                                            else
+                                            {
+                                                <img class="friendListPic" src="~/ProfilePics/default_female.png" alt="">
+                                            }
+                                        }
                                         else
                                         {<img class="friendListPic" src="~/ProfilePics/@Model.UserProfilePhoto" alt=""> }
                                     }

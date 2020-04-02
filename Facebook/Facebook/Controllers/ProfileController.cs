@@ -36,7 +36,7 @@ namespace Facebook.Controllers
             facebookDataContext = _facebookDataContext;
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpGet]
         public IActionResult Profile(int? id)
         {

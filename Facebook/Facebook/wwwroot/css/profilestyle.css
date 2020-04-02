@@ -83,3 +83,43 @@
 .button-addfriend {
     background-color: #0e385f;
 }
+
+.bioInfo {
+    font-size: 1rem;
+}
+
+#bioContent {
+    padding: 5px;
+    line-height: 22px;
+}
+
+@media (min-width: 544px) {
+    .bioInfo {
+        font-size: 1.5rem;
+    }
+    /*1rem = 16px*/
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+    .bioInfo {
+        font-size: 2rem;
+    }
+    /*1rem = 16px*/
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .bioInfo {
+        font-size: 2.5rem;
+    }
+    /*1rem = 16px*/
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .bioInfo {
+        font-size: 3rem;
+    }
+    /*1rem = 16px*/
+}
