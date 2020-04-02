@@ -7,6 +7,7 @@ using Facebook.Contracts;
 using Facebook.Mappers;
 using Facebook.Models.ViewModels;
 using Facebook.Recources;
+using Facebook.Utilities;
 using Facebook.Utilities.Enums;
 using FaceBook.Models;
 using FacebookDbContext;
@@ -35,7 +36,7 @@ namespace Facebook.Controllers
             facebookDataContext = _facebookDataContext;
         }
 
-
+        //[AuthorizedAction]
         [HttpGet]
         public IActionResult Profile(int? id)
         {
@@ -44,6 +45,9 @@ namespace Facebook.Controllers
 
 
             User currentUser = userData.GetUser(HttpContext);
+
+            if(id == null)
+                return RedirectToAction("Login", "Account");
 
             //to confirm Valid Id
             if (id != currentUser.Id)
@@ -59,12 +63,14 @@ namespace Facebook.Controllers
                 .Include("Gender")
                 .Include("ProfilePhotos")//profilePhotos
                 .Include("UserRelationsDesider.Initiator.ProfilePhotos")//requests&countFriend
+                .Include("UserRelationsDesider.Desider.ProfilePhotos")
                  .Include("UserRelationsInitiator")//CountFriend
                 .Include("UsersPosts.Post.Comments.User.ProfilePhotos")//commenets
                 .Include("UsersPosts.Post.Likes.User.ProfilePhotos")//postsAndLikes/user
                 .Include("UsersPosts.Post.PostPhotos").SingleOrDefault();//postsAndPhoto
 
-            ProfilePageDto profilePageDto = ProfilePageDtoMapper.Mapper(AllUserdata, (int)id);
+
+            ProfilePageDto profilePageDto = ProfilePageDtoMapper.Mapper(AllUserdata, (int)currentUser.Id);
 
             ViewBag.Gender = new SelectList(facebookDataContext.Gender, "Id", "GenderName", AllUserdata.GenderId);
 
@@ -72,7 +78,7 @@ namespace Facebook.Controllers
             return View(profilePageDto);
         }
 
-
+        //[AuthorizedAction]
         [HttpDelete]
         public IActionResult rejectRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
         {
@@ -95,7 +101,8 @@ namespace Facebook.Controllers
             }
 
         }
-
+        
+        //[AuthorizedAction]
         [HttpPut]
         public IActionResult acceptRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
         {
@@ -119,6 +126,7 @@ namespace Facebook.Controllers
 
         }
 
+        //[AuthorizedAction]
         [HttpPut]
         public IActionResult EditInfo([FromBody] userInfo userInfoToUpdate)
         {
@@ -127,6 +135,7 @@ namespace Facebook.Controllers
                 return Json(new { statusCode = ResponseStatus.ValidationError });
             }
 
+            
             try
             {
                 User user = facebookDataContext.Users.Where(u => u.Id == userInfoToUpdate.id).FirstOrDefault();
@@ -156,14 +165,78 @@ namespace Facebook.Controllers
             }
         }
 
+        //[AuthorizedAction]
+        [HttpPost]
+        public IActionResult AddFriend([FromQuery] int? initiatorId, [FromQuery] int? deciderId)
+        {
+            if (initiatorId == null || deciderId == null)
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+            try
+            {
+                if (!facebookDataContext.Users.Any(u => u.Id == initiatorId) ||
+                    !facebookDataContext.Users.Any(u => u.Id == deciderId))
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
 
+                UserRelation newUserRelation = new UserRelation()
+                {
+                    InitiatorId = (int)initiatorId,
+                    DesiderId = (int)deciderId,
+                    SocialStatusId = (int)SocialStatuses.Request,
+                    CreatedAt = DateTime.Now,
+                    IsDeleted = false,
+                };
+                facebookDataContext.UserRelations.Add(newUserRelation);
+                facebookDataContext.SaveChanges();
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            catch (Exception)
+            {
+                return Json(new { statusCode = ResponseStatus.Error });
+            }
+        }
+
+        //[AuthorizedAction]
+        [HttpPut]
+        public IActionResult RemoveFriend([FromQuery] int? initiatorId, [FromQuery] int? deciderId)
+        {
+            if (initiatorId == null || deciderId == null)
+                return Json(new { statusCode = ResponseStatus.ValidationError });
+            try
+            {
+                if (!facebookDataContext.Users.Any(u => u.Id == initiatorId) ||
+                    !facebookDataContext.Users.Any(u => u.Id == deciderId))
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
+
+                var relationToRemove = facebookDataContext.UserRelations.Where(u => u.InitiatorId == initiatorId && u.DesiderId == deciderId
+                 && u.SocialStatusId == (int)SocialStatuses.Friend && u.IsDeleted == false).FirstOrDefault();
+
+                if (relationToRemove == null)
+                    relationToRemove = facebookDataContext.UserRelations.Where(u => u.InitiatorId == deciderId && u.DesiderId == initiatorId
+                 && u.SocialStatusId == (int)SocialStatuses.Friend && u.IsDeleted == false).FirstOrDefault();
+
+                if(relationToRemove == null)
+                {
+                    return Json(new { statusCode = ResponseStatus.NoDataFound });
+                }
+                relationToRemove.IsDeleted = true; // remove the relationship
+                facebookDataContext.SaveChanges();
+
+                return Json(new { statusCode = ResponseStatus.Success });
+            }
+            catch (Exception)
+            {
+                return Json(new { statusCode = ResponseStatus.Error });
+            }
+        }
+
+        //[AuthorizedAction]
         [HttpPut]
         public IActionResult ChangeProfilePhoto(/*[FromBody]*/IFormFile profileImage, [FromQuery] int? userId)
         {
             string fileName = "";
             DateTime dateTimeNow = DateTime.Now;
 
-            if(profileImage == null)
+            if (profileImage == null)
                 return Json(new { statusCode = ResponseStatus.Error });
 
             if (profileImage != null)
@@ -185,7 +258,7 @@ namespace Facebook.Controllers
                 // Set the changed profile photo from isCurrent = ture -> false
                 ProfilePhoto oldProfilePhoto = facebookDataContext.ProfilePhotos.
                     Where(p => p.UserId == userId && p.IsCurrent == true).FirstOrDefault();
-                if(oldProfilePhoto != null)
+                if (oldProfilePhoto != null)
                 {
                     oldProfilePhoto.IsCurrent = false;
                     try { facebookDataContext.SaveChanges(); }

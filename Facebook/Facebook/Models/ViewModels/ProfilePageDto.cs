@@ -22,7 +22,9 @@ namespace Facebook.Models.ViewModels
        public List<string> AllProfilePhotos { get; set; } = new List<string>();
         //friendRequest
        public List<FriendRequest> FriendRequests { get; set; } = new List<FriendRequest>();
-
+       public FriendRelationStatus btnRelationStatus { get; set; }
+       public int CurrentUserId { get; set; }
+       
     }
 
     public class userInfo
@@ -51,6 +53,8 @@ namespace Facebook.Models.ViewModels
 
     public class postComment
     {
+        public int CommentId { get; set; }
+        public int CommentCreatorId { get; set; }
         public string CommentContent { get; set; }
         public string commentDate { get; set; }
         public string FullNameCreator { get; set; }
@@ -61,9 +65,12 @@ namespace Facebook.Models.ViewModels
 
     public class postLike
     {
+        public int LikeId { get; set; }
+        public int LikeCreatorId { get; set; }
         public string FullNameCreatorLike { get; set; }
         public string PhotoCreatorLike { get; set; }
-       // public string DateCreatedLike { get; set; }
+       
+        public string DateCreatedLike { get; set; }
         
     }
 
@@ -72,5 +79,10 @@ namespace Facebook.Models.ViewModels
         public string FullName { get; set; }
         public string Photo { get; set; }
         public int initiatorId { get; set; }
+    }
+
+    public enum FriendRelationStatus
+    {
+        Add, Remove, Pending
     }
 }

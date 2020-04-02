@@ -7,7 +7,7 @@ function deletePost(postId) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes',
-        allowOutsideClick: false,
+        allowOutsideClick: true,
     }).then((result) => {
         if (result.value) {
             const post = document.getElementById("post_" + postId);
@@ -104,8 +104,9 @@ function createPost() {
 
     if (postImage.value !== "") {
         const file_ext = postImage.value.substr(postImage.value.lastIndexOf('.') + 1, postImage.value.length);
-        if (file_ext !== "jpg" && file_ext !== "png") {
-            return toastr.error("Image Extention must be jpg or png.", 'Validation Error');
+        file_ext.toLowerCase();
+        if (file_ext !== "jpg" && file_ext !== "jpeg" && file_ext !== "png") {
+            return toastr.error("Image Extention must be jpg/jpeg or png.", 'Validation Error');
         }
     }
 

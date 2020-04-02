@@ -140,7 +140,8 @@
                                         {
                                             @:gray
                                         }
-                                            }" class="la la-heart"></i><button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Like</button>
+                                            }" class="la la-heart"></i>
+                                        <button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Likes</button>
                                     </a>
                                     <img src="images/liked-img.png" alt="">
                                     <span id="likeNumber_@post.PostId" style="margin-left:1px">@post.HomeLikeDto.Count()</span>
@@ -164,7 +165,7 @@
                                         </div>
                                         <div class="comment">
                                             <h3>@comment.FullName</h3>
-                                            <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
+                                            <span><i class="far fa-clock"></i> @comment.CommentDate</span>
                                             <p>@comment.CommentContent</p>
                                         </div>
                                         @if (comment.CanDelete)
@@ -211,19 +212,19 @@
                                             </div>
                                             <div class="comment">
                                                 <h3>@like.FullName</h3>
-                                                <span><img src="images/clock.png" alt="">@like.LikeDate</span>
+                                                <span><i class="far fa-clock"></i> @like.LikeDate</span>
                                             </div>
                                         </div>
                                     }
                                 }
                                 else
                                 {
-                                    @*@:There is no reactions for this post yet.*@
-                                    <div class="comment-list">
-                                        <div class="comment">
-                                            <h3>There are no reactions for this post yet.</h3>
-                                        </div>
-                                    </div>
+                                    @:There is no reactions for this post yet.
+                                    @*<div class="comment-list">
+                <div class="comment">
+                    <h3>There is no reactions for this post yet .</h3>
+                </div>
+                                 </div>*@
                                 }
                             </div>
                             <div class="modal-footer">
@@ -253,6 +254,7 @@
                 <!-- <i class="la la-ellipsis-v"></i> -->
             </div><!--sd-title end-->
             <div class="suggestions-list">
+            
                 @foreach (var user in Model.HomeUserDtos)
                 {
                     <div class="suggestion-usd">

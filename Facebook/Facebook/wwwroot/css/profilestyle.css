@@ -1,6 +1,6 @@
 ﻿
-#uploadImage {
-    position: absolute;
+.uploadImageContainer {
+    /*position: absolute;
     top: 40px;
     left: 91px;
     width: 80px;
@@ -9,19 +9,30 @@
     background: #0e385f70;
     margin: 0 auto;
     margin-bottom: -48px;
-    display:block;
+    display: none;*/
+    /*--------------------*/
+    /* top: 0px; */
+    /* left: 0px; */
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #0e385f70;
+    margin: 0 auto;
+    margin-bottom: -48px;
+    display: none;
 }
 
-.usr-pic:hover #uploadImage {
+.user-pic-edit:hover .uploadImageContainer {
     /*background-color: red;*/
     display: block;
 }
 
 #cameraUploadImage {
     color: #f8f9facf;
-    top: 27px;
+    top: 40px;
     position: relative;
-    font-size: 28px;
+    font-size: 35px;
 }
 
 #profileImageHolder {
@@ -41,4 +52,34 @@
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
+}
+
+.user-pic-edit {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    margin-bottom: -48px;
+    position: relative;
+}
+
+    .user-pic-edit img {
+        float: none;
+        border: 5px solid #fff;
+        -webkit-border-radius: 100px;
+        -moz-border-radius: 100px;
+        -ms-border-radius: 100px;
+        -o-border-radius: 100px;
+        border-radius: 100px;
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        left: 0px;
+    }
+
+.addRemoveFriend {
+    margin-top: 1rem;
+}
+
+.button-addfriend {
+    background-color: #0e385f;
 }

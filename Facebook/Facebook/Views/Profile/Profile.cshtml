@@ -9,42 +9,82 @@
         <div class="user-data full-width">
             <div class="user-profile">
                 <div class="username-dt">
-                    <div id="uploadImage">
-                        <label for="file-upload" class="custom-file-upload">
-                            <a id="upload" data-toggle="modal" data-target="#myModalUpload">
-                                <i class="fas fa-camera" id="cameraUploadImage"></i>
-                            </a>
-                        </label>
-                    </div>
+                    @*<div id="uploadImage">
+                            <label for="file-upload" class="custom-file-upload">
+                                <a id="upload" data-toggle="modal" data-target="#myModalUpload">
+                                    <i class="fas fa-camera" id="cameraUploadImage"></i>
+                                </a>
+                            </label>
+                        </div>*@
 
-
-                    <div class="usr-pic" id="profilePhoto">
+                    <div class="user-pic-edit" id="profilePhoto">
                         @{
-                        if (Model.UserProfilePhoto == null)
-                        {
-                        if (Model.UserInfo.GenderName == "Male")
-                        {
-                        <img style="background:whitesmoke;"
-                             src="~/ProfilePics/default.jpg" alt="">
-                        }
-                        else
-                        {
-                        <img style="background:whitesmoke;"
-                             src="~/ProfilePics/default_female.png" alt="">
-                        }
-                        @*<img src="~/ProfilePics/default.jpg" alt="">*@
-                        }
-                        else
-                        {
-                        <img src="~/ProfilePics/@Model.UserProfilePhoto" alt="">
-                        }
+                            if (Model.UserProfilePhoto == null)
+                            {
+                                if (Model.UserInfo.GenderName == "Male")
+                                {
+                                    <img style="background:whitesmoke;"
+                                         src="~/ProfilePics/default.jpg" alt="">
+                                }
+                                else
+                                {
+                                    <img style="background:whitesmoke;"
+                                         src="~/ProfilePics/default_female.png" alt="">
+                                }
+                                @*<img src="~/ProfilePics/default.jpg" alt="">*@
+                            }
+                            else
+                            {
+                                <img src="~/ProfilePics/@Model.UserProfilePhoto" alt="">
+                            }
+                            @if (Model.CanEditProfileWritePost)
+                            {
+                                <div class="uploadImageContainer">
+                                    <label for="file-upload" class="custom-file-upload">
+                                        <a id="upload" data-toggle="modal" data-target="#myModalUpload">
+                                            <i class="fas fa-camera" id="cameraUploadImage"></i>
+                                        </a>
+                                    </label>
+                                </div>
+                            }
                         }
                         @*<img src="@Model.UserProfilePhoto" alt="">*@
                     </div>
                 </div><!--username-dt end-->
                 <div class="user-specs">
-                    <h3 class="fullNameCurrent">@Model.UserInfo.FullName</h3>
+                    <h3 class="fullNameCurrent">
+                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@Model.UserInfo.id">
+                            @Model.UserInfo.FullName
+                        </a>
+                    </h3>
                     <span>@Model.UserInfo.PhoneNumber</span>
+
+                    @{
+                        if (!@Model.CanEditProfileWritePost  /*Do not show buttons*/)
+                        {
+                            <div id="addRemoveFriendContainer" class="addRemoveFriend">
+                                @if (Model.btnRelationStatus == FriendRelationStatus.Remove)
+                                {
+                                    <button id="removeFriendBtn" type="button" class="btn btn-danger" onclick="RemoveFriend(@Model.CurrentUserId, @Model.UserInfo.id)">
+                                        Remove Friend
+                                    </button>
+                                    <button id="addFriendBtn" type="button" style="display:none" class="btn text-white button-addfriend" onclick="AddFriend(@Model.CurrentUserId, @Model.UserInfo.id)">
+                                        Add Friend
+                                    </button>
+                                }
+                                else if (Model.btnRelationStatus == FriendRelationStatus.Pending)
+                                {
+                                    <p class="text-info">Pending Request</p>
+                                }
+                                else
+                                { // FriendRelationStatus.Add
+                                    <button id="addFriendBtn" type="button" class="btn text-white button-addfriend" onclick="AddFriend(@Model.CurrentUserId, @Model.UserInfo.id)">
+                                        Add Friend
+                                    </button>
+                                }
+                            </div>
+                        }
+                    }
                 </div>
             </div><!--user-profile end-->
             <ul class="user-fw-status">
@@ -55,40 +95,41 @@
             </ul>
         </div><!--user-data end-->
         @{
-        if (Model.CanEditProfileWritePost && Model.FriendRequests.Count > 0)
-        {
-        <div class="suggestions full-width">
-            <div class="sd-title">
-                <h3>Friend Requests</h3>
-            </div><!--sd-title end-->
-            @foreach (var friendRequest in Model.FriendRequests)
+            if (Model.CanEditProfileWritePost && Model.FriendRequests.Count > 0)
             {
-            <div class="suggestions-list" id="Req_@friendRequest.initiatorId">
-                <div class="suggestion-usd" @*id="Req_@friendRequest.initiatorId" *@>
-                    @{
-                    if (friendRequest.Photo == null)
+                <div class="suggestions full-width">
+                    <div class="sd-title">
+                        <h3>Friend Requests</h3>
+                    </div><!--sd-title end-->
+                    @foreach (var friendRequest in Model.FriendRequests)
                     {
-                    <img class="profilePic" src="~/ProfilePics/default.jpg" alt="">
+                        <div class="suggestions-list" id="Req_@friendRequest.initiatorId">
+                            <div class="suggestion-usd" @*id="Req_@friendRequest.initiatorId" *@>
+                                @{
+                                    if (friendRequest.Photo == null)
+                                    {
+                                        <img class="profilePic" src="~/ProfilePics/default.jpg" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="profilePic" src="~/ProfilePics/@friendRequest.Photo" alt="">
+                                    }
+                                }
+                                <div class="sgt-text">
+                                    <h4>
+                                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@friendRequest.initiatorId">
+                                            @friendRequest.FullName
+                                        </a>
+                                    </h4>
+                                    <span>Graphic Designer</span>
+                                </div>
+                                <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
+                                <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
+                            </div>
+                        </div><!--suggestions-list end-->
                     }
-                    else
-                    {
-                    <img class="profilePic" src="~/ProfilePics/@friendRequest.Photo" alt="">
-                    }
-                    }
-                    <div class="sgt-text">
-                        <h4>@friendRequest.FullName</h4>
-                        <span>Graphic Designer</span>
-                    </div>
-                    <span><i class="la la-minus" onclick="rejectRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
-                    <span><i class="la la-plus" onclick="acceptRequest(@friendRequest.initiatorId,@Model.UserInfo.id)"></i></span>
                 </div>
-            </div><!--suggestions-list end-->
             }
-            <div class="view-more">
-                <a href="#" title="">View More</a>
-            </div>
-        </div>
-        }
         }
 
         <div class="tags-sec full-width">
@@ -134,106 +175,68 @@
         </div><!--user-tab-sec end-->
         <div class="product-feed-tab animated fadeIn current" id="feed-dd">
 
-            @{
-            if (Model.CanEditProfileWritePost)
+
+            @if (Model.CanEditProfileWritePost)
             {
 
-            <div class="post-topbar">
-                <div class="post-st">
-                    <ul>
-                        <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
-                    </ul>
-                </div><!--post-st end-->
-            </div>
-
-
-            <div id="myModal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-dialog-edit">
-                    <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <form enctype="multipart/form-data">
-                            <div class="modal-header model-header-edit">
-                                <h3 id="createTitle">Create Post</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div class="post-body">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <textarea id="postTextArea" class="form-control" rows="3" name="PostContent" placeholder="What's in your mind..."></textarea>
-                                        </div>
-                                        <div class="col-lg-12 row " id="image-category">
-
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="postImage">
-                                                <label class="custom-file-label" for="customFile">Choose Image</label>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                    </div>
-                                </div><!--post-project-fields end-->
-                            </div>
-                            <div class="modal-footer-Edit modal-footer" style="float:right">
-                                <button type="button" class="btn btn-default bg-danger text-white" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn text-white" style="background-color:#0e385f" id="submit" onclick="createPost()">Post</button>
-                            </div>
-                        </form>
-                    </div>
-
+                <div class="post-topbar">
+                    <div class="post-st">
+                        <ul>
+                            <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
+                        </ul>
+                    </div><!--post-st end-->
                 </div>
-            </div>
+
             }
-            }
+
             <!-- Modal -->
-
-
-
             <div class='posts-section' id="posts">
                 @foreach (var post in Model.Posts)
                 {
 
-                <div id="post_@post.PostId" class="posty">
-                    <div class="post-bar no-margin">
-                        <div class="post_topbar">
-                            <div class="usy-dt">
-                                @{
-                                if (@Model.UserProfilePhoto == null)
-                                {<img class="friendListPic" src="~/ProfilePics/default.jpg" alt=""> }
-                                else
-                                {<img class="friendListPic" src="~/ProfilePics/@Model.UserProfilePhoto" alt=""> }
-                                }
-                                <div class="usy-name">
-                                    <h3>@Model.UserInfo.FullName</h3>
-                                    <span><i class="far fa-clock"></i> @post.PostDate</span>
+                    <div id="post_@post.PostId" class="posty">
+                        <div class="post-bar no-margin">
+                            <div class="post_topbar">
+                                <div class="usy-dt">
+                                    @{
+                                        if (@Model.UserProfilePhoto == null)
+                                        {<img class="friendListPic" src="~/ProfilePics/default.jpg" alt=""> }
+                                        else
+                                        {<img class="friendListPic" src="~/ProfilePics/@Model.UserProfilePhoto" alt=""> }
+                                    }
+                                    <div class="usy-name">
+                                        <h3>
+                                            <a asp-action="Profile" asp-controller="Profile" asp-route-id="@Model.UserInfo.id">
+                                                @Model.UserInfo.FullName
+                                            </a>
+                                        </h3>
+                                        <span><i class="far fa-clock"></i> @post.PostDate</span>
+                                    </div>
                                 </div>
+                                @if (post.CanChange)
+                                {
+                                    <div class="ed-opts">
+                                        <a title="" href="#" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                                        <ul class="ed-options">
+                                            <li><a onclick="getPostById(@post.PostId)" title="">Edit Post</a></li>
+                                            <li><a onclick="deletePost(@post.PostId)" title="">Delete Post</a></li>
+                                        </ul>
+                                    </div>
+                                }
                             </div>
-                            @if (post.CanChange)
-                            {
-                            <div class="ed-opts">
-                                <a title="" href="#" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                                <ul class="ed-options">
-                                    <li><a onclick="getPostById(@post.PostId)" title="">Edit Post</a></li>
-                                    <li><a onclick="deletePost(@post.PostId)" title="">Delete Post</a></li>
-                                </ul>
-                            </div>
-                            }
-                        </div>
 
-                        <div class="job_descp">
-                            <p id="postContent_@post.PostId">@post.PostContent</p>
-                            @if (post.PostPhoto != null)
-                            {
-                            <img style="margin-left:23%; width:250px" src="@post.PostPhoto" />
-                            }
-                        </div>
-                        <div class="job-status-bar">
-                            <ul class="like-com">
-                                <li>
-                                    <a>
-                                        <i id="heart_@post.PostId" onclick="SendLike(@post.PostId)" style="color:@{
+                            <div class="job_descp">
+                                <p id="postContent_@post.PostId">@post.PostContent</p>
+                                @if (post.PostPhoto != null)
+                                {
+                                    <img style="margin-left:23%; width:250px" src="~/PostPics/@post.PostPhoto" />
+                                }
+                            </div>
+                            <div class="job-status-bar">
+                                <ul class="like-com">
+                                    <li>
+                                        <a>
+                                            <i id="heart_@post.PostId" onclick="SendLike(@post.PostId)" style="color:@{
                                                 if (post.IsLike)
                                                 {
                                             @:blue
@@ -243,97 +246,66 @@
                                             @:gray
                                         }
                                             }" class="la la-heart"></i>
-                                        <button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Likes</button>
-                                    </a>
-                                    <img src="images/liked-img.png" alt="">
-                                    <span id="likeNumber_@post.PostId" style="margin-left:1px">@post.numOfLikes</span>
-                                </li>
-                                <li>
-                                    <a style="margin-top:16px" title="" class="com"><img src="images/com.png" alt=""> Comments </a>
-                                    <span id="commentNumber_@post.PostId" style="margin-left:1px">@post.numOfComments</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!--post-bar end-->
-                    <div class="comment-section">
-                        <div class="comment-sec">
-                            <ul id="commentContainer_@post.PostId">
-                                @foreach (var comment in post.Comments)
-                                {
-                                <li>
-                                    <div class="comment-list">
-                                        <div class="bg-img">
-                                            @{
-                                            if (comment.CreatorPhoto == null)
+                                            <button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Likes</button>
+                                        </a>
+                                        <img src="images/liked-img.png" alt="">
+                                        <span id="likeNumber_@post.PostId" style="margin-left:1px">@post.numOfLikes</span>
+                                    </li>
+                                    <li>
+                                        <a style="margin-top:16px" title="" class="com"><img src="images/com.png" alt=""> Comments </a>
+                                        <span id="commentNumber_@post.PostId" style="margin-left:1px">@post.numOfComments</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!--post-bar end-->
+                        <div class="comment-section">
+                            <div class="comment-sec">
+                                <ul id="commentContainer_@post.PostId">
+                                    @foreach (var comment in post.Comments)
+                                    {
+                                    <li id="comment_@comment.CommentId">
+                                        <div class="comment-list" style="color:firebrick">
+                                            <div class="bg-img">
+                                                @{
+                                                    if (comment.CreatorPhoto == null)
+                                                    {
+                                                        <img class="friendListPic" src="~/ProfilePics/default.jpg" alt="">
+                                                    }
+                                                    else
+                                                    { <img class="friendListPic" src="~/ProfilePics/@comment.CreatorPhoto" alt=""> }
+                                                }
+                                            </div>
+                                            <div class="comment">
+                                                <h3>
+                                                   <a asp-action="Profile" asp-controller="Profile" asp-route-id="@comment.CommentCreatorId">
+                                                        @comment.FullNameCreator
+                                                   </a>
+                                                </h3>
+                                                <span><i class="far fa-clock"></i> @comment.commentDate</span>
+                                                <p>@comment.CommentContent</p>
+                                            </div>
+                                            @if (comment.canRemove)
                                             {
-                                            <img class="friendListPic" src="~/ProfilePics/default.jpg" alt="">
+                                                <div class="comment">
+                                                    <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
+                                                </div>
                                             }
-                                            else
-                                            { <img class="friendListPic" src="~/ProfilePics/@comment.CreatorPhoto" alt=""> }
-                                            }
-                                        </div>
-                                        <div class="comment">
-                                            <h3>@comment.FullNameCreator</h3>
-                                            <span><img src="images/clock.png" alt="">@comment.commentDate</span>
-                                            <p>@comment.CommentContent</p>
-                                        </div>
-                                    </div><!--comment-list end-->
-                                </li>
-                                }
-                            </ul>
-                        </div><!--comment-sec end-->
-                        <div class="post-comment">
-                            <div class="comment_box">
-                                <form>
-                                    <input id="commentTextBox_@post.PostId" type="text" placeholder="Post a comment">
-                                    <button id="sendBtn_@post.PostId" type="button" onclick="SendComment(@post.PostId)">Comment</button>
-                                </form>
-                            </div>
-                        </div><!--post-comment end-->
-                    </div><!--comment-section end-->
-                </div>
-
-                <!-- Likes Model -->
-                <div class="modal fade" id="exampleModal_@post.PostId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
-                            <div id="likesContainer_@post.PostId" class="modal-body">
-                                @if (post.numOfLikes != 0)
-                                {
-                                @foreach (var like in post.Likes)
-                                {
-                                <div class="comment-list">
-                                    <div class="bg-img">
-                                        <img class="friendListPic" src="@like.PhotoCreatorLike" alt="">
-                                    </div>
-                                    <div class="comment">
-                                        <h3>@like.FullNameCreatorLike</h3>
-                                    </div>
+                                        </div><!--comment-list end-->
+                                    </li>
+                                    }
+                                </ul>
+                            </div><!--comment-sec end-->
+                            <div class="post-comment">
+                                <div class="comment_box">
+                                    <form>
+                                        <input id="commentTextBox_@post.PostId" type="text" placeholder="Post a comment">
+                                        <button id="sendBtn_@post.PostId" type="button" onclick="SendComment(@post.PostId)">Comment</button>
+                                    </form>
                                 </div>
-                                }
-                                }
-                                else
-                                {
-                                <div class="comment-list">
-                                    <div class="comment">
-                                        <h3>There are no reactions for this post yet.</h3>
-                                    </div>
-                                </div>
-                                }
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
+                            </div><!--post-comment end-->
+                        </div><!--comment-section end-->
                     </div>
-                </div>
+
                 }
             </div>
         </div><!--product-feed-tab end-->
@@ -342,9 +314,14 @@
             <div class="user-profile-ov st2 animated fadeIn" id="infoContainer" style="display:none;">
                 @*<h3>Info <a href="#" title="" class="exp-bx-open"<i class="fas fa-user-edit"></i></a></h3>*@
                 <h3>
-                    Info <a id="infoModal" data-toggle="modal" data-target="#editInfoModal">
-                        <i class="fas fa-user-edit"></i>
-                    </a>
+                    Info
+                    @if (@Model.CanEditProfileWritePost)
+                    {
+
+                        <a id="infoModal" data-toggle="modal" data-target="#editInfoModal">
+                            <i class="fas fa-user-edit"></i>
+                        </a>
+                    }
                 </h3>
                 <h4>Name</h4>
                 <p id="infoNameCurrent"> @Model.UserInfo.FullName </p>
@@ -390,7 +367,7 @@
 </div>
 
 
-
+@*Edit User Info Modal*@
 <div class="modal fade" id="editInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -432,7 +409,6 @@
         </div>
     </div>
 </div><!--esraaaaaaaaaaaaa-->
-
 @*Profile Image Upload Modal*@
 <div id="myModalUpload" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-edit">
@@ -477,15 +453,140 @@
     </div>
 </div>
 
+
+
+@*Create Post Modal Pop-up*@
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-edit">
+        <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form enctype="multipart/form-data">
+                <div class="modal-header model-header-edit">
+                    <h3 id="createTitle">Create Post</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="post-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <textarea id="postTextArea" class="form-control" rows="3" name="PostContent" placeholder="What's in your mind..."></textarea>
+                            </div>
+                            <div class="col-lg-12 row " id="image-category">
+
+                            </div>
+                            <div class="col-lg-12">
+                                <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="postImage" accept="image/png, image/jpeg">
+                                    <label class="custom-file-label" for="customFile">Choose Image</label>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </div><!--post-project-fields end-->
+                </div>
+                <div class="modal-footer-Edit modal-footer" style="float:right">
+                    <button type="button" class="btn btn-default bg-danger text-white" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn text-white" style="background-color:#0e385f" id="submit" onclick="createPost()">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*Edit Modal*@
+<div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="post-body">
+                    <div class="row">
+                        <div class="col-lg-12 form-group">
+                            <textarea class="form-control" rows="3" id="postContentTextArea" name="PostContent" onkeydown="checkform()" placeholder="What's in your mind..."></textarea>
+                            <input style="display:none" type="text" id="postIdTextBox" />
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="EditPost()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Likes Modal*@
+@foreach (var post in Model.Posts)
+{
+    <div class="modal fade" id="exampleModal_@post.PostId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Likes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div id="likesContainer_@post.PostId" class="modal-body">
+                    @if (post.numOfLikes != 0)
+                    {
+                        @foreach (var like in post.Likes)
+                        {
+                            <div id="like_@like.LikeId" class="comment-list">
+                                <div class="bg-img">
+                                    <img class="friendListPic" src="~/ProfilePics/@like.PhotoCreatorLike" alt="">
+                                </div>
+                                <div class="comment">
+                                    <h3>
+                                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@like.LikeCreatorId">
+                                            @like.FullNameCreatorLike
+                                        </a>
+                                    </h3>
+                                    <span><i class="far fa-clock"></i> @like.DateCreatedLike</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        //WHEN UNLIKING FROM PROFILE feh mushkela!!!!!!!!!!
+                        @:There is no reactions for this post yet.
+                        @*<div class="comment-list">
+                <div class="comment">
+                    <h3>There are no reactions for this post yet.</h3>
+                </div>
+            </div>*@
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
 @section scripts {
-<script src="~/js/InfoCrud.js"></script>
-<script src="~/js/UserRelationCrud.js"></script>
-
+    <script src="~/js/InfoCrud.js"></script>
+    <script src="~/js/UserRelationCrud.js"></script>
+    <script src="~/js/PostCrud.js"></script>
+    <script src="~/js/CommentLike.js"></script>
     @*
-<script type="text/javascript" src="~/js/GetAllPostsProfile.js"></script>
-<script src="~/js/CreatePostVald.js"></script>
-<script src="~/js/CreatePost.js"></script>
+        <script type="text/javascript" src="~/js/GetAllPostsProfile.js"></script>
+        <script src="~/js/CreatePostVald.js"></script>
+        <script src="~/js/CreatePost.js"></script>
 
-<script src="~/js/UploadImage.js"></script>*@
+        <script src="~/js/UploadImage.js"></script>*@
 
 }
