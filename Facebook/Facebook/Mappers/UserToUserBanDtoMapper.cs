@@ -30,10 +30,10 @@ namespace Facebook.Mappers
             {
                 Id = from.Id,
                 RoleId = from.RoleId,
-                Email = from.Email,
+                Bio = from.Bio,
                 Fullname = $"{from.FirstName} {from.LastName}",
                 IsActive = from.IsActive,
-                ProfilePhotoUrl = from.ProfilePhotos.Where(x=>x.IsCurrent == true).Count() == 0 ? "default.jpg" : from.ProfilePhotos.Where(x => x.IsCurrent == true).FirstOrDefault().Url
+                ProfilePhotoUrl = from.ProfilePhotos.Where(x=>x.IsCurrent == true).Count() == 0 ? (from.GenderId == 1 ? "default.jpg" : "default_female.png") : from.ProfilePhotos.Where(x => x.IsCurrent == true).FirstOrDefault().Url
             };
 
             return to;

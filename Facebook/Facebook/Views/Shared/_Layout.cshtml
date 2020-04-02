@@ -1,16 +1,9 @@
 ﻿
 @{
     Layout = null;
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
-@{
-    User user = null;
-    if (ViewData["Users"] != null)
-    {
-        user = (User)ViewData["Users"];
-        TempData.Keep("Users");
-    }
-}
 
 <!DOCTYPE html>
 <html>
@@ -44,15 +37,12 @@
 
 
     <div class="wrapper">
-
-
-
         <header>
             <div class="container">
                 <div class="header-data">
                     <div class="logo">
                         <div id="ll">
-                            <a href="index" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
+                            <a href="~/Home/Index" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
                         </div>
                     </div><!--logo end-->
                     <div class="search-bar">
@@ -70,16 +60,13 @@
                                 </a>
                             </li>
                             <li>
-                                
-                                @{if (user != null)
-                                    {
-                                        <a asp-action="Profile" asp-controller="Profile" asp-route-id="@user.Id" title="">
-                                            <div><i class="fas fa-user-circle fa-lg"></i></div>
-                                            Profile
-                                        </a>
-                                    }
 
-                                }
+
+                                <a asp-action="Profile" asp-controller="Profile" asp-route-id="@layoutUserDto.userId" title="">
+                                    <div><i class="fas fa-user-circle fa-lg"></i></div>
+                                    Profile
+                                </a>
+
                             </li>
                         </ul>
                     </nav><!--nav end-->
@@ -88,35 +75,12 @@
                     </div><!--menu-btn end-->
                     <div class="user-account">
                         <div class="user-info">
-                            @{
-                                if (user.ProfilePhotos.Count > 0)
-                                {
-                                    <img class="profilePic" src="~/ProfilePics/@user.ProfilePhotos" alt="">
-                                }
-                                else
-                                {
-                                    if (user.GenderId == 1 /* Male*/)
-                                    {
-                                        <img class="profilePic" style="background:whitesmoke;" 
-                                             src="~/ProfilePics/default.jpg" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img class="profilePic" style="background:whitesmoke;"
-                                             src="~/ProfilePics/default_female.png" alt="">
-                                    }
-                                }
-                            }
-                            @*<img src="http://via.placeholder.com/30x30" alt="">*@
-                            @{if (user != null)
-                                {
-                                    <a class="fullNameCurrent" href="#" title="">@user.FirstName</a>
-                                }
-                                else
-                                {
-                                    <a href="#" title="">hacker</a>
-                                }
-                            }
+
+
+                            <img class="profilePic" style="background:whitesmoke;"
+                                 src="~/ProfilePics/@layoutUserDto.ProfilePic" alt="">
+                            <a class="fullNameCurrent" href="#" title="">@layoutUserDto.FullName</a>
+
 
                             <i class="fas fa-chevron-circle-down"></i>
                         </div>
@@ -128,7 +92,7 @@
                                         Account Settings
                                     </a>
                                 </li>
-                                @if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Roles/Index").Any())
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Roles/Index").Any())
                                 {
                                     <li class="text-center">
                                         <a href="/Roles/Index" title="">
@@ -137,7 +101,7 @@
                                         </a>
                                     </li>
                                 }
-                                @if (((List<Actions>)ViewData["Actions"]).Where(x => x.Url == "/Account/AdminControl").Any())
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Account/AdminControl").Any())
                                 {
                                     <li class="text-center">
                                         <a href="/Account/AdminControl" title="">

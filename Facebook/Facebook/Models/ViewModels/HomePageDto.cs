@@ -10,31 +10,37 @@ namespace Facebook.Models.ViewModels
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
         public int NumberOfFriends { get; set; }
-
+        public string Bio { get; set; }
+        public int UserId { get; set; }
         public List<HomeUserDto> HomeUserDtos { get; set; }
         public List<HomePostDto> HomePostDto { get; set; }
     }
 
     public class HomeUserDto
     {
-        public HomeUserDto(string _FullName, string _ProfilePicUrl) 
-            => (FullName, ProfilePicUrl) = (_FullName, _ProfilePicUrl);
+        public HomeUserDto(string _FullName, string _ProfilePicUrl, string _Bio, int _UserId) 
+            => (FullName, ProfilePicUrl, Bio, UserId) = (_FullName, _ProfilePicUrl, _Bio, _UserId);
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
+        public string Bio { get; set; }
+        public int UserId { get; set; }
     }
 
     public class HomeUserTempDto 
     {
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
+        public string Bio { get; set; }
+        public int UserId { get; set; }
         public List<HomePostTempDto> HomePostDto { get; set; }
     }
 
     public class HomePostDto
     {
-        public HomePostDto(string _FullName, string _ProfilePic, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl, int _PostId, bool _CanEditDelete, bool _IsLike) 
-            => (FullName, ProfilePic, PostDate, PostContent, HomeCommentDto, HomeLikeDto, PostPicUrl, PostId, CanEditDelete, IsLike) = (_FullName, _ProfilePic, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl, _PostId, _CanEditDelete, _IsLike);
+        public HomePostDto(string _FullName, string _ProfilePic, string _PostDate, string _PostContent, List<HomeCommentDto> _HomeCommentDto, List<HomeLikeDto> _HomeLikeDto, string _PostPicUrl, int _PostId, bool _CanEditDelete, bool _IsLike, int _UserId) 
+            => (FullName, ProfilePic, PostDate, PostContent, HomeCommentDto, HomeLikeDto, PostPicUrl, PostId, CanEditDelete, IsLike, UserId) = (_FullName, _ProfilePic, _PostDate, _PostContent, _HomeCommentDto, _HomeLikeDto, _PostPicUrl, _PostId, _CanEditDelete, _IsLike, _UserId);
 
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string ProfilePic { get; set; }
         public string PostDate { get; set; }
@@ -49,6 +55,7 @@ namespace Facebook.Models.ViewModels
 
     public class HomePostTempDto
     {
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string ProfilePic { get; set; }
         public string PostDate { get; set; }
@@ -64,6 +71,7 @@ namespace Facebook.Models.ViewModels
 
     public class HomeCommentDto
     {
+        public int UserId { get; set; }
         public int CommentId { get; set; }
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
@@ -74,6 +82,7 @@ namespace Facebook.Models.ViewModels
 
     public class HomeLikeDto
     {
+        public int UserId { get; set; }
         public int LikeId { get; set; }
         public string FullName { get; set; }
         public string ProfilePicUrl { get; set; }
@@ -82,6 +91,7 @@ namespace Facebook.Models.ViewModels
 
     public class CreatedPostDto
     {
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string ProfilePic { get; set; }
         public string PostDate { get; set; }

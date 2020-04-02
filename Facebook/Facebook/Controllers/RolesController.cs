@@ -25,14 +25,14 @@ namespace Facebook.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             return View(await _context.Roles.ToListAsync());
         }
 
         // GET: Roles/Create
         public IActionResult Create()
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace Facebook.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
 
             if (id == null)
             {
@@ -112,7 +112,7 @@ namespace Facebook.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            ViewData["Actions"] = userData.GetActions(HttpContext);
+            ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
             if (id == null)
             {
                 return NotFound();

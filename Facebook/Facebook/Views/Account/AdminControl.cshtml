@@ -19,7 +19,7 @@
                             <div class="company-up-info">
                                 <img src="~/ProfilePics/@user.ProfilePhotoUrl" alt="">
                                 <h3>@user.Fullname</h3>
-                                <h4>@user.Email</h4>
+                                <h4>@user.Bio</h4>
                                 <ul>
                                     <li>
                                         @if (user.IsActive)
@@ -47,7 +47,7 @@
                                 </select>
                             </div>
            
-                            <a href="#" title="" class="view-more-pro">View Profile</a>
+                            <a href="~/Profile/Profile/@user.Id" title="" class="view-more-pro">View Profile</a>
                         </div><!--company_profile_info end-->
                     </div>
                 }

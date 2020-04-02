@@ -29,9 +29,9 @@ namespace Facebook.Mappers
             var to = new SearchUserDto
             {
                 Fullname = $"{from.FirstName} {from.LastName}",
-                Email = from.Email,
                 Id = from.Id,
-                ProfilePic = from.ProfilePhotos.Where(x => x.IsCurrent == true).Count() == 0 ? "default.jpg" : from.ProfilePhotos.Where(x => x.IsCurrent == true).FirstOrDefault().Url
+                Bio = from.Bio,
+                ProfilePic = from.ProfilePhotos.Where(x => x.IsCurrent == true).Count() == 0 ? (from.GenderId == 1 ? "default.jpg" : "default_female.png") : from.ProfilePhotos.Where(x => x.IsCurrent == true).FirstOrDefault().Url
             };
 
 

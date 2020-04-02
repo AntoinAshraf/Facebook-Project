@@ -28,14 +28,16 @@ namespace Facebook.Mappers
         {
             if (from == null) return null;
 
-            List<HomeUserTempDto> homeUserDtos = Map(from.UserRelationsInitiator, from.UserRelationsDesider, hostingEnvironment, from.Id).ToList();
+            List<HomeUserTempDto> homeUserDtos = Map(from.UserRelationsInitiator.Where(x=>x.Desider.IsDeleted == false), from.UserRelationsDesider.Where(x=>x.Initiator.IsDeleted == false), hostingEnvironment, from.Id).ToList();
             var to = new HomePageDto
             {
                 FullName = $"{from.FirstName} {from.LastName}",
-                NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count()
-                                    + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend).Count(),
-                HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl)).ToList(),
-                HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts, hostingEnvironment, from.Id).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId, x.CanEditDelete, x.IsLike)).ToList(),
+                Bio = from.Bio,
+                UserId = from.Id,
+                NumberOfFriends = from.UserRelationsDesider.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend && x.Initiator.IsDeleted == false).Count()
+                                    + from.UserRelationsInitiator.Where(x => x.SocialStatusId == (int)SocialStatuses.Friend && x.Desider.IsDeleted == false).Count(),
+                HomeUserDtos = homeUserDtos.Select(x=> new HomeUserDto(x.FullName, x.ProfilePicUrl, x.Bio, x.UserId)).ToList(),
+                HomePostDto = GetAllPosts(homeUserDtos, from.UsersPosts, hostingEnvironment, from.Id).Select(x=> new HomePostDto(x.FullName, x.ProfilePic, x.PostDate, x.PostContent, x.HomeCommentDto, x.HomeLikeDto, x.PostPicUrl, x.PostId, x.CanEditDelete, x.IsLike, x.UserId)).ToList(),
             };
             string defaultPic = "";
             if (from.GenderId == 1 /* Male */)
@@ -57,7 +59,7 @@ namespace Facebook.Mappers
             var to = new List<HomePostTempDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.Post.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.Post.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment, currentUserId));
                 }
@@ -72,6 +74,7 @@ namespace Facebook.Mappers
 
             var to = new HomePostTempDto
             {
+                UserId = from.User.Id,
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 PostContent = from.Post.PostContent,
                 CreatedAt = from.CreatedAt,
@@ -81,7 +84,7 @@ namespace Facebook.Mappers
                 IsLike = from.Post.Likes.Any(x=>x.PostId == from.PostId && x.UserId == currentUserId && x.IsDeleted == false)
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg") ;
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? (from.User.GenderId == 1 ? "default.jpg" : "default_female.png")) ;
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePic = "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -133,9 +136,11 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.Desider.FirstName} {from.Desider.LastName}",
                 HomePostDto = Map(from.Desider.UsersPosts, hostingEnvironment, currentUserId).ToList(),
+                Bio = from.Desider.Bio,
+                UserId = from.Desider.Id
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Desider.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Desider.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? (from.Desider.GenderId == 1 ? "default.jpg" : "default_female.png"));
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -150,9 +155,11 @@ namespace Facebook.Mappers
             {
                 FullName = $"{from.Initiator.FirstName} {from.Initiator.LastName}",
                 HomePostDto = Map(from.Initiator.UsersPosts, hostingEnvironment, currentUserId).ToList(),
+                Bio = from.Initiator.Bio,
+                UserId = from.Initiator.Id
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Initiator.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.Initiator.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? (from.Initiator.GenderId == 1 ? "default.jpg" : "default_female.png"));
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -166,7 +173,7 @@ namespace Facebook.Mappers
             var to = new List<HomeCommentDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment, currentUserId));
                 }
@@ -181,13 +188,14 @@ namespace Facebook.Mappers
 
             var to = new HomeCommentDto
             {
+                UserId = from.User.Id,
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 CommentContent = from.CommentContent,
                 CommentId = from.Id,
                 CanDelete = from.UserId == currentUserId
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? (from.User.GenderId == 1 ? "default.jpg" : "default_female.png"));
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl =  "data:image/png;base64," + Convert.ToBase64String(b);
 
@@ -209,7 +217,7 @@ namespace Facebook.Mappers
             var to = new List<HomeLikeDto>();
             if (from != null && from.Count() > 0)
             {
-                foreach (var item in from.Where(x=>x.IsDeleted == false))
+                foreach (var item in from.Where(x=>x.IsDeleted == false && x.User.IsDeleted == false))
                 {
                     to.Add(Map(item, hostingEnvironment));
                 }
@@ -224,11 +232,12 @@ namespace Facebook.Mappers
 
             var to = new HomeLikeDto
             {
+                UserId = from.User.Id,
                 FullName = $"{from.User.FirstName} {from.User.LastName}",
                 LikeId = from.Id
             };
 
-            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? "default.jpg");
+            string path = hostingEnvironment.WebRootPath + "/ProfilePics/" + (from.User.ProfilePhotos.Where(x => x.IsCurrent).Select(x => x.Url).FirstOrDefault() ?? (from.User.GenderId == 1 ? "default.jpg" : "default_female.png"));
             byte[] b = System.IO.File.ReadAllBytes(path);
             to.ProfilePicUrl = "data:image/png;base64," + Convert.ToBase64String(b);
 
