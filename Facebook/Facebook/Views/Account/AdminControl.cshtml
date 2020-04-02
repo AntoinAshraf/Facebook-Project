@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "UserBan";
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
 <section class="companies-info">
@@ -22,26 +23,32 @@
                                 <h4>@user.Bio</h4>
                                 <ul>
                                     <li>
-                                        @if (user.IsActive)
+                                        @if (layoutUserDto.actions.Where(x => x.Url == "/Account/UserBan").Any())
                                         {
-                                            <button id="BanBtn_@user.Id" type="button" onclick="UserBan(@user.Id)" class="btn btn-danger">Ban</button>
-                                        }
-                                        else
-                                        {
-                                            <button id="BanBtn_@user.Id" type="button" onclick="UserBan(@user.Id)" class="btn btn-primary">UnBan</button>
+                                            @if (user.IsActive)
+                                            {
+                                                <button id="BanBtn_@user.Id" type="button" onclick="UserBan(@user.Id)" class="btn btn-danger">Ban</button>
+                                            }
+                                            else
+                                            {
+                                                <button id="BanBtn_@user.Id" type="button" onclick="UserBan(@user.Id)" class="btn btn-primary">UnBan</button>
+                                            }
                                         }
                                     </li>
                                 </ul>
                                 <select id="Select_@user.Id" class="roleSelect" onchange="changeRole(@user.Id)" id="roleDropDown">
                                     @foreach (var role in (List<Role>)ViewData["Roles"])
                                     {
-                                        if (role.Id == user.RoleId)
+                                        @if (layoutUserDto.actions.Where(x => x.Url == "/Account/ChangeRole").Any())
                                         {
-                                            <option selected value="@role.Id">@role.Title</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@role.Id">@role.Title</option>
+                                            if (role.Id == user.RoleId)
+                                            {
+                                                <option selected value="@role.Id">@role.Title</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@role.Id">@role.Title</option>
+                                            }
                                         }
                                     }
                                 </select>

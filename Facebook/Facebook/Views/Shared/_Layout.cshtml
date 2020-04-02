@@ -42,31 +42,44 @@
                 <div class="header-data">
                     <div class="logo">
                         <div id="ll">
-                            <a href="~/Home/Index" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
+                            @if (layoutUserDto.actions.Where(x => x.Url == "/Home/Index").Any())
+                            {
+                                <a href="~/Home/Index" title=""><i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i></a>
+                            }
+                            else
+                            {
+                                <i class="fab fa-facebook-f fa-lg" style="color:#fff;"></i>
+                            }
                         </div>
                     </div><!--logo end-->
-                    <div class="search-bar">
-                        <form action="/Search/Index">
-                            <input type="text" name="search" placeholder="Search...">
-                            <button type="submit"><i class="fas fa-search"></i></button>
-                        </form>
-                    </div><!--search-bar end-->
+                    @if (layoutUserDto.actions.Where(x => x.Url == "/Search/Index").Any())
+                    {
+                        <div class="search-bar">
+                            <form action="/Search/Index">
+                                <input type="text" name="search" placeholder="Search...">
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                            </form>
+                        </div><!--search-bar end-->
+                    }
                     <nav>
                         <ul>
                             <li>
-                                <a asp-action="Index" asp-controller="Home" title="">
-                                    <div><i class="fas fa-home fa-lg"></i></div>
-                                    Home
-                                </a>
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Home/Index").Any())
+                                {
+                                    <a asp-action="Index" asp-controller="Home" title="">
+                                        <div><i class="fas fa-home fa-lg"></i></div>
+                                        Home
+                                    </a>
+                                }
                             </li>
                             <li>
-
-
-                                <a asp-action="Profile" asp-controller="Profile" asp-route-id="@layoutUserDto.userId" title="">
-                                    <div><i class="fas fa-user-circle fa-lg"></i></div>
-                                    Profile
-                                </a>
-
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Profile/Profile").Any())
+                                {
+                                    <a asp-action="Profile" asp-controller="Profile" asp-route-id="@layoutUserDto.userId" title="">
+                                        <div><i class="fas fa-user-circle fa-lg"></i></div>
+                                        Profile
+                                    </a>
+                                }
                             </li>
                         </ul>
                     </nav><!--nav end-->
@@ -79,19 +92,22 @@
 
                             <img class="profilePic" style="background:whitesmoke;"
                                  src="~/ProfilePics/@layoutUserDto.ProfilePic" alt="">
-                            <a class="fullNameCurrent" href="#" title="">@layoutUserDto.FullName</a>
+                            <a class="fullNameCurrent" href="~/Profile/Profile/@layoutUserDto.userId" title="">@layoutUserDto.FullName</a>
 
 
                             <i class="fas fa-chevron-circle-down"></i>
                         </div>
                         <div class="user-account-settingss">
                             <ul class="us-links">
-                                <li class="text-center">
-                                    <a href="/Account/ChangePassword" title="">
-                                        <i class="fas fa-user-cog"></i>
-                                        Account Settings
-                                    </a>
-                                </li>
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Account/ChangePassword").Any())
+                                {
+                                    <li class="text-center">
+                                        <a href="/Account/ChangePassword" title="">
+                                            <i class="fas fa-user-cog"></i>
+                                            Account Settings
+                                        </a>
+                                    </li>
+                                }
                                 @if (layoutUserDto.actions.Where(x => x.Url == "/Roles/Index").Any())
                                 {
                                     <li class="text-center">
@@ -127,8 +143,6 @@
                 <div class="container">
                     <div class="main-section-data">
                         <div class="row">
-
-
                             @RenderBody()
                         </div>
                     </div><!-- main-section-data end-->

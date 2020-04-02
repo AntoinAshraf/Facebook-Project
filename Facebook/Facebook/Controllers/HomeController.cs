@@ -37,7 +37,7 @@ namespace Facebook.Controllers
             this.facebookDataContext = _facebookDataContext;
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         public IActionResult Index()
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -59,6 +59,7 @@ namespace Facebook.Controllers
         }
 
         [HttpGet]
+        [AuthorizedAction]
         public IActionResult DeletePost([FromQuery]int postId)
         {
             if (postId == 0)
@@ -98,6 +99,7 @@ namespace Facebook.Controllers
         }
 
         [HttpPost]
+        [AuthorizedAction]
         public IActionResult CreatePost(IFormFile postImage, string postText)
         {
             string fileName = "";

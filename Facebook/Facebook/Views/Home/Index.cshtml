@@ -1,6 +1,7 @@
 ﻿@model Facebook.Models.ViewModels.HomePageDto
 @{
     ViewData["Title"] = "Home";
+    LayoutUserDto layoutUserDto = (LayoutUserDto)ViewData["LayoutData"];
 }
 
 @*Left Side (Info & Footer)*@
@@ -49,52 +50,55 @@
 @*Middle Side (Post creation & Showing All Posts)*@
 <div class="col-lg-6 col-md-8 no-pd">
     <div class="main-ws-sec">
-        <div class="post-topbar">
-            <div class="post-st">
-                <ul>
-                    <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
-                </ul>
-            </div><!--post-st end-->
-        </div>
-        <!-- Modal -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-dialog-edit">
-                <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <form enctype="multipart/form-data">
-                        <div class="modal-header model-header-edit">
-                            <h3 id="createTitle">Create Post</h3>
-                        </div>
-                        <div class="modal-body">
-                            <div class="post-body">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <textarea id="postTextArea" class="form-control" rows="3" name="PostContent" placeholder="What's in your mind..."></textarea>
-                                    </div>
-                                    <div class="col-lg-12 row " id="image-category">
-                      
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="postImage">
-                                            <label class="custom-file-label" for="customFile">Choose Image</label>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                </div>
-                            </div><!--post-project-fields end-->
-                        </div>
-                        <div class="modal-footer-Edit modal-footer" style="float:right">
-                            <button type="button" class="btn btn-default bg-danger text-white" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn text-white" style="background-color:#0e385f" id="submit" onclick="createPost()">Post</button>
-                        </div>
-                    </form>
-                </div>
-
+        @if (layoutUserDto.actions.Where(x => x.Url == "/Home/CreatePost").Any())
+        {
+            <div class="post-topbar">
+                <div class="post-st">
+                    <ul>
+                        <li> <a id="popBtn" data-toggle="modal" data-target="#myModal">What's in your mind?</a></li>
+                    </ul>
+                </div><!--post-st end-->
             </div>
-        </div>
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-edit">
+                    <button type="button" class="btn btn-default btn-circle" data-dismiss="modal"><i class="la la-times-circle-o"></i></button>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <form enctype="multipart/form-data">
+                            <div class="modal-header model-header-edit">
+                                <h3 id="createTitle">Create Post</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="post-body">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <textarea id="postTextArea" class="form-control" rows="3" name="PostContent" placeholder="What's in your mind..."></textarea>
+                                        </div>
+                                        <div class="col-lg-12 row " id="image-category">
+
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <i class="fas fa-image" style="font-size:40px; color:#0e385f;"></i>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="postImage">
+                                                <label class="custom-file-label" for="customFile">Choose Image</label>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                </div><!--post-project-fields end-->
+                            </div>
+                            <div class="modal-footer-Edit modal-footer" style="float:right">
+                                <button type="button" class="btn btn-default bg-danger text-white" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn text-white" style="background-color:#0e385f" id="submit" onclick="createPost()">Post</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        }
 
         <div class='posts-section' id="posts">
             @foreach (var post in Model.HomePostDto)
@@ -112,13 +116,22 @@
                             </div>
                             @if (post.CanEditDelete)
                             {
-                                <div class="ed-opts">
-                                    <a title="" href="#" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                                    <ul class="ed-options">
-                                        <li><a onclick="getPostById(@post.PostId)" title="">Edit Post</a></li>
-                                        <li><a onclick="deletePost(@post.PostId)" title="">Delete Post</a></li>
-                                    </ul>
-                                </div>
+                                @if (layoutUserDto.actions.Where(x => x.Url == "/Home/EditPost").Any() || layoutUserDto.actions.Where(x => x.Url == "/Home/DeletePost").Any())
+                                {
+                                    <div class="ed-opts">
+                                        <a title="" href="#" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                                        <ul class="ed-options">
+                                            @if (layoutUserDto.actions.Where(x => x.Url == "/Home/EditPost").Any())
+                                            {
+                                                <li><a onclick="getPostById(@post.PostId)" title="">Edit Post</a></li>
+                                            }
+                                            @if (layoutUserDto.actions.Where(x => x.Url == "/Home/DeletePost").Any())
+                                            {
+                                                <li><a onclick="deletePost(@post.PostId)" title="">Delete Post</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
                             }
                         </div>
 
@@ -133,22 +146,26 @@
                             <ul class="like-com">
                                 <li>
                                     <a>
-                                        <i id="heart_@post.PostId" onclick="SendLike(@post.PostId)" style="color:@{
-                                        if (post.IsLike)
+                                        @if (layoutUserDto.actions.Where(x => x.Url == "/CommentLike/AddLike").Any())
                                         {
-                                            @:blue
+                                            <i id="heart_@post.PostId" onclick="SendLike(@post.PostId)" style="color:@{
+                                                if (post.IsLike)
+                                                {
+                                                    @:blue
+                                                }
+                                                else
+                                                {
+                                                    @:gray
+                                                }
+                                            }" class="la la-heart"></i>
                                         }
-                                        else
-                                        {
-                                            @:gray
-                                        }
-                                            }" class="la la-heart"></i><button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Like</button>
+                                        <button style="color:#076bec; border:none; background-color:white;" type="button" data-toggle="modal" data-target="#exampleModal_@post.PostId">Like</button>
                                     </a>
                                     <img src="images/liked-img.png" alt="">
                                     <span id="likeNumber_@post.PostId" style="margin-left:1px">@post.HomeLikeDto.Count()</span>
                                 </li>
                                 <li>
-                                    <a style="margin-top:16px" title="" class="com"><img src="images/com.png" alt=""> Comment </a>
+                                    <a style="margin-top:16px" title="" class="com"><img src="images/com.png" alt="">Comment </a>
                                     <span id="commentNumber_@post.PostId" style="margin-left:1px">@post.HomeCommentDto.Count()</span>
                                 </li>
                             </ul>
@@ -159,35 +176,41 @@
                             <ul id="commentContainer_@post.PostId">
                                 @foreach (var comment in post.HomeCommentDto)
                                 {
-                                <li id="comment_@comment.CommentId">
-                                    <div class="comment-list" style="color:firebrick">
-                                        <div class="bg-img">
-                                            <img class="friendListPic" src="@comment.ProfilePicUrl" alt="">
-                                        </div>
-                                        <div class="comment">
-                                            <h3><a href="~/Profile/Profile/@comment.UserId" title="">@comment.FullName</a></h3>
-                                            <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
-                                            <p>@comment.CommentContent</p>
-                                        </div>
-                                        @if (comment.CanDelete)
-                                        {
-                                            <div class="comment">
-                                                <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
+                                    <li id="comment_@comment.CommentId">
+                                        <div class="comment-list" style="color:firebrick">
+                                            <div class="bg-img">
+                                                <img class="friendListPic" src="@comment.ProfilePicUrl" alt="">
                                             </div>
-                                        }
-                                    </div><!--comment-list end-->
-                                </li>
+                                            <div class="comment">
+                                                <h3><a href="~/Profile/Profile/@comment.UserId" title="">@comment.FullName</a></h3>
+                                                <span><img src="images/clock.png" alt="">@comment.CommentDate</span>
+                                                <p>@comment.CommentContent</p>
+                                            </div>
+                                            @if (comment.CanDelete)
+                                            {
+                                                if (layoutUserDto.actions.Where(x => x.Url == "/CommentLike/DeleteComment").Any())
+                                                {
+                                                    <div class="comment">
+                                                        <i onclick="deleteComment(@comment.CommentId, @post.PostId)" class="la la-trash"></i>
+                                                    </div>
+                                                }
+                                            }
+                                        </div><!--comment-list end-->
+                                    </li>
                                 }
                             </ul>
                         </div><!--comment-sec end-->
-                        <div class="post-comment">
-                            <div class="comment_box">
-                                <form>
-                                    <input id="commentTextBox_@post.PostId" type="text" placeholder="Post a comment">
-                                    <button id="sendBtn_@post.PostId" type="button" onclick="SendComment(@post.PostId)">Send</button>
-                                </form>
-                            </div>
-                        </div><!--post-comment end-->
+                        @if (layoutUserDto.actions.Where(x => x.Url == "/CommentLike/AddComment").Any())
+                        {
+                            <div class="post-comment">
+                                <div class="comment_box">
+                                    <form>
+                                        <input id="commentTextBox_@post.PostId" type="text" placeholder="Post a comment">
+                                        <button id="sendBtn_@post.PostId" type="button" onclick="SendComment(@post.PostId)">Send</button>
+                                    </form>
+                                </div>
+                            </div><!--post-comment end-->
+                        }
                     </div><!--comment-section end-->
                 </div>
 
@@ -222,10 +245,10 @@
                                 {
                                     @:There is no reactions for this post yet.
                                     @*<div class="comment-list">
-                                        <div class="comment">
-                                            <h3>There are no reactions for this post yet.</h3>
-                                        </div>
-                                    </div>*@
+                                            <div class="comment">
+                                                <h3>There are no reactions for this post yet.</h3>
+                                            </div>
+                                        </div>*@
                                 }
                             </div>
                             <div class="modal-footer">
@@ -276,40 +299,44 @@
                 }
 
                 @*<div class="view-more">
-                    <a href="#" title="">View More</a>
-                </div>*@
+                        <a href="#" title="">View More</a>
+                    </div>*@
             </div><!--suggestions-list end-->
         </div>
     </div><!--right-sidebar end-->
 </div>
 
-<div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit Post</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="post-body">
-                    <div class="row">
-                        <div class="col-lg-12 form-group">
-                            <textarea class="form-control" rows="3" id="postContentTextArea" name="PostContent" onkeydown="checkform()" placeholder="What's in your mind..."></textarea>
-                            <input style="display:none" type="text" id="postIdTextBox" />
+@if (layoutUserDto.actions.Where(x => x.Url == "/Home/EditPost").Any())
+{
+    <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="post-body">
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <textarea class="form-control" rows="3" id="postContentTextArea" name="PostContent" onkeydown="checkform()" placeholder="What's in your mind..."></textarea>
+                                <input style="display:none" type="text" id="postIdTextBox" />
+                            </div>
+                            <hr />
                         </div>
-                        <hr />
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="EditPost()">Save changes</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="EditPost()">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+
 
 
 
@@ -319,10 +346,10 @@
     <script src="~/js/CommentLike.js"></script>
     <script src="~/js/PostCrud.js"></script>
     <script>
-        $(".custom-file-input").on("change", function() {
-      var fileName = $(this).val().split("\\").pop();
-      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
     </script>
     @*<script type="text/javascript" src="~/js/getAllPosts.js"></script>*@
     @*<script src="~/js/UploadImage.js"></script>*@
