@@ -41,14 +41,14 @@ namespace Facebook.Controllers
         public IActionResult Profile(int? id)
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
-            
+
             //ViewData["Actions"] = userData.GetActions(HttpContext);
             ViewData["Users"] = userData.GetUser(HttpContext);
 
 
             User currentUser = userData.GetUser(HttpContext);
 
-            if(id == null)
+            if (id == null)
                 return RedirectToAction("Login", "Account");
 
             //to confirm Valid Id
@@ -80,7 +80,7 @@ namespace Facebook.Controllers
             return View(profilePageDto);
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpDelete]
         public IActionResult rejectRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
         {
@@ -103,8 +103,8 @@ namespace Facebook.Controllers
             }
 
         }
-        
-        //[AuthorizedAction]
+
+        [AuthorizedAction]
         [HttpPut]
         public IActionResult acceptRequest([FromQuery]int? intiatorId, [FromQuery] int? deciderId)
         {
@@ -128,7 +128,7 @@ namespace Facebook.Controllers
 
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpPut]
         public IActionResult EditInfo([FromBody] userInfo userInfoToUpdate)
         {
@@ -137,17 +137,17 @@ namespace Facebook.Controllers
                 return Json(new { statusCode = ResponseStatus.ValidationError });
             }
 
-            
+
             try
             {
                 User user = facebookDataContext.Users.Where(u => u.Id == userInfoToUpdate.id).FirstOrDefault();
 
-                if(user ==null)
+                if (user == null)
                     return Json(new { statusCode = ResponseStatus.NoDataFound });
 
 
-                user.Bio = userInfoToUpdate.Bio; 
-                user.PhoneNumber = userInfoToUpdate.PhoneNumber; 
+                user.Bio = userInfoToUpdate.Bio;
+                user.PhoneNumber = userInfoToUpdate.PhoneNumber;
                 user.BirthDate = userInfoToUpdate.BirthDate;
 
                 if (userInfoToUpdate.GenderName == "Male")
@@ -155,8 +155,8 @@ namespace Facebook.Controllers
                 else // female
                     user.GenderId = 2;
 
-                string[] nameSplitted =  userInfoToUpdate.FullName.Split(" "); // to get first, last name
-                user.FirstName = nameSplitted[0]; 
+                string[] nameSplitted = userInfoToUpdate.FullName.Split(" "); // to get first, last name
+                user.FirstName = nameSplitted[0];
                 user.LastName = nameSplitted[1];
 
                 facebookDataContext.SaveChanges();
@@ -171,7 +171,7 @@ namespace Facebook.Controllers
             }
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpPost]
         public IActionResult AddFriend([FromQuery] int? initiatorId, [FromQuery] int? deciderId)
         {
@@ -201,7 +201,7 @@ namespace Facebook.Controllers
             }
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpPut]
         public IActionResult RemoveFriend([FromQuery] int? initiatorId, [FromQuery] int? deciderId)
         {
@@ -220,7 +220,7 @@ namespace Facebook.Controllers
                     relationToRemove = facebookDataContext.UserRelations.Where(u => u.InitiatorId == deciderId && u.DesiderId == initiatorId
                  && u.SocialStatusId == (int)SocialStatuses.Friend && u.IsDeleted == false).FirstOrDefault();
 
-                if(relationToRemove == null)
+                if (relationToRemove == null)
                 {
                     return Json(new { statusCode = ResponseStatus.NoDataFound });
                 }
@@ -236,7 +236,7 @@ namespace Facebook.Controllers
             }
         }
 
-        //[AuthorizedAction]
+        [AuthorizedAction]
         [HttpPut]
         public IActionResult ChangeProfilePhoto(/*[FromBody]*/IFormFile profileImage, [FromQuery] int? userId)
         {
@@ -284,11 +284,11 @@ namespace Facebook.Controllers
                     IsDeleted = false
                 };
 
-                if(user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true) != null)
+                if (user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true) != null)
                     user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true).Url = fileName;
-                
+
                 facebookDataContext.ProfilePhotos.Add(newProfilePhoto);
-                try 
+                try
                 {
                     facebookDataContext.SaveChanges();
                     userData.SetUser(HttpContext, user);
@@ -298,54 +298,5 @@ namespace Facebook.Controllers
 
             return Json(new { statusCode = ResponseStatus.Success });
         }
-
-        #region OldGetPostsVersion
-        //[HttpGet]
-        ///***
-        // * id --> this user Id 
-
-        // */
-        //public IActionResult GetPosts(int?id)
-        //{ // is DELTEDDDDDDDDDDDDDDDDDDDDDDDDD, posts comment??????????????????
-        //    try
-        //    {
-        //        if(id==null) return Json(new { statusCode = ResponseStatus.NoDataFound });              
-        //        User user = userData.GetUser(HttpContext);
-
-        //        //to check who is user?
-        //        bool flag = true;//to check Owner prop
-        //        if(id!=user.Id)
-        //        {
-        //            user = facebookDataContext.Users.SingleOrDefault(p => p.Id == id);
-        //            flag = false;
-        //        }
-
-
-
-        //        PostsMapper postsMapper = new PostsMapper(facebookDataContext);
-
-        //        var postsResult = facebookDataContext.UsersPosts.Where(p => p.UserId == user.Id && p.Post.IsDeleted == false)
-        //            .Include(p => p.Post)
-        //            .ThenInclude(p => p.PostPhotos)
-        //            .Include(p => p.Post.Comments)
-        //            .ToList();
-
-        //        if (postsResult == null || postsResult.Count < 0)
-        //            return Json(new { statusCode = ResponseStatus.NoDataFound });
-
-        //        // Mapping
-        //        List<PostsDTO> postsToRetrieve = postsMapper.Map(postsResult, user).ToList();
-        //        postsToRetrieve.ForEach(o => o.Owner = flag);
-
-        //        return Json(new { statusCode = ResponseStatus.Success, responseMessage = postsToRetrieve });
-        //    }
-        //    catch
-        //    {
-        //        return Json(new { statusCode = ResponseStatus.NoDataFound });
-        //    }
-        //}
-
-        #endregion
-
     }
 }

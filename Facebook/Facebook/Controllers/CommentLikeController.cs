@@ -76,7 +76,7 @@ namespace Facebook.Controllers
                 return Json(new { statusCode = ResponseStatus.ValidationError });
 
             Comment comment = facebookDataContext.Comments.FirstOrDefault(x => x.Id == commentId);
-            if(comment == null)
+            if (comment == null)
                 return Json(new { statusCode = ResponseStatus.ValidationError });
 
             comment.IsDeleted = true;

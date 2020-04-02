@@ -22,7 +22,8 @@ namespace Facebook.Controllers
         private readonly FacebookDataContext facebookDataContext;
         private readonly IUserData userData;
 
-        public SearchController(ILogger<HomeController> logger, FacebookDataContext _facebookDataContext, IUserData _userData) {
+        public SearchController(ILogger<HomeController> logger, FacebookDataContext _facebookDataContext, IUserData _userData)
+        {
             userData = _userData;
             _logger = logger;
             facebookDataContext = _facebookDataContext;
@@ -34,7 +35,8 @@ namespace Facebook.Controllers
         public IActionResult Index(string search)
         {
 
-            if (string.IsNullOrEmpty(search)) {
+            if (string.IsNullOrEmpty(search))
+            {
                 return RedirectToAction("/Home/Index");
             }
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
@@ -43,7 +45,7 @@ namespace Facebook.Controllers
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users.Include(x => x.UserRelationsDesider).Include(x => x.UserRelationsInitiator).Include(x => x.ProfilePhotos)
-                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim()))  && usr.Id != loggedUserData.Id && usr.IsDeleted == false).ToList();
+                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim())) && usr.Id != loggedUserData.Id && usr.IsDeleted == false).ToList();
 
             List<SearchUserDto> searchUserDtos = SearchUserMapper.Map(searchUsrs, loggedUserData.Id).ToList();
 
@@ -54,7 +56,8 @@ namespace Facebook.Controllers
 
         [HttpPut]
         [AuthorizedAction]
-        public IActionResult ConfirmFriendAction(int InitiatorId, int DesiderId) {
+        public IActionResult ConfirmFriendAction(int InitiatorId, int DesiderId)
+        {
 
             var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => usrRel.InitiatorId == InitiatorId && usrRel.DesiderId == DesiderId).FirstOrDefault();
             if (userRelSelect == null)
@@ -70,7 +73,8 @@ namespace Facebook.Controllers
 
         [HttpDelete]
         [AuthorizedAction]
-        public IActionResult UnFriendAction(int InitiatorId, int DesiderId) {
+        public IActionResult UnFriendAction(int InitiatorId, int DesiderId)
+        {
             var userRelSelect = facebookDataContext.UserRelations.Where(usrRel => (usrRel.InitiatorId == InitiatorId || usrRel.InitiatorId == DesiderId) && (usrRel.InitiatorId == DesiderId || usrRel.DesiderId == DesiderId)).FirstOrDefault();
             if (userRelSelect == null)
                 return Json(new { success = false });
@@ -84,17 +88,19 @@ namespace Facebook.Controllers
 
         [HttpPost]
         [AuthorizedAction]
-        public IActionResult RequestFriendAction(int InitiatorId, int DesiderId) {
-            UserRelation newUserRel = new UserRelation() {
-                    CreatedAt = DateTime.Now,
-                    DesiderId = DesiderId,
-                    InitiatorId = InitiatorId,
-                    IsDeleted = false,
-                    SocialStatusId = (int)SocialStatuses.Request
-                };
+        public IActionResult RequestFriendAction(int InitiatorId, int DesiderId)
+        {
+            UserRelation newUserRel = new UserRelation()
+            {
+                CreatedAt = DateTime.Now,
+                DesiderId = DesiderId,
+                InitiatorId = InitiatorId,
+                IsDeleted = false,
+                SocialStatusId = (int)SocialStatuses.Request
+            };
             facebookDataContext.UserRelations.Add(newUserRel);
             facebookDataContext.SaveChanges();
-            return Json(new { success = true});
+            return Json(new { success = true });
         }
     }
 }
