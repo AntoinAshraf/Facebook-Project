@@ -42,7 +42,7 @@ namespace Facebook.Utilities
         public LayoutUserDto GetLayoutData(HttpContext httpContext)
         {
             User user = GetUser(httpContext);
-            string profilePic = user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id) == null ? (user.GenderId == 1 ? "default.jpg" : "default_female.png") : user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id).Url;
+            string profilePic = user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id && x.IsCurrent == true) == null ? (user.GenderId == 1 ? "default.jpg" : "default_female.png") : user.ProfilePhotos.FirstOrDefault(x => x.UserId == user.Id && x.IsCurrent == true).Url;
             return new LayoutUserDto() { userId = user.Id, FullName = $"{user.FirstName}", ProfilePic = profilePic, actions = GetActions(httpContext) };
         }
 

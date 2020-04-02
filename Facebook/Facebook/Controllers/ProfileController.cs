@@ -284,7 +284,8 @@ namespace Facebook.Controllers
                     IsDeleted = false
                 };
 
-                user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId).Url = fileName;
+                if(user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true) != null)
+                    user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true).Url = fileName;
                 
                 facebookDataContext.ProfilePhotos.Add(newProfilePhoto);
                 try 
