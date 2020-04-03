@@ -113,16 +113,7 @@
                     {
                         <div class="suggestions-list" id="Req_@friendRequest.initiatorId">
                             <div class="suggestion-usd" @*id="Req_@friendRequest.initiatorId" *@>
-                                @{
-                                    if (friendRequest.Photo == null)
-                                    {
-                                        <img class="profilePic" src="~/ProfilePics/default.jpg" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img class="profilePic" src="~/ProfilePics/@friendRequest.Photo" alt="">
-                                    }
-                                }
+                                <img class="profilePic" src="~/ProfilePics/@friendRequest.Photo" alt="">
                                 <div class="sgt-text">
                                     <h4>
                                         <a asp-action="Profile" asp-controller="Profile" asp-route-id="@friendRequest.initiatorId">

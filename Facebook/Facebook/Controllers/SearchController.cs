@@ -45,7 +45,7 @@ namespace Facebook.Controllers
             var loggedUserData = userData.GetUser(HttpContext);
 
             List<User> searchUsrs = facebookDataContext.Users.Include(x => x.UserRelationsDesider).Include(x => x.UserRelationsInitiator).Include(x => x.ProfilePhotos)
-                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim())) && usr.Id != loggedUserData.Id && usr.IsDeleted == false).ToList();
+                .Where(usr => (usr.FirstName.Trim().Contains(search.Trim()) || usr.LastName.Trim().Contains(search.Trim()) || (usr.FirstName.Trim() + " " + usr.LastName.Trim() == search.Trim())) && usr.Id != loggedUserData.Id && usr.IsDeleted == false  && usr.RoleId != (int)UserType.SuperAdmin).ToList();
 
             List<SearchUserDto> searchUserDtos = SearchUserMapper.Map(searchUsrs, loggedUserData.Id).ToList();
 
