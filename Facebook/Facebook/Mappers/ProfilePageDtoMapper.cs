@@ -92,7 +92,7 @@ namespace Facebook.Mappers
                     {
                         FriendRequest friendRequest = new FriendRequest();
                         friendRequest.FullName = $"{item.Initiator.FirstName} {item.Initiator.LastName}";
-                        friendRequest.Photo = item.Initiator.ProfilePhotos.Where(photo => photo.IsCurrent == true).Select(photo => photo.Url).FirstOrDefault();
+                        friendRequest.Photo = item.Initiator.ProfilePhotos.FirstOrDefault(photo => photo.IsCurrent == true) != null ? item.Initiator.ProfilePhotos.FirstOrDefault(photo => photo.IsCurrent == true).Url : (item.Initiator.GenderId == 1 ? "default.jpg" : "default_female.png");
                         friendRequest.initiatorId = item.InitiatorId;
                         friendRequests.Add(friendRequest);
                     }

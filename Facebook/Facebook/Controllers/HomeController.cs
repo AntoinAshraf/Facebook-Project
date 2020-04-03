@@ -51,7 +51,7 @@ namespace Facebook.Controllers
                 .Include("UsersPosts.Post.Comments.User.ProfilePhotos")
                 .Include("UsersPosts.Post.Likes.User.ProfilePhotos")
                 .Include("UsersPosts.Post.PostPhotos")
-                //.Include("ProfilePhotos")
+                .Include("ProfilePhotos")
                 .FirstOrDefault();
             HomePageDto homePageDto = HomePageDtoMapper.Map(userFullData, hostingEnvironment);
             return View(homePageDto);
@@ -108,7 +108,7 @@ namespace Facebook.Controllers
 
             if (postImage != null)
             {
-                if (postImage.ContentType != "image/jpeg" && postImage.ContentType != "image/png")
+                if (postImage.ContentType.ToLower() != "image/jpeg" && postImage.ContentType.ToLower() != "image/png" && postImage.ContentType.ToLower() != "image/jpg")
                     return Json(new { statusCode = ResponseStatus.ValidationError, responseMessage = ValidationMessages.WrongFormat });
 
                 var uploads = Path.Combine(hostingEnvironment.WebRootPath, "PostPics");

@@ -25,10 +25,10 @@ namespace Facebook.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly FacebookDataContext facebookDataContext;
         private readonly IUserData userData;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public ProfileController(ILogger<ProfileController> logger, FacebookDataContext _facebookDataContext, IUserData _userData
-              , IHostingEnvironment hostingEnvironment)
+              , IWebHostEnvironment hostingEnvironment)
         {
             userData = _userData;
             this.hostingEnvironment = hostingEnvironment;
@@ -41,10 +41,7 @@ namespace Facebook.Controllers
         public IActionResult Profile(int? id)
         {
             ViewData["LayoutData"] = userData.GetLayoutData(HttpContext);
-
-            //ViewData["Actions"] = userData.GetActions(HttpContext);
             ViewData["Users"] = userData.GetUser(HttpContext);
-
 
             User currentUser = userData.GetUser(HttpContext);
 
@@ -63,7 +60,7 @@ namespace Facebook.Controllers
 
             var AllUserdata = facebookDataContext.Users.Where(user => user.Id == id)
                 .Include("Gender")
-                //.Include("ProfilePhotos")//profilePhotos
+                .Include("ProfilePhotos")//profilePhotos
                 .Include("UserRelationsDesider.Initiator.ProfilePhotos")//requests&countFriend
                 .Include("UserRelationsDesider.Desider.ProfilePhotos")
                 .Include("UserRelationsInitiator")//CountFriend
@@ -284,13 +281,18 @@ namespace Facebook.Controllers
                     IsDeleted = false
                 };
 
-                if (user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true) != null)
-                    user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true).Url = fileName;
+
 
                 facebookDataContext.ProfilePhotos.Add(newProfilePhoto);
                 try
                 {
                     facebookDataContext.SaveChanges();
+
+                    if (user.ProfilePhotos.Any(p => p.UserId == userId && p.IsCurrent == true))
+                        user.ProfilePhotos.FirstOrDefault(p => p.UserId == userId && p.IsCurrent == true).Url = fileName;
+                    else
+                        user.ProfilePhotos.Add(newProfilePhoto);
+
                     userData.SetUser(HttpContext, user);
                 }
                 catch { return Json(new { statusCode = ResponseStatus.Error }); }

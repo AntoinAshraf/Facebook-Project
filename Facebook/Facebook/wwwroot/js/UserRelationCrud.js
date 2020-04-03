@@ -63,17 +63,16 @@ function acceptRequest(initiatorId, UserInfoId, friendRequestsCount) {
     }).then((response) => {
         return response.json();
     }).then((data) => {
+        debugger
         if (data.statusCode !== 200) {
             toastr.error('You can not accept the request!', 'Validation Error');
         }
         if (data.statusCode === 200) {
-            if (friendRequestsCount == 1)
+            if (friendRequestsCount == 1) 
                 deleteRequestContainer();
             else
-            {
                 deleteRequestRow(initiatorId);
-                updateFriendsNumber();
-            }
+            updateFriendsNumber();
             toastr.success('Friend Request Accepted!', 'Done');
         }
 
@@ -101,6 +100,7 @@ function deleteRequestRow(initiatorId) {
 }
 
 function updateFriendsNumber() {
+    debugger
     var result = document.getElementById("friendsNumber");
 
     result.innerText++; // Incrementing the number of friends for the user to be shown dynamically 
