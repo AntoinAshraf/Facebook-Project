@@ -1,5 +1,5 @@
 ﻿    var pp;
-           fetch("https://localhost:44340/Home/GetPosts", {
+fetch(window.location.origin+"/Home/GetPosts", {
         method: "get"
         }).then((response) => {
 

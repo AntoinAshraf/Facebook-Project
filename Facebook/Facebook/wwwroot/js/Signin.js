@@ -30,7 +30,7 @@ function signin(){
     signinBtn.innerHTML = "Loading";
     signinBtn.style.backgroundColor = "#65a6f9";
 
-    fetch("https://localhost:44340/Account/Login", {
+    fetch(window.location.origin+"/Account/Login", {
         method: "post",
         body: JSON.stringify({
             Email: email.value,

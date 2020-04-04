@@ -34,7 +34,7 @@ function saveSettings(){
     saveSettingsBtn.innerHTML = "Loading";
     saveSettingsBtn.style.backgroundColor = "#65a6f9";
     debugger
-    fetch("https://localhost:44340/Account/ChangePassword", {
+    fetch(window.location.origin+"/Account/ChangePassword", {
         method: "post",
         body: JSON.stringify({
             OldPassword: oldPassword.value,

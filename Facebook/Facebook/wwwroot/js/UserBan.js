@@ -31,7 +31,7 @@ function UserBan(userId) {
             }
 
 
-            fetch("https://localhost:44340/Account/UserBan/" + userId + "?ban=" + Pan, {
+            fetch(window.location.origin+"/Account/UserBan/" + userId + "?ban=" + Pan, {
                 method: "get"
             }).then((response) => {
                 return response.json();
@@ -87,7 +87,7 @@ function changeRole(userId) {
             }
 
             debugger
-            fetch("https://localhost:44340/Account/ChangeRole/" + userId + "?roleId=" + roleId, {
+            fetch(window.location.origin+"/Account/ChangeRole/" + userId + "?roleId=" + roleId, {
                 method: "get"
             }).then((response) => {
                 return response.json();

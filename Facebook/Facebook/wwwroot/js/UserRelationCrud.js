@@ -1,5 +1,5 @@
 ﻿function AddFriend(initiatorId, UserInfoId) {
-    fetch("https://localhost:44340/Profile/AddFriend?initiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
+    fetch(window.location.origin+"/Profile/AddFriend?initiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'POST'
     }).then((response) => {
         return response.json();
@@ -17,7 +17,7 @@
 }
 
 function RemoveFriend(initiatorId, UserInfoId) {
-    fetch("https://localhost:44340/Profile/RemoveFriend?initiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
+    fetch(window.location.origin+"/Profile/RemoveFriend?initiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'PUT'
     }).then((response) => {
         return response.json();
@@ -36,7 +36,7 @@ function RemoveFriend(initiatorId, UserInfoId) {
 function rejectRequest(initiatorId, UserInfoId, friendRequestsCount)
 {
     console.log(friendRequestsCount);
-    fetch("https://localhost:44340/profile/rejectRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
+    fetch(window.location.origin+"/profile/rejectRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'DELETE'
     }).then((response) => {
         return response.json();
@@ -58,7 +58,7 @@ function rejectRequest(initiatorId, UserInfoId, friendRequestsCount)
 }
 
 function acceptRequest(initiatorId, UserInfoId, friendRequestsCount) {
-    fetch("https://localhost:44340/profile/acceptRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
+    fetch(window.location.origin+"/profile/acceptRequest?intiatorId=" + initiatorId + "&deciderId=" + UserInfoId, {
         method: 'PUT'
     }).then((response) => {
         return response.json();

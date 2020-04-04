@@ -34,7 +34,7 @@ function confirmChangePassword(){
     confirmBtn.innerHTML = "Loading";
     confirmBtn.style.backgroundColor = "#65a6f9";
 
-    fetch("https://localhost:44340/Account/RecoverPassword/?code=" + code.value, {
+    fetch(window.location.origin+"/Account/RecoverPassword/?code=" + code.value, {
         method: "post",
         body: JSON.stringify({
             Email: email.value,

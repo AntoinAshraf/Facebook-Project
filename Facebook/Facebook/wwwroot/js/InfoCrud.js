@@ -25,7 +25,7 @@
         return toastr.error("Phone number should have 11 digits!", 'Validation Error');
 
 
-    fetch("https://localhost:44340/Profile/EditInfo", {
+    fetch(window.location.origin+"/Profile/EditInfo", {
         method: "put",
         body: JSON.stringify({
             FullName: name.value,
@@ -127,7 +127,7 @@ function changePhoto(userId) {
 
 
 
-    //fetch("https://localhost:44340/Profile/ChangeProfilePhoto?userId=" + userId, {
+    //fetch(window.location.origin+"/Profile/ChangeProfilePhoto?userId=" + userId, {
     //    method: "PUT",
     //    body: formData
     //    //headers: {

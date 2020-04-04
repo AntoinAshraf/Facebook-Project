@@ -79,7 +79,7 @@ function Register(){
     RegisterBtn.innerHTML = "Loading";
     //RegisterBtn.style.backgroundColor = "#65a6f9";
 
-    fetch("https://localhost:44340/Account/Register", {
+    fetch(window.location.origin+"/Account/Register", {
         method: "post",
         body: JSON.stringify({
             Email: email.value,

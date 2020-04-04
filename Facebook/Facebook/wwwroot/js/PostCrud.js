@@ -12,7 +12,7 @@ function deletePost(postId) {
         if (result.value) {
             const post = document.getElementById("post_" + postId);
 
-            fetch("https://localhost:44340/Home/DeletePost?postId=" + postId, {
+            fetch(window.location.origin+"/Home/DeletePost?postId=" + postId, {
                 method: "get"
             }).then((response) => {
                 return response.json();
@@ -36,7 +36,7 @@ function getPostById(postId) {
     const postContentTextArea = document.getElementById("postContentTextArea");
     const postIdTextBox = document.getElementById("postIdTextBox");
 
-    fetch("https://localhost:44340/Home/GetPostById?postId=" + postId, {
+    fetch(window.location.origin+"/Home/GetPostById?postId=" + postId, {
         method: "get"
     }).then((response) => {
         return response.json();
@@ -63,7 +63,7 @@ function EditPost() {
 
     postContentTextArea.style.borderColor = "rgb(229, 229, 229)";
 
-    fetch("https://localhost:44340/Home/EditPost", {
+    fetch(window.location.origin+"/Home/EditPost", {
         method: "post",
         body: JSON.stringify({
             PostId: postIdTextBox.value,

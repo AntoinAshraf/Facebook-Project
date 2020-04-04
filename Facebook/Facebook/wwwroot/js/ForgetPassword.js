@@ -18,7 +18,7 @@ function sendCode(){
     sendCodeBtn.innerHTML = "Loading";
     sendCodeBtn.style.backgroundColor = "#65a6f9";
 
-    fetch("https://localhost:44340/Account/SendForgetPasswordCode/?Email=" + email.value, {
+    fetch(window.location.origin+"/Account/SendForgetPasswordCode/?Email=" + email.value, {
         method: "get"
     }).then((response) => {
         return response.json();

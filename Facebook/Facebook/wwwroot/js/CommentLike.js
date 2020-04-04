@@ -14,7 +14,7 @@ function SendComment(postId) {
     sendBtn.disabled = true;
     sendBtn.innerHTML = "Loading";
 
-    fetch("https://localhost:44340/CommentLike/AddComment", {
+    fetch(window.location.origin+"/CommentLike/AddComment", {
         method: "post",
         body: JSON.stringify({
             PostId: postId,
@@ -53,7 +53,7 @@ function SendLike(postId) {
     const likesContainer = document.getElementById("likesContainer_" + postId);
     const heart = document.getElementById("heart_" + postId);
 
-    fetch("https://localhost:44340/CommentLike/AddLike?postId=" + postId, {
+    fetch(window.location.origin+"/CommentLike/AddLike?postId=" + postId, {
         method: "get"
     }).then((response) => {
         return response.json();
@@ -99,7 +99,7 @@ function deleteComment(commentId, postId) {
         allowOutsideClick: false,
     }).then((result) => {
         if (result.value) {
-            fetch("https://localhost:44340/CommentLike/DeleteComment?commentId=" + commentId, {
+            fetch(window.location.origin+"/CommentLike/DeleteComment?commentId=" + commentId, {
                 method: "get"
             }).then((response) => {
                 return response.json();
