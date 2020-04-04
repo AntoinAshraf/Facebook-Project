@@ -32,12 +32,12 @@ function sendCode(){
         }
         sendCodeBtn.disabled = false;
         sendCodeBtn.innerHTML = "Send Email";
-        sendCodeBtn.style.backgroundColor = "#1877F2";
+        sendCodeBtn.style.backgroundColor = "#0e385f";
 
     }).catch((err) => {
         sendCodeBtn.disabled = false;
         sendCodeBtn.innerHTML = "Send Email";
-        sendCodeBtn.style.backgroundColor = "#1877F2";
+        sendCodeBtn.style.backgroundColor = "#0e385f";
         toastr.error("Something went wrong!", 'Validation Error');
     });
 }

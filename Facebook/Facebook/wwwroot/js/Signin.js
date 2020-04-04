@@ -59,11 +59,11 @@ function signin(){
         }
         signinBtn.disabled = false;
         signinBtn.innerHTML = "Sign in";
-        signinBtn.style.backgroundColor = "#1877F2";
+        signinBtn.style.backgroundColor = "#0e385f";
     }).catch((err) => {
         toastr.error("Something went wrong!", 'Validation Error');
         signinBtn.disabled = false;
         signinBtn.innerHTML = "Sign in";
-        signinBtn.style.backgroundColor = "#1877F2";
+        signinBtn.style.backgroundColor = "#0e385f";
     });
 }

@@ -56,11 +56,11 @@ function confirmChangePassword(){
         }
         confirmBtn.disabled = false;
         confirmBtn.innerHTML = "Confirm";
-        confirmBtn.style.backgroundColor = "#1877F2";
+        confirmBtn.style.backgroundColor = "#0e385f";
     }).catch((err) => {
         toastr.error("Something went wrong!", 'Validation Error');
         confirmBtn.disabled = false;
         confirmBtn.innerHTML = "Confirm";
-        confirmBtn.style.backgroundColor = "#1877F2";
+        confirmBtn.style.backgroundColor = "#0e385f";
     });
 }
