@@ -20,7 +20,7 @@ namespace Facebook
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().UseKestrel().UseUrls("https://localhost:9191/");
                 });
     }
 }

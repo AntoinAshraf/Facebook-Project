@@ -54,7 +54,7 @@ namespace Facebook.Controllers
             db.SaveChanges();
             string token = jwt.GenerateToken(user.Id);
             //email.SendAccountActivationEmail(user.Email, "https://localhost:44340/Account/ActivateAccount/?token=" + token);
-            email.SendAccountActivationEmail(user.Email, "https://localhost:5001/Account/ActivateAccount/?token=" + token);
+            email.SendAccountActivationEmail(user.Email, "https://localhost:9191/Account/ActivateAccount/?token=" + token);
             return Json(new { statusCode = ResponseStatus.Success, responseMessage = user.Id });
         }
 
@@ -114,7 +114,7 @@ namespace Facebook.Controllers
             userData.SetUser(HttpContext, user);
             string token = jwt.GenerateToken(user.Id);
             //email.SendRecoveryPasswordEmail(user.Email, code, "https://localhost:44340/Account/RecoverPassword/?token=" + token);
-            email.SendRecoveryPasswordEmail(user.Email, code, "https://localhost:5001/Account/RecoverPassword/?token=" + token);
+            email.SendRecoveryPasswordEmail(user.Email, code, "https://localhost:9191/Account/RecoverPassword/?token=" + token);
             return Json(new { statusCode = ResponseStatus.Success });
         }
 
