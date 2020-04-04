@@ -1,4 +1,7 @@
-﻿#popBtn {
+﻿a {
+    cursor: pointer;
+}
+#popBtn {
     /*background-color: #1877F2;*/
     background-color: #0e385f;
     color: #fff;
