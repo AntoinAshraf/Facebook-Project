@@ -116,7 +116,7 @@ function createPost() {
     formData.append("postText", postTextArea.value);
 
     $.ajax({
-        url: 'https://localhost:44340/Home/CreatePost',
+        url: window.location.origin+'/Home/CreatePost',
         type: 'POST',
         data: formData,
         processData: false,

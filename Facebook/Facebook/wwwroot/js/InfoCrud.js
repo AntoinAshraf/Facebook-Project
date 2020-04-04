@@ -97,7 +97,7 @@ function changePhoto(userId) {
     //formData.append("postText", postTextArea.value);
 
     $.ajax({
-        url: "https://localhost:44340/Profile/ChangeProfilePhoto?userId=" + userId,
+        url: window.location.origin+"/Profile/ChangeProfilePhoto?userId=" + userId,
         type: 'PUT',
         data: formData,
         processData: false,
